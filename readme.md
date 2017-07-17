@@ -1,8 +1,5 @@
 ## Usage
 cron - https://github.com/liebig/cron
-
-##Help info
-cron artisan  comand  - http://itsolutionstuff.com/post/example-of-cron-job-in-laravel-5example.html
 <br/>
 auth - https://cartalyst.com/manual/sentinel/2.0#introduction
 <br/>
