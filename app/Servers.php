@@ -9,6 +9,7 @@ class Servers extends Model
     /**
      * Заготовка запроса для получения активных teamspeak 3 серверов.
      *
+     * @param $query
      * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopeActive($query)
@@ -19,6 +20,7 @@ class Servers extends Model
     /**
      * Заготовка запроса для получения teamspeak 3 серверов.
      *
+     * @param $query
      * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopeTeamSpeak($query)

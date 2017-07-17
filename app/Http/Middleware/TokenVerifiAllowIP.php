@@ -9,6 +9,7 @@
 namespace Api\Http\Middleware;
 
 use Api\Exceptions\InvalidToken;
+use \Illuminate\Database\Eloquent\ModelNotFoundException;
 use Api\Exceptions\IPNotAllow;
 use Api\UserToken;
 use Closure;
@@ -34,7 +35,7 @@ class TokenVerifiAllowIP
             }
 
             throw new IPNotAllow();
-        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+        } catch (ModelNotFoundException $e) {
             throw new InvalidToken();
         }
 

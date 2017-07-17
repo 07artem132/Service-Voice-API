@@ -68,10 +68,7 @@ class SentinelGuard
     }
 
     /**
-     * Set the current user.
-     *
-     * @param  \Illuminate\Contracts\Auth\Authenticatable $user
-     * @return void
+     * @param Authenticatable $user
      */
     public function setUser(Authenticatable $user)
     {

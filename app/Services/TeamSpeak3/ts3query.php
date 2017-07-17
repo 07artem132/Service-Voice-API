@@ -47,11 +47,13 @@ class ts3query
     function VirtualServerBanList()
     {
         try {
-            return $this->connection->banList();
+            $data = $this->connection->banList();
         } catch (\TeamSpeak3_Adapter_ServerQuery_Exception $e) {
             if ($e->getMessage() === 'database empty result set')
                 return 'empty';
         }
+
+        return $data;
     }
 
     function VirtualServerBanListClear()
@@ -293,7 +295,8 @@ class ts3query
 
     /**
      * @param $InstanceID Уникальный ID (порядковый номер) инстанса в API
-     * @return object Illuminate\Database\Eloquent\Collection
+     * @return mixed
+     * @throws InstanceConfigNotFoundException
      */
     function GetInstanceConfig($InstanceID)
     {

@@ -51,13 +51,10 @@ class PowerDNS
 
     /**
      * @param string $domain
-     * @param string $name
-     * @param string $type
-     * @param int $ttl
-     * @param string $content
+     * @param mixed $json
      * @return mixed
      */
-    public function DomainRecordCreate(string $domain, $json)
+    public function DomainRecordCreate(string $domain, mixed $json): mixed
     {
         $this->AddRequestOption('body', $this->BildJsonRecordCreateOrEdit($domain, $json));
 
@@ -68,9 +65,10 @@ class PowerDNS
 
     /**
      * @param string $domain
+     * @param mixed $json
      * @return mixed
      */
-    public function DomainRecordDelete(string $domain, $json)
+    public function DomainRecordDelete(string $domain, mixed $json): mixed
     {
         $this->AddRequestOption('body', $this->BildJsonRecordDelete($domain, $json));
 
@@ -135,7 +133,7 @@ class PowerDNS
     }
 
     /**
-     * @param string $domain
+     * @param $json
      * @return mixed
      */
     public function DomainCreate($json)
@@ -281,8 +279,11 @@ class PowerDNS
     private function SendHttpRequest(string $Method, string $Url)
     {
         $res = $this->pdns_client->request($Method, $Url, $this->request_option);
+
         if ($res->getStatusCode() === 200)
             return json_decode($res->getBody());
+
+        return null;
     }
 
 }

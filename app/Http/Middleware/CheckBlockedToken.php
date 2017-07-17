@@ -9,6 +9,7 @@
 namespace Api\Http\Middleware;
 
 use Api\Exceptions\TokenBlocked;
+use \Illuminate\Database\Eloquent\ModelNotFoundException;
 use Api\UserToken;
 use Closure;
 
@@ -24,7 +25,7 @@ class CheckBlockedToken
                 throw new TokenBlocked();
             }
 
-        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+        } catch (ModelNotFoundException $e) {
             throw new InvalidToken();
         }
 

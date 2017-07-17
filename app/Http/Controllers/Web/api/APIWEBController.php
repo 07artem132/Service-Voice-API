@@ -19,9 +19,7 @@ use Carbon\Carbon;
 class APIWEBController extends Controller
 {
     /**
-     * Create a new controller instance.
-     *
-     * @return void
+     * APIWEBController constructor.
      */
     public function __construct()
     {

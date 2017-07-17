@@ -15,6 +15,7 @@ use Api\Exceptions\InvalidToken;
 use Api\Exceptions\TooManyRequest;
 use Illuminate\Cache\RateLimiter;
 use Symfony\Component\HttpFoundation\Response;
+use \Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class LimitRequestAPP
 {
@@ -26,10 +27,8 @@ class LimitRequestAPP
     protected $limiter;
 
     /**
-     * Create a new request throttler.
-     *
-     * @param  \Illuminate\Cache\RateLimiter $limiter
-     * @return void
+     * LimitRequestAPP constructor.
+     * @param RateLimiter $limiter
      */
     public function __construct(RateLimiter $limiter)
     {
@@ -61,11 +60,9 @@ class LimitRequestAPP
                 $response, $limit,
                 $this->calculateRemainingAttempts($key, $limit)
             );
-        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+        } catch (ModelNotFoundException $e) {
             throw new InvalidToken();
         }
-
-        return $next($request);
     }
 
     /**

@@ -10,6 +10,7 @@ namespace Api\Http\Middleware;
 
 use Api\Exceptions\InvalidToken;
 use Api\Exceptions\NotSpecified;
+use \Illuminate\Database\Eloquent\ModelNotFoundException;
 use Api\UserToken;
 use Closure;
 use Auth;
@@ -28,7 +29,7 @@ class TokenVerifi
 
             AUTH::onceUsingId($tokenDB->user_id);
 
-        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+        } catch (ModelNotFoundException $e) {
             throw new InvalidToken();
         }
 

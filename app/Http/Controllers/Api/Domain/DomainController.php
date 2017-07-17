@@ -474,6 +474,10 @@ class DomainController
      *    "status": "success",
      *}
      */
+    /**
+     * @param $domain
+     * @return \Illuminate\Http\JsonResponse
+     */
     function DomainRecordAdd($domain)
     {
         $json = $this->JsonDecodeAndValidate(Request::getContent(), true);
@@ -522,6 +526,10 @@ class DomainController
      *{
      *    "status": "success",
      *}
+     */
+    /**
+     * @param $domain
+     * @return \Illuminate\Http\JsonResponse
      */
     function DomainRecordDelete($domain)
     {

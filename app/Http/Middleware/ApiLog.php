@@ -9,7 +9,6 @@
 namespace Api\Http\Middleware;
 
 use Illuminate\Contracts\Routing\TerminableMiddleware;
-use Illuminate\Support\Facades\Log;
 use Closure;
 use Api\ApiLog as DbLog;
 

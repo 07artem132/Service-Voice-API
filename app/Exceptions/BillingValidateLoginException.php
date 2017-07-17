@@ -13,11 +13,8 @@ use Exception;
 class BillingValidateLoginException extends  Exception
 {
     /**
-     * Create a new authentication exception.
-     *
-     * @param  string $message
-     * @param  array $guards
-     * @return void
+     * BillingValidateLoginException constructor.
+     * @param string $message
      */
     public function __construct($message = 'Error Validate Login.' )
     {

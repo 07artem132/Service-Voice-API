@@ -7,12 +7,14 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Debugbar;
 
+/**
+ * Class LogSuccessfulLogin
+ * @package Api\Listeners
+ */
 class LogSuccessfulLogin
 {
     /**
-     * Create the event listener.
-     *
-     * @return void
+     * LogSuccessfulLogin constructor.
      */
     public function __construct()
     {

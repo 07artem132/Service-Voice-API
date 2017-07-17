@@ -20,8 +20,8 @@ class Task extends Model
 
     /**
      * Заготовка запроса для получения активных задач.
-     *
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @param $query
+     * @return mixed
      */
     public function scopeActive($query)
     {

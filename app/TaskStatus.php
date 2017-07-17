@@ -15,8 +15,8 @@ class TaskStatus extends Model
 
     /**
      * Заготовка запроса для получения задач которые нужно выполнить.
-     *
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @param $query
+     * @return mixed
      */
     public function scopeActualTasks($query)
     {

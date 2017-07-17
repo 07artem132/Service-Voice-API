@@ -15,9 +15,7 @@ class Event
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     /**
-     * Create a new event instance.
-     *
-     * @return void
+     * Event constructor.
      */
     public function __construct()
     {

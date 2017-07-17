@@ -12,9 +12,7 @@ namespace Api\Traits;
 trait RestSuccessResponseTrait
 {
     /**
-     * Returns json response.
-     *
-     * @param array|null $payload
+     * @param null $data
      * @param int $statusCode
      * @return \Illuminate\Http\JsonResponse
      */

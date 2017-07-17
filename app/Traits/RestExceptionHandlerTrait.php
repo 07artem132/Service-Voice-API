@@ -106,7 +106,11 @@ trait RestExceptionHandlerTrait
      *    }
      *}
      */
-
+    /**
+     * @param string $message
+     * @param int $statusCode
+     * @return \Illuminate\Http\JsonResponse
+     */
     protected function TeamSpeakInvalidUid($message = 'Сервера с таким UID не сушествует', $statusCode = 400)
     {
         return $this->jsonResponse([
@@ -119,17 +123,34 @@ trait RestExceptionHandlerTrait
 
     }
 
+    /**
+     * @param string $message
+     * @param int $statusCode
+     * @return \Illuminate\Http\JsonResponse
+     */
     protected function BadJson($message = 'Ошибка при парсинге JSON', $statusCode = 500)
     {
         return $this->jsonResponse(['status' => 'unsuccess', 'error' => $message], $statusCode);
     }
 
+    /**
+     * @param string $error
+     * @param string $message
+     * @param int $statusCode
+     * @return \Illuminate\Http\JsonResponse
+     */
     protected function NotFound($error = 'NotFound', $message = 'Такого вызова API не существует', $statusCode = 404)
     {
         return $this->jsonResponse(['status' => 'unsuccess', 'error' => $error, 'message' => $message], $statusCode);
 
     }
 
+    /**
+     * @param $message
+     * @param int $statusCode
+     * @param $Header
+     * @return \Illuminate\Http\JsonResponse
+     */
     protected function ErrorMethodRequert($message, $statusCode = 405, $Header)
     {
         return $this->jsonResponse(['status' => 'unsuccess', 'error' => $message], $statusCode, $Header);
@@ -149,6 +170,9 @@ trait RestExceptionHandlerTrait
      *        "message": "SOURCE_NOT_AVAILABLE",
      *    }
      *}
+     */
+    /**
+     * @return \Illuminate\Http\JsonResponse
      */
     protected function SourceNotAvailable()
     {
@@ -176,6 +200,10 @@ trait RestExceptionHandlerTrait
      *    }
      *}
      */
+    /**
+     * @param $field
+     * @return \Illuminate\Http\JsonResponse
+     */
     protected function NotSpecified($field)
     {
         return $this->jsonResponse([
@@ -202,6 +230,10 @@ trait RestExceptionHandlerTrait
      *        "instanse_id": "10"
      *    }
      *}
+     */
+    /**
+     * @param int $Instanse_ID
+     * @return \Illuminate\Http\JsonResponse
      */
     /**
      * @param int $Instanse_ID
@@ -239,6 +271,10 @@ trait RestExceptionHandlerTrait
      * @param $ip string
      * @return \Illuminate\Http\JsonResponse
      */
+    /**
+     * @param string $ip
+     * @return \Illuminate\Http\JsonResponse
+     */
     protected function InvalidIpAddress(string $ip)
     {
         return $this->jsonResponse([
@@ -266,6 +302,10 @@ trait RestExceptionHandlerTrait
      *        "retry_after_through": 14
      *    }
      *}
+     */
+    /**
+     * @param int $retryAfter
+     * @return \Illuminate\Http\JsonResponse
      */
     /**
      * @param int $retryAfter
@@ -301,6 +341,10 @@ trait RestExceptionHandlerTrait
      */
     /**
      * @param $token string
+     * @return \Illuminate\Http\JsonResponse
+     */
+    /**
+     * @param string $token
      * @return \Illuminate\Http\JsonResponse
      */
     protected function InvalidToken(string $token)
@@ -361,6 +405,7 @@ trait RestExceptionHandlerTrait
      *
      * @param array|null $payload
      * @param int $statusCode
+     * @param array|null $headers
      * @return \Illuminate\Http\JsonResponse
      */
     protected function jsonResponse(array $payload = null, int $statusCode = 404, array $headers = null)

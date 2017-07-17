@@ -21,9 +21,7 @@ class ApiGenerateDoc extends Command
     protected $description = 'Генерация документации с использованием apidocjs';
 
     /**
-     * Create a new command instance.
-     *
-     * @return void
+     * ApiGenerateDoc constructor.
      */
     public function __construct()
     {
@@ -35,7 +33,7 @@ class ApiGenerateDoc extends Command
      *
      * @return mixed
      */
-    public function handle()
+    public function handle(): void
     {
         $app = base_path('app/');
         $publicDocs = base_path('public/docs/');
@@ -46,6 +44,6 @@ class ApiGenerateDoc extends Command
         $this->info(shell_exec('apidoc -f .php -i ' . $app . ' -o ' . $publicDocs . ' -t ' . $template));
 
         $this->info('Генерация документации выполнена');
-
+        return;
     }
 }

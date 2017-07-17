@@ -3,14 +3,10 @@
 namespace Api\Http\Controllers\Auth;
 
 use Api\Http\Controllers\Auth\VerifyUserController as VerifyUser;
-use Api\Http\Controllers\Auth\RegisterController;
 use Illuminate\Support\Facades\Redirect;
 use Api\Http\Controllers\Controller;
 use Illuminate\Support\MessageBag;
 use Illuminate\Http\Request;
-use Api\Services\WHMCS\API;
-use Api\User;
-use Sentinel;
 use Auth;
 
 class LoginController extends Controller
@@ -26,9 +22,7 @@ class LoginController extends Controller
     protected $guard = 'sentry';
 
     /**
-     * Create a new controller instance.
-     *
-     * @return void
+     * LoginController constructor.
      */
     public function __construct()
     {
@@ -79,7 +73,6 @@ class LoginController extends Controller
             $MessageBag = $MessageBag->add('AUTH', 'Неправильный логин или пароль!');
             return Redirect::back()->withInput()->withErrors($MessageBag);
         }
-        return;
     }
 
     /**

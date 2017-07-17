@@ -7,12 +7,14 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Debugbar;
 
+/**
+ * Class LogSuccessfulLogout
+ * @package Api\Listeners
+ */
 class LogSuccessfulLogout
 {
     /**
-     * Create the event listener.
-     *
-     * @return void
+     * LogSuccessfulLogout constructor.
      */
     public function __construct()
     {

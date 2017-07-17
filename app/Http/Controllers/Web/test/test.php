@@ -74,7 +74,6 @@ class test extends Controller
             'api.token.create' => true,
             'api.token.list.all' => true,
             'api.domain.list' => true,
-            'api.domain.record.list' => true,
             'api.domain.record.formated.list' => true,
             'api.domain.record.list' => true,
             'api.domain.record.add' => true,
