@@ -1,0 +1,6 @@
+/public
+/vendor
+composer.phar
+composer.lock
+.travis.yml
+.DS_Store

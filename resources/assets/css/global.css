@@ -1,0 +1,102 @@
+.container {
+    width: 100%;
+}
+
+header {
+    border-bottom: 1px solid #e8e8e8 !important;
+    height: 8vh;
+    background: #f3f3f3;
+    width: 100%;
+    display: block;
+}
+
+footer {
+    border-top: 1px solid #e8e8e8 !important;
+    height: 10vh;
+}
+
+body, html {
+
+}
+
+section#app-content {
+    min-height: 82vh;
+    display: table-cell;
+}
+
+div#content {
+    height: 100%;
+    float: left;
+}
+
+/*  Анимация загрузки */
+
+.glyphicon-refresh-animate {
+    -animation: spin .7s infinite linear;
+    -webkit-animation: spin2 3s infinite linear;
+    font-size: 7vw;
+    position: absolute;
+    left: 50%;
+    top: 31%;
+}
+
+@-webkit-keyframes spin2 {
+    from {
+        -webkit-transform: rotate(0deg);
+    }
+    to {
+        -webkit-transform: rotate(360deg);
+    }
+}
+
+@keyframes spin {
+    from {
+        transform: scale(1) rotate(0deg);
+    }
+    to {
+        transform: scale(1) rotate(360deg);
+    }
+}
+
+/*//////////////////////*/
+
+.col-md-10 {
+    width: 86.333333%;
+}
+
+ .chat {
+     list-style: none;
+     margin: 0;
+     padding: 0;
+ }
+
+.chat li {
+    margin-bottom: 10px;
+    padding-bottom: 5px;
+    border-bottom: 1px dotted #B3A9A9;
+}
+
+.chat li .chat-body p {
+    margin: 0;
+    color: #777777;
+}
+
+.panel-body {
+    overflow-y: scroll;
+    height: 350px;
+}
+
+::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+    background-color: #F5F5F5;
+}
+
+::-webkit-scrollbar {
+    width: 12px;
+    background-color: #F5F5F5;
+}
+
+::-webkit-scrollbar-thumb {
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
+    background-color: #555;
+}
