@@ -22,6 +22,8 @@ class CreateUserTokensTable extends Migration
             $table->integer('app_type'); // возможные варианты 1 или 2
             $table->tinyInteger('Blocked');
             $table->timestamps();
+
+            $table->engine = 'InnoDB';
         });
     }
 

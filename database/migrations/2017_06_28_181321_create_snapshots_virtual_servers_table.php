@@ -19,6 +19,8 @@ class CreateSnapshotsVirtualServersTable extends Migration
             $table->string('unique_id');
             $table->longText('snapshot');
             $table->timestamps();
+
+            $table->engine = 'InnoDB';
         });
     }
 

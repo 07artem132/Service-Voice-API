@@ -20,6 +20,8 @@ class CreateTaskLogsTable extends Migration
             $table->text('message', 255);
             $table->float('run_time')->nullable();
             $table->timestamps();
+
+            $table->engine = 'InnoDB';
         });
     }
 

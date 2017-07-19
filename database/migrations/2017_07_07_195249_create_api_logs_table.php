@@ -20,6 +20,8 @@ class CreateApiLogsTable extends Migration
             $table->string('execute_time');
             $table->string('client_ip');
             $table->timestamps();
+
+            $table->engine = 'InnoDB';
         });
     }
 

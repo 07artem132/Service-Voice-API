@@ -22,6 +22,8 @@ class CreateStatisticsVirtualServersTable extends Migration
             $table->float('avg_ping');
             $table->float('avg_packetloss');
             $table->timestamps();
+
+            $table->engine = 'InnoDB';
         });
     }
 

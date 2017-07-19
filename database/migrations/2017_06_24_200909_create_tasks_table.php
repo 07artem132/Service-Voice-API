@@ -23,6 +23,8 @@ class CreateTasksTable extends Migration
             $table->string('name',255);
             $table->string('description',255);
             $table->timestamps();
+
+            $table->engine = 'InnoDB';
         });
     }
 

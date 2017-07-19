@@ -20,6 +20,8 @@ class CreateStatisticsInstancesTable extends Migration
             $table->integer('server_runing');
             $table->integer('user_online');
             $table->timestamps();
+
+            $table->engine = 'InnoDB';
         });
     }
 

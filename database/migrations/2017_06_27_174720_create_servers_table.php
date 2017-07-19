@@ -24,6 +24,8 @@ class CreateServersTable extends Migration
             $table->integer('port');
             $table->tinyInteger('is_enabled');
             $table->timestamps();
+
+            $table->engine = 'InnoDB';
         });
     }
 

@@ -20,6 +20,8 @@ class CreateTaskStatusesTable extends Migration
             $table->timestamp('last_run')->default(\DB::raw('CURRENT_TIMESTAMP'));
             $table->timestamp('next_due')->default(\DB::raw('CURRENT_TIMESTAMP'));
             $table->timestamps();
+
+            $table->engine = 'InnoDB';
         });
     }
 
