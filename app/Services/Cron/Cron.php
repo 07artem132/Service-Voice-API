@@ -105,7 +105,7 @@ class Cron
         $TaskStatus = TaskStatus::find($id);
 
         $TaskStatus->last_run = date('Y-m-d H:i:s');
-        $TaskStatus->next_due = date('Y-m-d H:i:s', time() + ($frequency * 60));
+        $TaskStatus->next_due = date('Y-m-d H:i:00', time() + ($frequency * 60));
 
         $TaskStatus->save();
 
