@@ -50,10 +50,9 @@ class Cron
 
     private function GetActualTasks()
     {
-        $ActualTasks = Task::with(['Tasks' => function ($query) {
-            // Костыль, мы добавляем 5 секунд дабы невелировать "задержку" крона
-            $query->where('next_due', '<=', date('Y-m-d H:i:s', time() + 5));
-        }])->Active()->orderBy('priority')->get();
+        $ActualTasks = Task::whereHas('Tasks', function ($query) {
+            $query->where('next_due', '<=', date('Y-m-d H:i:s', time()));
+        })->Active()->orderBy('priority')->get();
 
         return $ActualTasks;
     }
