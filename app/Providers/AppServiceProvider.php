@@ -18,14 +18,14 @@ class AppServiceProvider extends ServiceProvider
     {
         Schema::defaultStringLength(191);
 
-       // \Cron::add('CRON API', '* * * * *', function () {
-        //    $CronAPI = new Cron();
-        //    $CronAPI->ActualTaskRun();
+        \Cron::add('CRON API', '* * * * *', function () {
+            $CronAPI = new Cron();
+            $CronAPI->ActualTaskRun();
             return null;
-       // });
+        });
 
 
-  //      \Debugbar::enable();
+        //      \Debugbar::enable();
 
     }
 
@@ -36,6 +36,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-       // \Debugbar::disable();
+        // \Debugbar::disable();
     }
 }

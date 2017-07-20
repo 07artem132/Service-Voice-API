@@ -13,7 +13,7 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::domain('api.service-voice.com')->group(function () {
+Route::domain(env('APP_DOMAIN'))->prefix('v1/')->group(function () {
 
     Route::group(['middleware' => ['permissions:api.usage']], function () {
 
@@ -332,7 +332,16 @@ Route::domain('api.service-voice.com')->group(function () {
             ],
             'middleware' => 'permissions:api.teamspeak.virtualserver.icon.delete'
         ]);
-
+        Route::get('/teamspeak/instance/{server_id}/virtualserver/{bashe64uid}/icon/{icon_id}', [
+            'as' => 'TeamSpeakIconControllerDownload',
+            'uses' => 'Api\TeamSpeak\IconController@Download',
+            'where' => [
+                'server_id' => '[0-9]+',
+                'icon_id' => '[0-9]+',
+                'bashe64uid' => '(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?',
+            ],
+            'middleware' => 'permissions:api.teamspeak.virtualserver.icon.download'
+        ]);
         ///////////////////////////////////БАНЫ//////////////////////////////////
         Route::get('/teamspeak/instance/{server_id}/virtualserver/{bashe64uid}/ban', [
             'as' => 'TeamSpeakInstanceQueryVirtualServerBanList',
@@ -410,6 +419,51 @@ Route::domain('api.service-voice.com')->group(function () {
             ],
             'middleware' => ['permissions:api.token.create']
         ]);
+        ////////////////////////////////////////////////////////////////////////
+
+        /////////////////////////////Группы серверов/////////////////////////////////////
+        Route::delete('/group/{group}', [
+            'as' => 'GroupDelete',
+            'uses' => 'Api\Group\GroupController@Delete',
+            'where' => [
+                'group' => '^[A-Za-z]+$',
+            ],
+            'middleware' => ['permissions:api.group.delete']
+        ]);
+        Route::get('/group', [
+            'as' => 'GroupList',
+            'uses' => 'Api\Group\GroupController@List',
+            'middleware' => ['permissions:api.group.list']
+        ]);
+        Route::post('/group', [
+            'as' => 'GroupCreate',
+            'uses' => 'Api\Group\GroupController@Create',
+            'middleware' => ['permissions:api.group.create']
+        ]);
+        Route::get('/group/{group}', [
+            'as' => 'ServerGroupList',
+            'uses' => 'Api\Group\GroupController@ServerGroupList',
+            'middleware' => ['permissions:api.group.server.list']
+        ]);
+        Route::post('/group/{group}/{server_id}', [
+            'as' => 'ServerAddGroup',
+            'uses' => 'Api\Group\GroupController@ServerAddGroup',
+            'where' => [
+                'group' => '^[A-Za-z]+$',
+                'server_id' => '[0-9]+',
+            ],
+            'middleware' => ['permissions:api.group.server.add']
+        ]);
+        Route::delete('/group/{group}/{server_id}', [
+            'as' => 'ServerRemoveGroup',
+            'uses' => 'Api\Group\GroupController@ServerRemoveGroup',
+            'where' => [
+                'group' => '^[A-Za-z]+$',
+                'server_id' => '[0-9]+',
+            ],
+            'middleware' => ['permissions:api.group.server.remove']
+        ]);
+
         ////////////////////////////////////////////////////////////////////////
 
         //////////////////////ВЗАИМОДЕЙСТВИЕ С ИНСТАНСОМ//////////////////////

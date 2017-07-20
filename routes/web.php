@@ -12,10 +12,14 @@
 */
 
 
+Route::get('/', function () {
+    return view('welcome');
+});
+Route::get('/test', 'Web\test\test@index')->name('test');//->middleware();
+
+/*
 Route::domain('partner.service-voice.com')->group(function () {
-    Route::get('/', function () {
-        return view('welcome');
-    });
+
 
     Route::get('/docs', [
         'as' => 'docs',
@@ -66,15 +70,10 @@ Route::domain('partner.service-voice.com')->group(function () {
         'uses' => 'web\api\APIWEBController@stat'
     ]);
 
-    Route::get('/test', 'Web\test\test@index')->name('test');//->middleware();
 
 
     Route::get('/login', ['as' => 'login', 'uses' => 'Auth\LoginController@showLoginForm']);
     Route::post('/login', ['as' => 'login', 'uses' => 'Auth\LoginController@login']);
 
     Route::post('/logout', ['as' => 'logout', 'uses' => 'Auth\LoginController@logout']);
-});
-
-
-
-
+});*/

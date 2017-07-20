@@ -28,7 +28,7 @@ class test extends Controller
     function index()
     {
 
-
+  //  return    $this->JsonFormatedPrint('{"status":"error","error":{"code":404,"message":"GROUP_NOT_FOUND","description":["Группа athp не сушествует"]}}');
         //  Storage::disk('cloud-public')->put('test.txt', 'test');
         //     $url = Storage::disk('cloud-public')->getMetadata('test.txt');
         //   dd( 'https://ac3ddaae4ce1e2fd3540-86e666417f45e47f3b79ca304cf41b6b.ssl.cf5.rackcdn.com/'.$url['path']);
@@ -36,9 +36,9 @@ class test extends Controller
 
         //crc32();
 
-    //        foreach (glob("/var/www/html/storage/app/public/teamspeak3/icon/*.png") as $file) {
-    //          echo '<img src="data:image/png;base64,' . base64_encode(file_get_contents($file)) . '" />';
-    //    }
+        //        foreach (glob("/var/www/html/storage/app/public/teamspeak3/icon/*.png") as $file) {
+        //          echo '<img src="data:image/png;base64,' . base64_encode(file_get_contents($file)) . '" />';
+        //    }
 
         $role = Sentinel::findRoleById(1);
 
@@ -90,6 +90,13 @@ class test extends Controller
             'api.teamspeak.virtualserver.icon.list' => true,
             'api.teamspeak.virtualserver.icon.upload' => true,
             'api.teamspeak.virtualserver.icon.delete' => true,
+            'api.teamspeak.virtualserver.icon.download' => true,
+            'api.group.delete' => true,
+            'api.group.list' => true,
+            'api.group.create' => true,
+            'api.group.server.add' => true,
+            'api.group.server.remove' => true,
+            'api.group.server.list' => true,
         ];
         $role->save();
 

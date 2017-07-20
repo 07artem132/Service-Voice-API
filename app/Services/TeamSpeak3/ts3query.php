@@ -11,7 +11,6 @@ namespace Api\Services\TeamSpeak3;
 
 use Api\Exceptions\InstanceConfigNotFoundException;
 use Api\Exceptions\TeamSpeakInvalidUidException;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 use Api\Servers;
 use TeamSpeak3;
@@ -22,15 +21,17 @@ class ts3query
 {
     private $connection;
     private $InstanceConfig;
-    private $connectionOptions = '?timeout=2&blocking=0&nickname=apiSV';
-    private $connectionFlags = 'use_offline_as_virtual';
 
     function __construct($InstanceID, $server_id = null)
     {
         $this->InstanceConfig = $this->GetInstanceConfig($InstanceID);
 
-        $url = "serverquery://{$this->InstanceConfig->username}:{$this->InstanceConfig->password}@{$this->InstanceConfig->ipaddress}:{$this->InstanceConfig->port}/$this->connectionOptions";
-        ($server_id != null) ? $url .= '&server_id=' . $server_id . '#' . $this->connectionFlags : $url .= '#' . $this->connectionFlags;
+        $Options = 'timeout=' . config('TeamSpeak.connection.timeout');
+        $Options .= '&blocking=' . config('TeamSpeak.connection.blocking');
+        $Options .= '&nickname=' . config('TeamSpeak.connection.nickname');
+
+        $url = "serverquery://{$this->InstanceConfig->username}:{$this->InstanceConfig->password}@{$this->InstanceConfig->ipaddress}:{$this->InstanceConfig->port}/$Options";
+        ($server_id != null) ? $url .= '&server_id=' . $server_id . '#' . config('TeamSpeak.connection.flags') : $url .= '#' . config('TeamSpeak.connection.flags');
 
         Log::debug('TeamSpeak connection url: ' . $url);
 
@@ -217,19 +218,12 @@ class ts3query
         $data = $this->connection->channelFileList('0', '', '/icons');
 
         for ($i = 0; $i < count($data); $i++) {
-            $return[$i]['id'] = (int)substr((string)$data[$i]['name'], 5);
-            $return[$i]['datetime'] = $data[$i]['datetime'];
-            $return[$i]['size'] = $data[$i]['size'];
-
-            $path = '/teamspeak3/icon/' . $return[$i]['id'] . '.png';
-
-            if (!Storage::disk('public')->exists($path))
-                Storage::disk('public')->put($path, $this->DownloadFile(0, $data[$i]['src'], ''));
-
-            $return[$i]['download_url'] = Storage::disk('public')->url($path);
+            $data[$i]['path'] = (string)$data[$i]['path'];
+            $data[$i]['name'] = (string)$data[$i]['name'];
+            $data[$i]['src'] = (string)$data[$i]['src'];
         }
 
-        return $return;
+        return $data;
     }
 
     function DeleteFile($name, $cpw = '')
@@ -256,12 +250,6 @@ class ts3query
 
         for ($i = 0; $i < count($data); $i++) {
             $return[$i]['id'] = substr((string)$data[$i]['name'], 5);
-
-            $path = '/teamspeak3/icon/' . $return[$i]['id'] . '.png';
-
-            if (!Storage::disk('public')->exists($path))
-                Storage::disk('public')->put($path, $this->DownloadFile(0, $data[$i]['src'], ''));
-
         }
 
         return $return;

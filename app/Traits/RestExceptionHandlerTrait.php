@@ -9,20 +9,26 @@
 
 namespace Api\Traits;
 
-use Api\Exceptions\InvalidToken;
-use Api\Exceptions\IPNotAllow;
-use Api\Exceptions\TeamSpeakInvalidUidException;
-use Api\Exceptions\TokenBlocked;
-use Api\Exceptions\NotSpecified;
-use Api\Exceptions\TooManyRequest;
 use Exception;
-use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
+use Api\Exceptions\IPNotAllow;
+use Api\Exceptions\InvalidJSON;
+use Api\Exceptions\InvalidToken;
+use Api\Exceptions\NotSpecified;
+use Api\Exceptions\TokenBlocked;
+use Api\Exceptions\TooManyRequest;
+use Api\Exceptions\RequestIsNotJson;
+use Illuminate\Database\QueryException;
+use Api\Exceptions\GroupNotFoundException;
+use Api\Exceptions\ServerNotFoundException;
+use Api\Exceptions\ServerGroupExistException;
+use Illuminate\Validation\ValidationException;
+use Api\Exceptions\TeamSpeakInvalidUidException;
+use Api\Exceptions\InstanceConfigNotFoundException;
+use Api\Exceptions\ServerGroupNotAssociatedException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use \Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
-use Api\Exceptions\InstanceConfigNotFoundException;
-use Api\Exceptions\InvalidJSON;
 
 trait RestExceptionHandlerTrait
 {
@@ -73,11 +79,211 @@ trait RestExceptionHandlerTrait
             case $this->isTeamSpeakInvalidUidException($e);
                 $retval = $this->TeamSpeakInvalidUid();
                 break;
+            case $this->isValidationException($e);
+                $retval = $this->ValidationException($e->validator);
+                break;
+            case $this->isRequestIsNotJson($e);
+                $retval = $this->RequestIsNotJson();
+                break;
+            case $this->isGroupNotFoundException($e);
+                $retval = $this->GroupNotFound($e->group);
+                break;
+            case $this->isServerNotFoundException($e);
+                $retval = $this->ServerNotFound($e->server_id);
+                break;
+            case $this->isServerGroupExistException($e);
+                $retval = $this->ServerGroupExist($e->server_id, $e->group);
+                break;
+            case $this->isServerGroupNotAssociatedException($e);
+                $retval = $this->ServerGroupNotAssociated($e->server_id, $e->group);
+                break;
             default:
                 $retval = $this->badRequest($e->getMessage());
         }
 
         return $retval;
+    }
+
+    /**
+     * @param int $server_id
+     * @param int $statusCode
+     */
+    function ServerGroupNotAssociated(int $server_id, string $group, int $statusCode = 400)
+    {
+        return $this->jsonResponse([
+            'status' => 'error',
+            'error' => [
+                'code' => $statusCode,
+                'message' => 'SERVER_GROUP_NOT_ASSOCIATED',
+                'description' => [
+                    'Сервер с id ' . $server_id . ' не ассоциирован с группой ' . $group
+                ]
+            ]
+        ], $statusCode, null);
+    }
+
+    /**
+     * @param int $server_id
+     * @param int $statusCode
+     */
+    function ServerGroupExist(int $server_id, string $group, int $statusCode = 400)
+    {
+        return $this->jsonResponse([
+            'status' => 'error',
+            'error' => [
+                'code' => $statusCode,
+                'message' => 'SERVER_GROUP_EXIST',
+                'description' => [
+                    'Сервер с id ' . $server_id . ' уже ассоциирован с группой ' . $group
+                ]
+            ]
+        ], $statusCode, null);
+    }
+
+    /**
+     * @apiDefine SERVER_NOT_FOUND
+     *
+     * @apiError (Error code 404) SERVER_NOT_FOUND Сервера с переданным идентификатором не сушествует.
+     *
+     * @apiErrorExample {json} Сервера не сушествует:
+     *     HTTP/1.1 404 Not Found
+     *{
+     *  "status":"error",
+     *  "error":{
+     *    "code":404,
+     *    "message":"SERVER_NOT_FOUND",
+     *    "description":[
+     *      "Сервера с id 2 не сушествует"
+     *    ]
+     *  }
+     *}
+     */
+
+    /**
+     * @param int $server_id
+     * @param int $statusCode
+     * @return \Illuminate\Http\JsonResponse
+     */
+    function ServerNotFound(int $server_id, int $statusCode = 404)
+    {
+        return $this->jsonResponse([
+            'status' => 'error',
+            'error' => [
+                'code' => $statusCode,
+                'message' => 'SERVER_NOT_FOUND',
+                'description' => [
+                    'Сервера с id ' . $server_id . ' не сушествует'
+                ]
+            ]
+        ], $statusCode, null);
+    }
+    /**
+     * @apiDefine GROUP_NOT_FOUND
+     *
+     * @apiError (Error code 404) GROUP_NOT_FOUND Группа с переданным идентификатором не сушествует.
+     *
+     * @apiErrorExample {json} Группа не сушествует:
+     *     HTTP/1.1 404 Not Found
+     *{
+     *  "status":"error",
+     *  "error":{
+     *    "code":404,
+     *    "message":"GROUP_NOT_FOUND",
+     *    "description":[
+     *      "Группа athp не сушествует"
+     *    ]
+     *  }
+     *}
+     */
+    /**
+     * @param string $group Имя группы
+     * @param int $statusCode Код ошибки
+     * @return \Illuminate\Http\JsonResponse
+     */
+    function GroupNotFound(string $group, int $statusCode = 404)
+    {
+        return $this->jsonResponse([
+            'status' => 'error',
+            'error' => [
+                'code' => $statusCode,
+                'message' => 'GROUP_NOT_FOUND',
+                'description' => [
+                    'Группа ' . $group . ' не сушествует'
+                ]
+            ]
+        ], $statusCode, null);
+
+    }
+    /**
+     * @apiDefine INVALID_JSON_CONTENT_TYPE
+     *
+     * @apiError (Error code 400) INVALID_JSON Переданные данные не JSON/Не корректный заголовок Content-Type.
+     *
+     * @apiErrorExample {json} Переданные данные не JSON:
+     *     HTTP/1.1 400 Bad Request
+     *{
+     *  "status":"error",
+     *  "error":{
+     *    "code":400,
+     *    "message":"INVALID_JSON",
+     *    "description":[
+     *      "Ожидалось что будет передан JSON, проверьте значение заголовка Content-Type"
+     *    ]
+     *  }
+     *}
+     */
+    /**
+     * @param int $statusCode
+     * @return \Illuminate\Http\JsonResponse
+     */
+    function RequestIsNotJson($statusCode = 400)
+    {
+        return $this->jsonResponse([
+            'status' => 'error',
+            'error' => [
+                'code' => $statusCode,
+                'message' => 'INVALID_JSON',
+                'description' => [
+                    'Ожидалось что будет передан JSON, проверьте значение заголовка Content-Type'
+                ]
+            ]
+        ], $statusCode, null);
+    }
+    /**
+     * @apiDefine VALIDATION_FAILED
+     *
+     * @apiError (Error code 400) VALIDATION_FAILED Переданные данные не проходят валидацию.
+     *
+     * @apiErrorExample {json} Ошибка при валидации данных:
+     *     HTTP/1.1 400 Bad Request
+     * *{
+     *  "status":"error",
+     *  "error":{
+     *    "code":400,
+     *    "message":"VALIDATION_FAILED",
+     *    "description":[
+     *      "Группа с таким идентификатором уже сушествует"
+     *    ]
+     *  }
+     *}
+     */
+    /**
+     * @param $validator
+     * @param int $statusCode
+     * @return \Illuminate\Http\JsonResponse
+     */
+    function ValidationException($validator, $statusCode = 400)
+    {
+        $validatorErrors = $validator->errors()->all();
+
+        return $this->jsonResponse([
+            'status' => 'error',
+            'error' => [
+                'code' => $statusCode,
+                'message' => 'VALIDATION_FAILED',
+                'description' => $validatorErrors,
+            ]
+        ], $statusCode, null);
     }
 
     /**
@@ -517,5 +723,36 @@ trait RestExceptionHandlerTrait
     protected function isTeamSpeakInvalidUidException(Exception $e)
     {
         return $e instanceof TeamSpeakInvalidUidException;
+    }
+
+    protected function isValidationException(Exception $e)
+    {
+        return $e instanceof ValidationException;
+    }
+
+    protected function isRequestIsNotJson(Exception $e)
+    {
+        return $e instanceof RequestIsNotJson;
+
+    }
+
+    protected function isGroupNotFoundException(Exception $e)
+    {
+        return $e instanceof GroupNotFoundException;
+    }
+
+    protected function isServerNotFoundException(Exception $e)
+    {
+        return $e instanceof ServerNotFoundException;
+    }
+
+    protected function isServerGroupExistException(Exception $e)
+    {
+        return $e instanceof ServerGroupExistException;
+    }
+
+    protected function isServerGroupNotAssociatedException(Exception $e)
+    {
+        return $e instanceof ServerGroupNotAssociatedException;
     }
 }

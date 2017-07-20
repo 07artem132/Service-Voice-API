@@ -6,7 +6,7 @@
  * Time: 22:27
  */
 
-namespace Api\Http\Controllers;
+namespace Api\Http\Controllers\Api\Token;
 
 use Api\Traits\RestSuccessResponseTrait;
 use Api\UserToken;

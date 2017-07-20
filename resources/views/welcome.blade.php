@@ -66,16 +66,6 @@
     </head>
     <body>
         <div class="flex-center position-ref full-height">
-            @if (Route::has('login'))
-                <div class="top-right links">
-                    @if (Auth::check())
-                        <a href="{{ url('/dashboard') }}">Личный кабинет</a>
-                    @else
-                        <a href="{{ url('/login') }}">Войти</a>
-                    @endif
-                </div>
-            @endif
-
             <div class="content">
                 <div class="title m-b-md">
                     Service-Voice API
@@ -84,7 +74,8 @@
                 <div class="links">
                     <a href="https://service-voice.com/">Сайт</a>
                     <a href="http://my.service-voice.com/">Биллинг</a>
-                    <a href="http://api.service-voice.com/docs/">Документация</a>
+                    <a href="http://{{env('APP_DOMAIN')}}/docs/">Документация</a>
+                    <a href="http://partner.service-voice.com/">Партнерам</a>
                 </div>
             </div>
         </div>

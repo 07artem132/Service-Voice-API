@@ -13,6 +13,7 @@ use Api\Traits\RestSuccessResponseTrait;
 use Api\Services\TeamSpeak3\ts3query;
 use Api\Http\Controllers\Controller;
 use Request;
+use Storage;
 use \Eventviva\ImageResize;
 
 class IconController extends Controller
@@ -27,6 +28,27 @@ class IconController extends Controller
         $ts3conn->serverGetByUid($uid);
 
         $data = $ts3conn->GetVirtualServerIconList();
+
+        return $this->jsonResponse($data);
+    }
+
+    function Download($server_id, $bashe64uid, $icon_id)
+    {
+        $uid = base64_decode($bashe64uid);
+        $name = '/icon_' . $icon_id;
+        $path = config('TeamSpeak.icon.path') . $icon_id . '.png';
+        $storage = config('TeamSpeak.icon.storage');
+
+        $ts3conn = new ts3query($server_id);
+        $ts3conn->serverGetByUid($uid);
+
+        $image = $ts3conn->DownloadFile(0, $name, '');
+        $url = 1;
+
+        if (!Storage::disk($storage)->exists($path))
+            Storage::disk($storage)->put($path, $image);
+
+        $data['url'] = Storage::disk($storage)->url($path);
 
         return $this->jsonResponse($data);
     }

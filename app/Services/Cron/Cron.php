@@ -101,6 +101,7 @@ class Cron
 
     private function UpdateLastRunAndNextDue($id, $frequency)
     {
+
         $TaskStatus = TaskStatus::find($id);
 
         $TaskStatus->last_run = date('Y-m-d H:i:s');
