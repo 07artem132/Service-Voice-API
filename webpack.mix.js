@@ -22,11 +22,7 @@ mix.options({
 });
 
 mix.js('resources/assets/js/app.js', 'public/js')
-
 .sass('resources/assets/sass/app.scss', 'public/css')
-mix.copy('resources/assets/fonts/', 'public/fonts')
-mix.copy('resources/assets/css/', 'public/css')
-mix.copy('resources/assets/img/', 'public/img')
 mix.less('app.less')
 .version();
 
