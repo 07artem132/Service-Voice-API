@@ -8,6 +8,7 @@
 
 namespace Api\Traits;
 
+use Illuminate\Http\JsonResponse;
 
 trait RestSuccessResponseTrait
 {
@@ -16,7 +17,7 @@ trait RestSuccessResponseTrait
      * @param int $statusCode
      * @return \Illuminate\Http\JsonResponse
      */
-    protected function jsonResponse( $data = null, $statusCode = 200)
+    protected function jsonResponse($data = null, int $statusCode = 200): JsonResponse
     {
         $payload = ['status' => 'success'];
         $data = $data ? $payload['data'] = $data : [];

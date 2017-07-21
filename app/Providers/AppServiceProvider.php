@@ -21,6 +21,7 @@ class AppServiceProvider extends ServiceProvider
         \Cron::add('CRON API', '* * * * *', function () {
             $CronAPI = new Cron();
             $CronAPI->ActualTaskRun();
+
             return null;
         });
 

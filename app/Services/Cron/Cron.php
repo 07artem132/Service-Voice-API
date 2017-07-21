@@ -18,7 +18,8 @@ class Cron
     {
         $ActualTasks = $this->GetActualTasks();
 
-        if ($ActualTasks[0]->Tasks === null)
+
+        if ($ActualTasks->isEmpty() || $ActualTasks[0]->Tasks === null)
             return;
 
         foreach ($ActualTasks as $task) {
@@ -41,7 +42,7 @@ class Cron
             $tun_time = microtime(true) - $taskStartTime;
 
             $this->TaskEndDbStatus($task->Tasks->id);
-            $this->UpdateLastRunAndNextDue($task->Tasks->id, $task->frequency);
+            $this->UpdateLastRunAndNextDue($task->Tasks->id, $task->frequency, $taskStartTime);
             $this->LogAdd($task->id, 1, 'Задача [' . $task->name . '] выполнена', $tun_time);
         }
 
@@ -98,13 +99,13 @@ class Cron
         $TaskStatus->save();
     }
 
-    private function UpdateLastRunAndNextDue($id, $frequency)
+    private function UpdateLastRunAndNextDue($id, $frequency, $taskStartTime)
     {
 
         $TaskStatus = TaskStatus::find($id);
 
         $TaskStatus->last_run = date('Y-m-d H:i:s');
-        $TaskStatus->next_due = date('Y-m-d H:i:00', time() + ($frequency * 60));
+        $TaskStatus->next_due = date('Y-m-d H:i:00', $taskStartTime + ($frequency * 60));
 
         $TaskStatus->save();
 

@@ -3,7 +3,11 @@
 namespace Api;
 
 use Illuminate\Database\Eloquent\Model;
-use Api\TaskStatus;
+
+/**
+ * Class Task
+ * @package Api
+ */
 class Task extends Model
 {
     /**

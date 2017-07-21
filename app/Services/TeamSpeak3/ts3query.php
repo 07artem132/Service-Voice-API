@@ -182,10 +182,14 @@ class ts3query
         return $data;
     }
 
-    function GetAllServersSnapshots()
+    /**
+     * @return array набор данных подготовленных для сохранения в базу данных.
+     */
+    function GetAllServersSnapshots(): array
     {
         $data = [];
         foreach ($this->connection as $VirtualServer) {
+            $data[$VirtualServer['virtualserver_id']]['port'] = (int)$VirtualServer['virtualserver_port'];
             $data[$VirtualServer['virtualserver_id']]['unique_id'] = (string)$VirtualServer['virtualserver_unique_identifier'];
             $data[$VirtualServer['virtualserver_id']]['snapshot'] = (string)$VirtualServer->snapshotCreate();
         }

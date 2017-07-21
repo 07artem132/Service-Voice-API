@@ -10,7 +10,7 @@
         "barryvdh/laravel-debugbar": "^2.4@dev",
         "barryvdh/laravel-ide-helper": "^2.3@dev",
         "cartalyst/sentinel": "^2.0@dev",
-        "consoletvs/charts": "4.*",
+        "consoletvs/charts": "dev-master",
         "doctrine/dbal": "^2.6@dev",
         "eventviva/php-image-resize": "dev-master",
         "guzzlehttp/guzzle": "^6.2@dev",

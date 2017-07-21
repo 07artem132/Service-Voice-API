@@ -1,4 +1,7 @@
 {
   "/js/app.js": "/js/app.js",
-  "/css/app.css": "/css/app.css"
+  "/css/app.css": "/css/app.css",
+  "/js/ConfigApi.js": "/js/ConfigApi.js",
+  "/mix.js": "/mix.js",
+  "resources/assets/js/preloading.min.js": "resources/assets/js/preloading.min.js"
 }
