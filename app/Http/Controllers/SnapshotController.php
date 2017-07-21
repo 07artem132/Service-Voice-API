@@ -13,7 +13,6 @@ use Illuminate\Http\JsonResponse;
 use Api\Services\TeamSpeak3\ts3query;
 use Api\Traits\RestSuccessResponseTrait;
 
-
 /**
  * Class SnapshotController
  * @package Api\Http\Controllers
@@ -30,7 +29,6 @@ class SnapshotController extends Controller
      * @var string Уникальный идентификатор виртуального сервера
      */
     private $uid;
-
 
     /**
      * @api {post} /api/teamspeak/instance/:server_id/virtualserver/:bashe64uid/snapshot Создать snapshot
