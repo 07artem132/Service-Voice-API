@@ -12,4 +12,7 @@ apidoc - http://apidocjs.com
 Charts - https://erik.cat/projects/Charts/docs/4
 <br/>
 php-image-resize - https://github.com/eventviva/php-image-resize
- 
+## Установка приложения
+1) composer install
+2) npm install
+3) php artisan api:generatedoc (для генерации актуальной документации)
