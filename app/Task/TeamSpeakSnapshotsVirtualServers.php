@@ -14,8 +14,14 @@ use Api\Servers;
 
 class TeamSpeakSnapshotsVirtualServers
 {
+    /**
+     * @var ts3query класс для взаимодействия с teamspeak 3
+     */
     private $ts3con;
 
+    /**
+     * TeamSpeakSnapshotsVirtualServers constructor.
+     */
     function __construct()
     {
         $servers = Servers::Active()->TeamSpeak()->get();
@@ -25,7 +31,10 @@ class TeamSpeakSnapshotsVirtualServers
         }
     }
 
-    public function CreateSnapshots($server_id)
+    /**
+     * @param int $server_id уникальный идентификатор сервера
+     */
+    public function CreateSnapshots(int $server_id): void
     {
         $this->ts3con = new ts3query($server_id);
         $data = $this->ts3con->GetAllServersSnapshots();
@@ -33,12 +42,13 @@ class TeamSpeakSnapshotsVirtualServers
             $db = new SnapshotsVirtualServers;
             $db->server_id = $server_id;
             $db->unique_id = $VirtualServerSnapshots['unique_id'];
+            $db->port = $VirtualServerSnapshots['port'];
             $db->snapshot = $VirtualServerSnapshots['snapshot'];
             $db->save();
         }
 
         $this->ts3con->logout();
 
-        return null;
+        return;
     }
 }

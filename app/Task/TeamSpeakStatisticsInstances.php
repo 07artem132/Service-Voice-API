@@ -2,14 +2,24 @@
 
 namespace Api\Task;
 
-use Api\Services\TeamSpeak3\ts3query;
-use Api\StatisticsInstances;
 use Api\Servers;
+use Api\StatisticsInstances;
+use Api\Services\TeamSpeak3\ts3query;
 
+/**
+ * Class TeamSpeakStatisticsInstances
+ * @package Api\Task
+ */
 class TeamSpeakStatisticsInstances
 {
+    /**
+     * @var ts3query класс для взаимодействия с teamspeak 3
+     */
     private $ts3con;
 
+    /**
+     * TeamSpeakStatisticsInstances constructor.
+     */
     function __construct()
     {
         $servers = Servers::Active()->TeamSpeak()->get();
@@ -19,7 +29,11 @@ class TeamSpeakStatisticsInstances
         }
     }
 
-    public function CollectionStatistics($server_id)
+    /**
+     * @param $server_id
+     * @return null
+     */
+    public function CollectionStatistics($server_id): void
     {
         $this->ts3con = new ts3query($server_id);
         $db = new StatisticsInstances;
@@ -31,21 +45,30 @@ class TeamSpeakStatisticsInstances
 
         $this->ts3con->logout();
 
-        return null;
+        return;
     }
 
-    private function GetSlotUsage()
+    /**
+     * @return int кол-во слотов используемых инстансом
+     */
+    private function GetSlotUsage(): int
     {
-        return $this->ts3con->hostinfo()[0]['virtualservers_total_maxclients'];
+        return (int)$this->ts3con->hostinfo()[0]['virtualservers_total_maxclients'];
     }
 
-    private function GetRuningVirtualServer()
+    /**
+     * @return int кол-во запушенных виртуальных серверов
+     */
+    private function GetRuningVirtualServer(): int
     {
-        return $this->ts3con->hostinfo()[0]['virtualservers_running_total'];
+        return (int)$this->ts3con->hostinfo()[0]['virtualservers_running_total'];
     }
 
-    private function GetUserOnline()
+    /**
+     * @return int кол-во пользователей онлайн
+     */
+    private function GetUserOnline(): int
     {
-        return $this->ts3con->hostinfo()[0]['virtualservers_total_clients_online'];
+        return (int)$this->ts3con->hostinfo()[0]['virtualservers_total_clients_online'];
     }
 }
