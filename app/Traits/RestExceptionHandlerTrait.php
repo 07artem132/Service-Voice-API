@@ -20,6 +20,7 @@ use Api\Exceptions\TooManyRequest;
 use Api\Exceptions\RequestIsNotJson;
 use Illuminate\Database\QueryException;
 use Api\Exceptions\GroupNotFoundException;
+use Api\Exceptions\PowerDnsClientException;
 use Api\Exceptions\ServerNotFoundException;
 use Api\Exceptions\ServerGroupExistException;
 use Illuminate\Validation\ValidationException;
@@ -27,6 +28,7 @@ use Api\Exceptions\TeamSpeakInvalidUidException;
 use Api\Exceptions\InstanceConfigNotFoundException;
 use Api\Exceptions\ServerGroupNotAssociatedException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Api\Exceptions\DomainEditNotMatchDomainFromUrlException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use \Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 
@@ -97,11 +99,71 @@ trait RestExceptionHandlerTrait
             case $this->isServerGroupNotAssociatedException($e);
                 $retval = $this->ServerGroupNotAssociated($e->server_id, $e->group);
                 break;
+            case $this->isPowerDnsClientException($e);
+                $retval = $this->PowerDnsClientException($e->response);
+                break;
+            case $this->isDomainEditNotMatchDomainFromUrlException($e);
+                $retval = $this->DomainEditNotMatchDomainFromUrlException($e->domain, $e->name);
+                break;
             default:
                 $retval = $this->badRequest($e->getMessage());
         }
 
         return $retval;
+    }
+
+    /**
+     * @apiDefine DOMAIN_EDIT_NOT_MATCH_DOMAIN_FROM_URL
+     *
+     * @apiError (Error code 400) DOMAIN_EDIT_NOT_MATCH_DOMAIN_FROM_URL Вы пытаетесь изменить домен отличный от того который передали в URL при запросе.
+     *
+     * @apiErrorExample {json} Домен в URL не соответствует переданному:
+     *     HTTP/1.1 400 Bad Request
+     *{
+     *  "status":"error",
+     *  "error":{
+     *    "code":400,
+     *    "message":"DOMAIN_EDIT_NOT_MATCH_DOMAIN_FROM_URL",
+     *    "description":"Вы пытаетесь изменить домен test.example012321231.org. но в URL указали домен example01.org"
+     *  }
+     *}
+     */
+
+    /**
+     * @param string $domain
+     * @param string $name
+     * @param int $statusCode
+     * @return \Illuminate\Http\JsonResponse
+     */
+    function DomainEditNotMatchDomainFromUrlException(string $domain, string $name, int $statusCode = 400)
+    {
+        return $this->jsonResponse([
+            'status' => 'error',
+            'error' => [
+                'code' => $statusCode,
+                'message' => 'DOMAIN_EDIT_NOT_MATCH_DOMAIN_FROM_URL',
+                'description' => "Вы пытаетесь изменить домен $name но в URL указали домен $domain"
+            ]
+        ], $statusCode, null);
+
+    }
+
+    /**
+     * @param string $response
+     * @param int $statusCode
+     * @return \Illuminate\Http\JsonResponse
+     */
+    function PowerDnsClientException(string $response, int $statusCode = 400)
+    {
+        $Error = json_decode($response);
+        return $this->jsonResponse([
+            'status' => 'error',
+            'error' => [
+                'code' => $statusCode,
+                'message' => 'DNS_CLIENT_EXCEPTION',
+                'description' => $Error->error
+            ]
+        ], $statusCode, null);
     }
 
     /**
@@ -262,7 +324,7 @@ trait RestExceptionHandlerTrait
      *    "code":400,
      *    "message":"VALIDATION_FAILED",
      *    "description":[
-     *      "Группа с таким идентификатором уже сушествует"
+     *      "Описание ошибки"
      *    ]
      *  }
      *}
@@ -754,5 +816,16 @@ trait RestExceptionHandlerTrait
     protected function isServerGroupNotAssociatedException(Exception $e)
     {
         return $e instanceof ServerGroupNotAssociatedException;
+    }
+
+    protected function isPowerDnsClientException(Exception $e)
+    {
+        return $e instanceof PowerDnsClientException;
+    }
+
+    protected function isDomainEditNotMatchDomainFromUrlException(Exception $e)
+    {
+        return $e instanceof DomainEditNotMatchDomainFromUrlException;
+
     }
 }

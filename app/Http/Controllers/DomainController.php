@@ -8,16 +8,18 @@
 
 namespace Api\Http\Controllers;
 
-use Api\Services\Domain\PowerDNS;
-use Api\Traits\RestSuccessResponseTrait;
+use Illuminate\Http\Request;
 use Api\Traits\RestHelperTrait;
-use Request;
+use Illuminate\Http\JsonResponse;
+use Api\Services\Domain\PowerDNS;
+use Api\Exceptions\RequestIsNotJson;
+use Api\Traits\RestSuccessResponseTrait;
 
 /**
  * Class DomainController
  * @package Api\Http\Controllers
  */
-class DomainController
+class DomainController extends Controller
 {
     use RestSuccessResponseTrait;
     use RestHelperTrait;
@@ -41,16 +43,34 @@ class DomainController
      *{
      *    "status": "success",
      *    "data": [
-     *        "example.com",
-     *        "example2.com"
-     *    ]
+     *   {
+     *       "dnssec": false,
+     *       "id": "example2.com.",
+     *       "kind": "Master",
+     *       "last_check": 0,
+     *       "masters": [],
+     *       "name": "example2.com.",
+     *       "notified_serial": 2017071602,
+     *       "serial": 2017071602
+     *   },
+     *   {
+     *       "dnssec": false,
+     *       "id": "example.com.",
+     *       "kind": "Master",
+     *       "last_check": 0,
+     *       "masters": [],
+     *       "name": "example.com.",
+     *       "notified_serial": 2017071602,
+     *       "serial": 2017071602
+     *   }
+     *  ]
      *}
      */
-
     /**
+     * Возврашает список доменов
      * @return \Illuminate\Http\JsonResponse
      */
-    function DomainList()
+    function List(): JsonResponse
     {
         $PowerDNS = new PowerDNS();
         $DomainList = $PowerDNS->DomainList();
@@ -214,16 +234,18 @@ class DomainController
      */
 
     /**
-     * @param $domain
-     * @return \Illuminate\Http\JsonResponse
+     * Возврашает отформатированный список записей домена
+     * @param string $domain домен
+     * @return JsonResponse Обьект с данными для ответа
      */
-    function DomainRecordFormatedList($domain)
+    function RecordFormatedList(string $domain): JsonResponse
     {
         $PowerDNS = new PowerDNS();
         $DomainRecordList = $PowerDNS->DomainRecordFormatedList($domain);
 
         return $this->jsonResponse($DomainRecordList);
     }
+
     /**
      * @api {get} /domain/:domain/record Cписок записей домена
      * @apiName Domain record list
@@ -382,10 +404,11 @@ class DomainController
      *}
      */
     /**
-     * @param $domain
-     * @return \Illuminate\Http\JsonResponse
+     * Возврашает список записей домена
+     * @param string $domain домен
+     * @return JsonResponse Обьект с данными для ответа
      */
-    function DomainRecordList($domain)
+    function RecordList(string $domain): JsonResponse
     {
         $PowerDNS = new PowerDNS();
         $DomainRecordList = $PowerDNS->DomainRecordList($domain);
@@ -393,6 +416,7 @@ class DomainController
         return $this->jsonResponse($DomainRecordList);
 
     }
+
     /**
      * @api {post} /domain Создать домен
      * @apiName Domain Add
@@ -410,8 +434,103 @@ class DomainController
      *}
      * @apiSampleRequest /domain
      * @apiHeader {String} X-token Ваш токен для работы с API.
+     * @apiHeader {String} Content-Type  Установите значение "application/json" потому как ожидается что вы отправите json
      * @apiSuccess (Success code 200) {String} status  Всегда содержит значение "success".
      * @apiPermission api.domain.add
+     * @apiUse INVALID_IP_ADDRESS
+     * @apiUse INVALID_TOKEN
+     * @apiUse REQUEST_LIMIT_EXCEEDED
+     * @apiUse TOKEN_IS_BLOCKED
+     * @apiUse VALIDATION_FAILED
+     * @apiSuccessExample {json} Успешно выполненный запрос:
+     *     HTTP/1.1 200 OK
+     *{
+     *  "status":"success",
+     *  "data":{
+     *    "dnssec":false,
+     *    "id":"example101111101.com.",
+     *    "kind":"Master",
+     *    "last_check":0,
+     *    "masters":[
+     *
+     *    ],
+     *    "name":"example101111101.com.",
+     *    "notified_serial":0,
+     *    "rrsets":[
+     *      {
+     *        "comments":[
+     *
+     *        ],
+     *        "name":"example101111101.com.",
+     *        "records":[
+     *          {
+     *            "content":"ns01.service-voice.com. info.service-voice.com. 2017072201 10800 3600 604800 3600",
+     *            "disabled":false
+     *          }
+     *        ],
+     *        "ttl":60,
+     *        "type":"SOA"
+     *      },
+     *      {
+     *        "comments":[
+     *
+     *        ],
+     *        "name":"example101111101.com.",
+     *        "records":[
+     *          {
+     *            "content":"ns01.example10.com.",
+     *            "disabled":false
+     *          },
+     *          {
+     *            "content":"ns2.example10.com.",
+     *            "disabled":false
+     *          }
+     *        ],
+     *        "ttl":60,
+     *        "type":"NS"
+     *      }
+     *    ],
+     *    "serial":2017072201,
+     *    "soa_edit":"",
+     *    "soa_edit_api":"DEFAULT"
+     *  }
+     *}
+     */
+    /**
+     * Добавление домена
+     * @param Request $request обьект который содержит все данные запроса
+     * @return JsonResponse Обьект с данными для ответа
+     * @throws RequestIsNotJson Возникает в случае если переданные данные не являются json
+     */
+    function Add(Request $request): JsonResponse
+    {
+        if (!$request->isJson())
+            throw new RequestIsNotJson();
+
+        $rules = config('ApiValidation.Domain.Create.rules');
+        $messages = config('ApiValidation.Domain.Create.messages');
+
+        $this->validate($request, $rules, $messages);
+
+        $PowerDNS = new PowerDNS();
+        $Response = $PowerDNS->DomainCreate(
+            $request->input('name'),
+            $request->input('kind'),
+            $request->input('nameservers')
+        );
+
+        return $this->jsonResponse($Response);
+    }
+    /**
+     * @api {post} /domain Удалить домен
+     * @apiName Domain delete
+     * @apiGroup Domain
+     * @apiVersion 1.0.0
+     * @apiDescription Удаляет домен
+     * @apiSampleRequest /domain
+     * @apiHeader {String} X-token Ваш токен для работы с API.
+     * @apiSuccess (Success code 200) {String} status  Всегда содержит значение "success".
+     * @apiPermission api.domain.delete
      * @apiUse INVALID_IP_ADDRESS
      * @apiUse INVALID_TOKEN
      * @apiUse REQUEST_LIMIT_EXCEEDED
@@ -419,22 +538,21 @@ class DomainController
      * @apiSuccessExample {json} Успешно выполненный запрос:
      *     HTTP/1.1 200 OK
      *{
-     *    "status": "success",
+     *  "status":"success",
      *}
      */
     /**
-     * @return \Illuminate\Http\JsonResponse
+     * @param $domain домен из URL
+     * @return JsonResponse
      */
-    function DomainAdd()
+    function Delete($domain): JsonResponse
     {
-        $json = $this->JsonDecodeAndValidate(Request::getContent(), true);
-
         $PowerDNS = new PowerDNS();
-        $Response = $PowerDNS->DomainCreate($json);
 
-        return $this->jsonResponse($Response);
+        $PowerDNS->DomainDelete($domain);
+
+        return $this->jsonResponse(null);
     }
-
     /**
      * @api {post} domain/{domain}/record Создать запись
      * @apiName Domain Record Add
@@ -444,7 +562,7 @@ class DomainController
      * Возможно создание нескольких записей за 1 запрос <br/><br/>
      * <b>При запросе обязательно необходимо передать RAW данные, пример данных</b>:<br/><br/>
      *{<br/>
-     * &nbsp;&nbsp;"0":{ <br/>
+     * &nbsp;&nbsp;{ <br/>
      * &nbsp;&nbsp;&nbsp;&nbsp;"name":"ts1",<br/>
      * &nbsp;&nbsp;&nbsp;&nbsp;"type":"A",<br/>
      * &nbsp;&nbsp;&nbsp;&nbsp;"ttl":"60",<br/>
@@ -462,12 +580,15 @@ class DomainController
      *}<br/>
      * @apiSampleRequest off
      * @apiHeader {String} X-token Ваш токен для работы с API.
+     * @apiHeader {String} Content-Type  Установите значение "application/json" потому как ожидается что вы отправите json
      * @apiSuccess (Success code 200) {String} status  Всегда содержит значение "success".
      * @apiPermission api.domain.record.add
      * @apiUse INVALID_IP_ADDRESS
      * @apiUse INVALID_TOKEN
      * @apiUse REQUEST_LIMIT_EXCEEDED
      * @apiUse TOKEN_IS_BLOCKED
+     * @apiUse VALIDATION_FAILED
+     * @apiUse DOMAIN_EDIT_NOT_MATCH_DOMAIN_FROM_URL
      * @apiSuccessExample {json} Успешно выполненный запрос:
      *     HTTP/1.1 200 OK
      *{
@@ -475,17 +596,32 @@ class DomainController
      *}
      */
     /**
-     * @param $domain
-     * @return \Illuminate\Http\JsonResponse
+     * Добавление записи для домена
+     * @param Request $request обьект который содержит все данные запроса
+     * @param string $domain домен
+     * @return JsonResponse Обьект с данными для ответа
+     * @throws RequestIsNotJson Возникает в случае если переданные данные не являются json
      */
-    function DomainRecordAdd($domain)
+    function RecordAdd(Request $request, string $domain): JsonResponse
     {
-        $json = $this->JsonDecodeAndValidate(Request::getContent(), true);
+        if (!$request->isJson())
+            throw new RequestIsNotJson();
+
+        $rules = config('ApiValidation.Domain.Record.Create.rules');
+        $messages = config('ApiValidation.Domain.Record.Create.messages');
+
+        $this->validate($request, $rules, $messages);
 
         $PowerDNS = new PowerDNS();
-        $Response = $PowerDNS->DomainRecordCreate($domain, $json);
+        $PowerDNS->DomainRecordCreate(
+            $domain,
+            $request->input('name'),
+            $request->input('type'),
+            $request->input('ttl'),
+            $request->input('records')
+        );
 
-        return $this->jsonResponse($Response);
+        return $this->jsonResponse(null);
     }
 
     /**
@@ -497,7 +633,7 @@ class DomainController
      * Возможно создание нескольких записей за 1 запрос <br/><br/>
      * <b>При запросе обязательно необходимо передать RAW данные, пример данных</b>:<br/><br/>
      *{<br/>
-     * &nbsp;&nbsp;"0":{ <br/>
+     * &nbsp;&nbsp;{ <br/>
      * &nbsp;&nbsp;&nbsp;&nbsp;"name":"ts1",<br/>
      * &nbsp;&nbsp;&nbsp;&nbsp;"type":"A",<br/>
      * &nbsp;&nbsp;&nbsp;&nbsp;"ttl":"60",<br/>
@@ -515,12 +651,15 @@ class DomainController
      *}<br/>
      * @apiSampleRequest off
      * @apiHeader {String} X-token Ваш токен для работы с API.
+     * @apiHeader {String} Content-Type  Установите значение "application/json" потому как ожидается что вы отправите json
      * @apiSuccess (Success code 200) {String} status  Всегда содержит значение "success".
      * @apiPermission api.domain.record.delete
      * @apiUse INVALID_IP_ADDRESS
      * @apiUse INVALID_TOKEN
      * @apiUse REQUEST_LIMIT_EXCEEDED
      * @apiUse TOKEN_IS_BLOCKED
+     * @apiUse VALIDATION_FAILED
+     * @apiUse DOMAIN_EDIT_NOT_MATCH_DOMAIN_FROM_URL
      * @apiSuccessExample {json} Успешно выполненный запрос:
      *     HTTP/1.1 200 OK
      *{
@@ -528,16 +667,30 @@ class DomainController
      *}
      */
     /**
-     * @param $domain
-     * @return \Illuminate\Http\JsonResponse
+     * @param Request $request обьект который содержит все данные запроса
+     * @param string $domain домен
+     * @return JsonResponse Обьект с данными для ответа
+     * @throws RequestIsNotJson Возникает в случае если переданные данные не являются json
      */
-    function DomainRecordDelete($domain)
+    function RecordDelete(Request $request, string $domain): JsonResponse
     {
-        $json = $this->JsonDecodeAndValidate(Request::getContent(), true);
+        if (!$request->isJson())
+            throw new RequestIsNotJson();
+
+        $rules = config('ApiValidation.Domain.Record.Delete.rules');
+        $messages = config('ApiValidation.Domain.Record.Delete.messages');
+
+        $this->validate($request, $rules, $messages);
 
         $PowerDNS = new PowerDNS();
-        $Response = $PowerDNS->DomainRecordDelete($domain, $json);
+        $PowerDNS->DomainRecordDelete(
+            $domain,
+            $request->input('name'),
+            $request->input('type'),
+            $request->input('ttl'),
+            $request->input('records')
+        );
 
-        return $this->jsonResponse($Response);
+        return $this->jsonResponse(null);
     }
 }

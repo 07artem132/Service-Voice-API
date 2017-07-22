@@ -16,4 +16,4 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/test', 'Web\test\test@index')->name('test');//->middleware();
+Route::get('/test', 'TestControllers@index')->name('test');//->middleware();

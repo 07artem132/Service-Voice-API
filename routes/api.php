@@ -204,14 +204,14 @@ Route::domain(env('APP_DOMAIN'))->prefix('v1/')->group(function () {
         /////////////////////////ДОКУМЕНТИРОВАНО/////////////////////////////
 
         Route::get('domain', [
-            'as' => 'DomainList',
-            'uses' => 'Api\Domain\DomainController@DomainList',
+            'as' => 'DomainControllerList',
+            'uses' => 'DomainController@List',
             'middleware' => 'permissions:api.domain.list'
         ]);
 
         Route::get('domain/{domain}/record/formated', [
             'as' => 'DomainRecordList',
-            'uses' => 'Api\Domain\DomainController@DomainRecordFormatedList',
+            'uses' => 'DomainController@RecordFormatedList',
             'where' => [
                 'domain' => '^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\-]*[A-Za-z0-9])$',
             ],
@@ -220,7 +220,7 @@ Route::domain(env('APP_DOMAIN'))->prefix('v1/')->group(function () {
 
         Route::get('domain/{domain}/record', [
             'as' => 'DomainRecordList',
-            'uses' => 'Api\Domain\DomainController@DomainRecordList',
+            'uses' => 'DomainController@RecordList',
             'where' => [
                 'domain' => '^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\-]*[A-Za-z0-9])$',
             ],
@@ -229,13 +229,13 @@ Route::domain(env('APP_DOMAIN'))->prefix('v1/')->group(function () {
 
         Route::post('domain', [
             'as' => 'DomainAdd',
-            'uses' => 'Api\Domain\DomainController@DomainAdd',
+            'uses' => 'DomainController@Add',
             'middleware' => 'permissions:api.domain.add'
         ]);
 
         Route::post('domain/{domain}/record', [
             'as' => 'DomainRecordAdd',
-            'uses' => 'Api\Domain\DomainController@DomainRecordAdd',
+            'uses' => 'DomainController@RecordAdd',
             'where' => [
                 'domain' => '^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\-]*[A-Za-z0-9])$',
             ],
@@ -244,12 +244,22 @@ Route::domain(env('APP_DOMAIN'))->prefix('v1/')->group(function () {
 
         Route::delete('domain/{domain}/record', [
             'as' => 'DomainRecordAdd',
-            'uses' => 'Api\Domain\DomainController@DomainRecordDelete',
+            'uses' => 'DomainController@RecordDelete',
             'where' => [
                 'domain' => '^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\-]*[A-Za-z0-9])$',
             ],
             'middleware' => 'permissions:api.domain.record.delete'
         ]);
+
+        Route::delete('domain/{domain}', [
+            'as' => 'DomainDelete',
+            'uses' => 'DomainController@Delete',
+            'where' => [
+                'domain' => '^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\-]*[A-Za-z0-9])$',
+            ],
+            'middleware' => 'permissions:api.domain.delete'
+        ]);
+
         //////////////////////////////////////////////////////////////////////
 
         ///////////////ВЗАИМОДЕЙСТВИЕ С ВИРТУАЛЬНЫМИ СЕРВЕРАМИ////////////////

@@ -20,7 +20,7 @@ trait RestSuccessResponseTrait
     protected function jsonResponse($data = null, int $statusCode = 200): JsonResponse
     {
         $payload = ['status' => 'success'];
-        $data = $data ? $payload['data'] = $data : [];
+        $data ? $payload['data'] = $data : [];
 
         return response()->json($payload, $statusCode);
     }
