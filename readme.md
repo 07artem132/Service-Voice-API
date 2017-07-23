@@ -9,10 +9,12 @@ debug bar  - https://github.com/barryvdh/laravel-debugbar
 <br/>
 apidoc - http://apidocjs.com
 <br/>
-Charts - https://erik.cat/projects/Charts/docs/4
-<br/>
 php-image-resize - https://github.com/eventviva/php-image-resize
 ## Установка приложения
 1) composer install
 2) npm install
 3) php artisan api:generatedoc (для генерации актуальной документации)
+
+## Компоненты которые были удалены но будут использоваться в других частях API
+Charts - https://erik.cat/projects/Charts/docs/4
+<br/>
