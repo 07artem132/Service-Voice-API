@@ -2,12 +2,15 @@
 
 namespace Api\Listeners;
 
+use Api\Task;
+use Api\TaskLog;
 use Api\Events\CronJobError;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
 class LogCronJobError
 {
+
     /**
      * Create the event listener.
      *
@@ -21,11 +24,23 @@ class LogCronJobError
     /**
      * Handle the event.
      *
-     * @param  CronJobError  $event
+     * @param  CronJobError $event
      * @return void
      */
     public function handle(CronJobError $event)
     {
-        //
+        $task_logs = new TaskLog;
+        $task_logs->task_id = $event->task_id;
+        $task_logs->status = 0;
+        $task_logs->message = $event->return;
+        $task_logs->run_time = $event->runtime;
+        $task_logs->save();
+
+        $TaskStatus = task::find($event->task_id);
+
+        $TaskStatus->last_run = date('Y-m-d H:i:s', $event->rundate);
+
+        $TaskStatus->save();
+
     }
 }
