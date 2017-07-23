@@ -3,8 +3,6 @@
 namespace Api\Events;
 
 use Api\Task;
-use Api\TaskLog;
-use Api\TaskStatus;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Broadcasting\PrivateChannel;
@@ -17,6 +15,12 @@ class CronJobError
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
+    public $name;
+    public $return;
+    public $runtime;
+    public $rundate;
+    public $task_id;
+
     /**
      * Create a new event instance.
      *
@@ -24,21 +28,11 @@ class CronJobError
      */
     public function __construct($name, $return, $runtime, $rundate)
     {
-        $Task = Task::where('name', '=', $name)->first();
-
-        $task_logs = new TaskLog;
-        $task_logs->task_id = $Task->id;
-        $task_logs->status = 0;
-        $task_logs->message = $return;
-        $task_logs->run_time = $runtime;
-        $task_logs->save();
-
-        $TaskStatus = TaskStatus::find($Task->id);
-
-        $TaskStatus->last_run = date('Y-m-d H:i:s', $rundate);
-
-        $TaskStatus->save();
-
+        $this->name = $name;
+        $this->return = $return;
+        $this->runtime = $runtime;
+        $this->rundate = $rundate;
+        $this->task_id = Task::where('name', '=', $name)->first()->id;
     }
 
     /**
