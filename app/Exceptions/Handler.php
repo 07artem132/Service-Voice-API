@@ -50,13 +50,8 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $e)
     {
-        if (!$this->isApiCall($request)) {
-            return response()->view('errors.500', [
-                'sentryID' => $this->sentryID,
-            ], 500);
-        } else {
-            return $this->getJsonResponseForException($request, $e);
-        }
+        $e->sentryID = $this->sentryID;
+        return $this->getJsonResponseForException($request, $e);
     }
 
     /**
