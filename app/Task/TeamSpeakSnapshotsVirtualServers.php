@@ -12,6 +12,10 @@ use Api\SnapshotsVirtualServers;
 use Api\Services\TeamSpeak3\ts3query;
 use Api\Servers;
 
+/**
+ * Class TeamSpeakSnapshotsVirtualServers
+ * @package Api\Task
+ */
 class TeamSpeakSnapshotsVirtualServers
 {
     /**
@@ -19,10 +23,7 @@ class TeamSpeakSnapshotsVirtualServers
      */
     private $ts3con;
 
-    /**
-     * TeamSpeakSnapshotsVirtualServers constructor.
-     */
-    function __construct()
+    function CronCallback()
     {
         $servers = Servers::Active()->TeamSpeak()->get();
 

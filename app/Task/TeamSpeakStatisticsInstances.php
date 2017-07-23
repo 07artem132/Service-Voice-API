@@ -17,10 +17,7 @@ class TeamSpeakStatisticsInstances
      */
     private $ts3con;
 
-    /**
-     * TeamSpeakStatisticsInstances constructor.
-     */
-    function __construct()
+    function CronCallback()
     {
         $servers = Servers::Active()->TeamSpeak()->get();
 

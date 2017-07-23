@@ -17,10 +17,7 @@ class TeamSpeakStatisticsVirtualServersInstance
      */
     private $ts3con;
 
-    /**
-     * TeamSpeakStatisticsVirtualServersInstance constructor.
-     */
-    function __construct()
+    function CronCallback()
     {
         $servers = Servers::Active()->TeamSpeak()->get();
 
