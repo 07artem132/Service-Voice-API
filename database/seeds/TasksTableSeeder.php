@@ -41,7 +41,7 @@ class TasksTableSeeder extends Seeder
             'class_name' => 'Api\Task\TeamSpeakSnapshotsVirtualServers',
             'is_enabled' => 1,
             'is_periodic' => 1,
-            'frequency' => '* */12 * * *',
+            'frequency' => '0 */12 * * *',
             'name' => 'Создание снапшотов всех виртуальных серверов на TeamSpeak 3 инстансах',
             'description' => '',
             'created_at' => date("Y-m-d H:i:s"),
