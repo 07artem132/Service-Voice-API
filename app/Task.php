@@ -41,11 +41,6 @@ class Task extends Model
      */
     protected $table = 'tasks';
 
-    public function Tasks()
-    {
-        return $this->hasOne('Api\TaskStatus', 'task_id', 'id');
-    }
-
     /**
      * Заготовка запроса для получения активных задач.
      * @param $query
