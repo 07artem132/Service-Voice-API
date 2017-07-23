@@ -184,17 +184,16 @@ return [
         Cartalyst\Sentinel\Laravel\SentinelServiceProvider::class,
 
         //https://github.com/barryvdh/laravel-debugbar
-        Barryvdh\Debugbar\ServiceProvider::class,
+        // Barryvdh\Debugbar\ServiceProvider::class,
 
         //https://docs.sentry.io/clients/php/integrations/laravel/
         Sentry\SentryLaravel\SentryLaravelServiceProvider::class,
 
         //https://github.com/barryvdh/laravel-ide-helper
-        Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
+        // Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
 
-        //https://erik.cat/projects/Charts/docs/4
-        ConsoleTVs\Charts\ChartsServiceProvider::class,
-
+        //Надстройка над CRON для более удобного использования и хранения задач в базе данных
+        Api\Providers\CronServiceProvider::class
     ],
 
     /*
@@ -248,11 +247,9 @@ return [
         'Reminder' => Cartalyst\Sentinel\Laravel\Facades\Reminder::class,
         'Sentinel' => Cartalyst\Sentinel\Laravel\Facades\Sentinel::class,
         //https://github.com/barryvdh/laravel-debugbar
-        'Debugbar' => Barryvdh\Debugbar\Facade::class,
+        //'Debugbar' => Barryvdh\Debugbar\Facade::class,
         //https://docs.sentry.io/clients/php/integrations/laravel/
         'Sentry' => Sentry\SentryLaravel\SentryFacade::class,
-        //https://erik.cat/projects/Charts/docs/4
-        'Charts' => ConsoleTVs\Charts\Facades\Charts::class,
     ],
 
 ];
