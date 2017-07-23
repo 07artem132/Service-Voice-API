@@ -16,6 +16,11 @@ class CronJobSuccess
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
+    public $name;
+    public $runtime;
+    public $rundate;
+    public $task_id;
+
     /**
      * Create a new event instance.
      *
@@ -23,14 +28,10 @@ class CronJobSuccess
      */
     public function __construct($name, $runtime, $rundate)
     {
-        $Task = Task::where('name', '=', $name)->first();
-
-        $task_logs = new TaskLog;
-        $task_logs->task_id = $Task->id;
-        $task_logs->status = 1;
-        $task_logs->message = 'Задание выполненно успешно';
-        $task_logs->run_time = $runtime;
-        $task_logs->save();
+        $this->name = $name;
+        $this->runtime = $runtime;
+        $this->rundate = $rundate;
+        $this->task_id = Task::where('name', '=', $name)->first()->id;
     }
 
     /**
