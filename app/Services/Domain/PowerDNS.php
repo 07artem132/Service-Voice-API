@@ -19,12 +19,30 @@ use Api\Exceptions\DomainEditNotMatchDomainFromUrlException;
  */
 class PowerDNS
 {
+    /**
+     * @var string Адрес API сервера с PowerDNS
+     */
     private $url;
+    /**
+     * @var string Ключ для работы с PowerDns
+     */
     private $key;
+    /**
+     * @var string уникальный идентификатор сервера на PowerDNS
+     */
     private $server_id;
+    /**
+     * @var HTTPClient Клиент для запросов к PowerDNS
+     */
     private $pdns_client;
+    /**
+     * @var array Параметры/Заголовки которые передаются в месте с запросом ( HEADER)
+     */
     private $request_option = [];
 
+    /**
+     * PowerDNS constructor.
+     */
     function __construct()
     {
         $this->url = env('POWER_DNS_URL');
@@ -63,9 +81,12 @@ class PowerDNS
     }
 
     /**
-     * @param string $domain
-     * @param mixed $json
-     * @return mixed
+     * @param string $domain изменяемый домен
+     * @param string $name Полное доменное имя (включая суб домен)
+     * @param string $type тип записи
+     * @param int $ttl ttl записи
+     * @param array $records Содержимое записи
+     * @return string закодированные данные в json
      */
     public function DomainRecordCreate(string $domain, string $name, string $type, int $ttl, array $records): void
     {
@@ -81,7 +102,7 @@ class PowerDNS
     /**
      * @param string $domain Домен из url
      * @param string $name полная запись которую хотят изменить
-     * @throws DomainEditNotMatchDomainFromUrlException
+     * @throws DomainEditNotMatchDomainFromUrlException Возникает в том случае если домен из URL не совпадает с доменом в записи которую необходимо изменить.
      */
     private function VerifiEditDomain(string $domain, string $name): void
     {
@@ -90,15 +111,18 @@ class PowerDNS
         preg_match($re, $name, $matches, PREG_OFFSET_CAPTURE, 0);
 
         if (empty($matches))
-            throw new DomainEditNotMatchDomainFromUrlException($domain, $name);//TODO здесь должно быть исключение
+            throw new DomainEditNotMatchDomainFromUrlException($domain, $name);
 
         return;
     }
 
     /**
-     * @param string $domain
-     * @param mixed $json
-     * @return mixed
+     * @param string $domain изменяемый домен
+     * @param string $name Полное доменное имя (включая суб домен)
+     * @param string $type тип записи
+     * @param int $ttl ttl записи
+     * @param array $records Содержимое записи
+     * @return string закодированные данные в json
      */
     public function DomainRecordDelete(string $domain, string $name, string $type, int $ttl, array $records): void
     {
@@ -112,9 +136,11 @@ class PowerDNS
     }
 
     /**
-     * @param string $domain
-     * @param $json
-     * @return string
+     * @param string $name Полное доменное имя (включая суб домен)
+     * @param string $type тип записи
+     * @param int $ttl ttl записи
+     * @param array $records Содержимое записи
+     * @return string закодированные данные в json
      */
     private function BildJsonRecordCreateOrEdit(string $name, string $type, int $ttl, array $records): string
     {
@@ -127,9 +153,11 @@ class PowerDNS
     }
 
     /**
-     * @param string $domain
-     * @param string $json
-     * @return string
+     * @param string $name Полное доменное имя (включая суб домен)
+     * @param string $type тип записи
+     * @param int $ttl ttl записи
+     * @param array $records Содержимое записи
+     * @return string закодированные данные в json
      */
     private function BildJsonRecordDelete(string $name, string $type, int $ttl, array $records): string
     {
@@ -143,8 +171,10 @@ class PowerDNS
     }
 
     /**
-     * @param  $json
-     * @return mixed
+     * @param string $domain Домен
+     * @param string $kind Тип домена (мастер/слейв/натив)
+     * @param array $nameservers Массив с нейм серверами
+     * @return string закодированные данные в json
      */
     private function BildJsonDomainCreate(string $domain, string $kind, array $nameservers): string
     {
@@ -156,8 +186,10 @@ class PowerDNS
     }
 
     /**
-     * @param $json
-     * @return mixed
+     * @param string $domain Домен
+     * @param string $kind Тип домена (мастер/слейв/натив)
+     * @param array $nameservers Массив с нейм серверами
+     * @return \stdClass
      */
     public function DomainCreate(string $domain, string $kind, array $nameservers): \stdClass
     {
@@ -301,10 +333,10 @@ class PowerDNS
     /**
      * @param string $Method Метод запроса
      * @param string $Url URL к которому необходимо выполнить запрос
-     * @return \stdClass Декодированный из json'a ответ
+     * @return mixed Декодированный из json'a ответ
      * @throws PowerDnsClientException
      */
-    private function SendHttpRequest(string $Method, string $Url)
+    private function SendHttpRequest(string $Method, string $Url): mixed
     {
         try {
             $res = $this->pdns_client->request($Method, $Url, $this->request_option);
@@ -312,7 +344,6 @@ class PowerDNS
             throw new PowerDnsClientException($e->getResponse()->getBody(true));
         }
 
-        //TODO возврашает как array так и stdClass Нужно привести к 1 типу возврашаемых данных
         return json_decode($res->getBody(), false);
     }
 
