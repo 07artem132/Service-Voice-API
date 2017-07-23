@@ -14,7 +14,5 @@ class DatabaseSeeder extends Seeder
         $this->call('TasksTableSeeder');
         $this->command->info('Таблица с задачами успешно заполнена!');
 
-        $this->call('TasksStatusTableSeeder');
-        $this->command->info('Таблица со статусом задач успешно заполнена!');
     }
 }
