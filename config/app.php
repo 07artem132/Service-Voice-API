@@ -183,12 +183,16 @@ return [
         // https://cartalyst.com/manual/sentinel/2.0
         Cartalyst\Sentinel\Laravel\SentinelServiceProvider::class,
 
+        //Зарегистрировано в /app/Providers/AppServiceProvider.php
         //https://github.com/barryvdh/laravel-debugbar
-        // Barryvdh\Debugbar\ServiceProvider::class,
+        //Barryvdh\Debugbar\ServiceProvider::class,
 
+        //Зарегистрировано в /app/Providers/AppServiceProvider.php
         //https://docs.sentry.io/clients/php/integrations/laravel/
-        Sentry\SentryLaravel\SentryLaravelServiceProvider::class,
+       // Sentry\SentryLaravel\SentryLaravelServiceProvider::class,
 
+
+        //Зарегистрировано в /app/Providers/AppServiceProvider.php
         //https://github.com/barryvdh/laravel-ide-helper
         // Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
 
@@ -246,10 +250,13 @@ return [
         'Activation' => Cartalyst\Sentinel\Laravel\Facades\Activation::class,
         'Reminder' => Cartalyst\Sentinel\Laravel\Facades\Reminder::class,
         'Sentinel' => Cartalyst\Sentinel\Laravel\Facades\Sentinel::class,
+        //Зарегистрировано в /app/Providers/AppServiceProvider.php
         //https://github.com/barryvdh/laravel-debugbar
         //'Debugbar' => Barryvdh\Debugbar\Facade::class,
+
         //https://docs.sentry.io/clients/php/integrations/laravel/
-        'Sentry' => Sentry\SentryLaravel\SentryFacade::class,
+        //Зарегистрировано в /app/Providers/AppServiceProvider.php
+       // 'Sentry' => Sentry\SentryLaravel\SentryFacade::class,
     ],
 
 ];
