@@ -4,7 +4,6 @@ namespace Api\Providers;
 
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
-use Api\Http\Controllers\TestController;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -16,7 +15,6 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         Schema::defaultStringLength(191);
-
     }
 
     /**
@@ -26,13 +24,16 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        if ($this->app->environment() !== 'production') {
-            $this->app->register(\Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class);
-        }
+
+        $this->app->register(\Sentry\SentryLaravel\SentryLaravelServiceProvider::class);
 
         if ($this->app->environment() !== 'production') {
-            $this->app->register(\Barryvdh\Debugbar\ServiceProvider::class);
-            $this->app->bind('Debugbar', \Barryvdh\Debugbar\Facade::class);
+            $this->app->register('Barryvdh\Debugbar\ServiceProvider');
+            $this->app->register('Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider');
+
+            $loader = \Illuminate\Foundation\AliasLoader::getInstance();
+            $loader->alias('Debugbar', 'Barryvdh\Debugbar\Facade');
+            $loader->alias('Sentry', 'Sentry\SentryLaravel\SentryFacade::class');
         }
     }
 }
