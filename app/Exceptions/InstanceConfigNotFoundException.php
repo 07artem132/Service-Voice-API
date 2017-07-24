@@ -28,7 +28,7 @@ class InstanceConfigNotFoundException extends Exception
     public function __construct(int $Instanse_ID)
     {
         $this->Instanse_ID = $Instanse_ID;
-        parent::__construct($Instanse_ID);
+        parent::__construct();
 
     }
 }
