@@ -257,13 +257,17 @@ class TeamSpeak
     function VirtualServerBanList(): array
     {
         try {
-            $data = (array)$this->connection->banList();
-        } catch (\TeamSpeak3_Adapter_ServerQuery_Exception $e) {
+            $data = $this->connection->banList();
+        } catch (TeamSpeak3_Adapter_ServerQuery_Exception $e) {
             if ($e->getMessage() === 'database empty result set')
                 return 'empty';
         }
 
-        return $data;
+        foreach ($data as $banID => $Param)
+            foreach ($Param as $key => $value)
+                $ReturnData[$banID][$key] = (string)$value;
+
+        return $ReturnData;
     }
 
     //endregion
@@ -287,9 +291,14 @@ class TeamSpeak
     /**
      * @return array
      */
-    function GetVirtualServerIconList(): array
+    function GetVirtualServerIconList(): ?array
     {
-        $data = $this->connection->channelFileList('0', '', '/icons');
+        try {
+            $data = $this->connection->channelFileList('0', '', '/icons');
+        } catch (TeamSpeak3_Adapter_ServerQuery_Exception  $e) {
+            if ($e->getMessage() === 'database empty result set')
+                return null;
+        }
 
         for ($i = 0; $i < count($data); $i++) {
             $data[$i]['path'] = (string)$data[$i]['path'];
