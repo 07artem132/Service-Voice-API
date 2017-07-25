@@ -324,6 +324,40 @@ return [
                     'max' => 'Максимальное значение поля :attribute составляет :max (int)',
                 ],
             ],
+            'Ban' => [
+                'rules' => [
+                    'rules' => [
+                        'required',
+                        'array',
+                        'min:1'
+                    ],
+                    'rules.name' => [
+                        'string',
+                    ],
+                    'rules.ip' => [
+                        'string',
+                    ],
+                    'rules.uid' => [
+                        'string',
+                    ],
+                    'timeseconds' => [
+                        'required',
+                        'integer',
+                    ],
+                    'reason' => [
+                        'required',
+                        'string',
+                    ]
+                ],
+                'messages' => [
+                    'array' => 'В поле :attribute вам необходимо передать массив (array)',
+                    'rules.min' => 'Вам необходимо передать массив содержаший по крайней мере 1 правило для бана (array)',
+                    'required' => 'Поле :attribute обязательно к заполнению.',
+                    'timeseconds.integer' => 'Ожидалось что в поле :attribute будет передана длительность бана в секундах (int)',
+                    'string' => 'Ожидалось что поле :attribute будет строкой (string)',
+
+                ]
+            ],
         ],
-    ],
+    ]
 ];
