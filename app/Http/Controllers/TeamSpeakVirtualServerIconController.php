@@ -16,7 +16,7 @@ use Illuminate\Http\JsonResponse;
 use Api\Services\TeamSpeak3\TeamSpeak;
 use Api\Traits\RestSuccessResponseTrait;
 
-class IconController extends Controller
+class TeamSpeakVirtualServerIconController extends Controller
 {
     use RestHelperTrait, RestSuccessResponseTrait;
 
