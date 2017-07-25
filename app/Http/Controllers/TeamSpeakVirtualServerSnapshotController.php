@@ -10,14 +10,14 @@ namespace Api\Http\Controllers;
 
 use Api\SnapshotsVirtualServers;
 use Illuminate\Http\JsonResponse;
-use Api\Services\TeamSpeak3\ts3query;
+use Api\Services\TeamSpeak3\teamSpeak;
 use Api\Traits\RestSuccessResponseTrait;
 
 /**
- * Class SnapshotController
+ * Class TeamSpeakVirtualServerSnapshotController
  * @package Api\Http\Controllers
  */
-class SnapshotController extends Controller
+class TeamSpeakVirtualServerSnapshotController extends Controller
 {
     use RestSuccessResponseTrait;
 
@@ -71,7 +71,7 @@ class SnapshotController extends Controller
     {
         $this->uid = base64_decode($bashe64uid);
 
-        $ts3conn = new ts3query($server_id);
+        $ts3conn = new teamSpeak($server_id);
         $ts3conn->serverGetByUid($this->uid);
         $snapshot = $ts3conn->snapshotCreate();
         $serverinfo = $ts3conn->serverinfo()[0];
