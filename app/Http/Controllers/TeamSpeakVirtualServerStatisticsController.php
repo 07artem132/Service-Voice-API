@@ -15,10 +15,10 @@ use Illuminate\Support\Facades\Cache;
 use Api\Traits\RestSuccessResponseTrait;
 
 /**
- * Class VirtualServerStatisticsController
+ * Class TeamSpeakVirtualServerStatisticsController
  * @package Api\Http\Controllers
  */
-class VirtualServerStatisticsController
+class TeamSpeakVirtualServerStatisticsController
 {
     use RestSuccessResponseTrait;
 
