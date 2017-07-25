@@ -14,7 +14,7 @@ use Api\Exceptions\RequestIsNotJson;
 use Api\Services\TeamSpeak3\TeamSpeak;
 use Api\Traits\RestSuccessResponseTrait;
 
-class VirtualServerBanControllers extends Controller
+class TeamSpeakVirtualServerBanControllers extends Controller
 {
     use RestSuccessResponseTrait;
 
