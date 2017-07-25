@@ -368,7 +368,7 @@ class TeamSpeakVirtualServerController extends Controller
     }
 
     /**
-     * @api {delete} /v1/teamspeak/instance/:server_id/virtualserver/:bashe64uid/serverinfo Информация о сервере
+     * @api {get} /v1/teamspeak/instance/:server_id/virtualserver/:bashe64uid/serverinfo Информация о сервере
      * @apiName TeamSpeak 3 server info
      * @apiGroup Virtual Server
      * @apiVersion 1.0.0
