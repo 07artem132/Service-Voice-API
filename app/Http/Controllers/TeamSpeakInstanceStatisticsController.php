@@ -19,7 +19,7 @@ use Api\Traits\RestSuccessResponseTrait;
  * Class Statistics
  * @package Api\Http\Controllers\TeamSpeak
  */
-class InstanceStatisticsController extends Controller
+class TeamSpeakInstanceStatisticsController extends Controller
 {
     use RestSuccessResponseTrait;
 
