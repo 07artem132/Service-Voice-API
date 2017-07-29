@@ -489,36 +489,34 @@ Route::domain(env('APP_DOMAIN'))->prefix('v1/')->group(function () {
         //region Токены (По ним идентифицируется пользователь)
         /////////////////////////////ТОКЕНЫ/////////////////////////////////////
         Route::delete('/token/{token}', [
-            'as' => 'TokenDelete',
-            'uses' => 'Api\Token\TokenController@Delete',
+            'as' => 'TokenControllerDelete',
+            'uses' => 'TokenController@Delete',
             'where' => [
-                'id' => '[0-9]+',
+                'id' => '^\d+$',
             ],
-            'middleware' => ['permissions:api.token.delete']
-        ]);
-        Route::get('/token/list', [
-            'as' => 'AllTokenList',
-            'uses' => 'Api\Token\TokenController@AllTokenList',
-            'where' => [
-                'id' => '[0-9]+',
-            ],
-            'middleware' => ['permissions:api.token.list.all']
+            'middleware' => [
+                'permissions:api.token.delete'
+            ]
         ]);
         Route::get('/token', [
-            'as' => 'TokenList',
-            'uses' => 'Api\Token\TokenController@UserTokenList',
+            'as' => 'TokenControllerList',
+            'uses' => 'TokenController@List',
             'where' => [
-                'id' => '[0-9]+',
+                'id' => '^\d+$',
             ],
-            'middleware' => ['permissions:api.token.list']
+            'middleware' => [
+                'permissions:api.token.list'
+            ]
         ]);
         Route::post('/token', [
-            'as' => 'TokenCreate',
-            'uses' => 'Api\Token\TokenController@Create',
+            'as' => 'TokenControllerCreate',
+            'uses' => 'TokenController@Create',
             'where' => [
-                'id' => '[0-9]+',
+                'id' => '^\d+$',
             ],
-            'middleware' => ['permissions:api.token.create']
+            'middleware' => [
+                'permissions:api.token.create'
+            ]
         ]);
         ////////////////////////////////////////////////////////////////////////
         //endregion
