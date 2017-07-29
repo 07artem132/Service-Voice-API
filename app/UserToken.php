@@ -24,7 +24,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Query\Builder|\Api\UserToken onlyTrashed()
  * @method static bool|null restore()
  * @method static \Illuminate\Database\Eloquent\Builder|\Api\UserToken token($token)
- * @method static \Illuminate\Database\Eloquent\Builder|\Api\UserToken user($user_id)
  * @method static \Illuminate\Database\Eloquent\Builder|\Api\UserToken whereAllowIp($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\Api\UserToken whereAppType($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\Api\UserToken whereBlocked($value)
@@ -46,7 +45,7 @@ class UserToken extends Model
     protected $dates = ['deleted_at'];
     protected $hidden = ['id', 'Blocked', 'user_id', 'deleted_at'];
 
-    public function scopeUser($query, $user_id)
+    public function scopeUserWhere($query, $user_id)
     {
         return $query->where('user_id', '=', $user_id);
 
@@ -60,13 +59,27 @@ class UserToken extends Model
 
     public function User()
     {
-        return $this->hasOne('Api\User','id');
+        return $this->hasOne('Api\User', 'id');
+    }
+
+    public function servers()
+    {
+        return $this->hasMany('Api\TokenServers', 'token_id');
+    }
+
+    public function privileges()
+    {
+        return $this->hasOne('Api\TokenPrivileges', 'token_id');
+    }
+
+    public function TeamspeakVirtualServers()
+    {
+        return $this->hasMany('Api\TokenTeamspeakVirtualServers', 'token_id');
     }
 
     public function scopeFirstCreated($query)
     {
-        return $query->orderBy('created_at','asc')->first();
+        return $query->orderBy('created_at', 'asc')->first();
 
     }
-
 }

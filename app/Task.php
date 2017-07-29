@@ -31,6 +31,8 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\Api\Task wherePriority($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\Api\Task whereUpdatedAt($value)
  * @mixin \Eloquent
+ * @property string|null $last_run
+ * @method static \Illuminate\Database\Eloquent\Builder|\Api\Task whereLastRun($value)
  */
 class Task extends Model
 {
