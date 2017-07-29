@@ -4,7 +4,7 @@ namespace Api\Task;
 
 use Api\Servers;
 use Api\StatisticsInstances;
-use Api\Services\TeamSpeak3\ts3query;
+use Api\Services\TeamSpeak3\TeamSpeak;
 
 /**
  * Class TeamSpeakStatisticsInstances
@@ -13,7 +13,7 @@ use Api\Services\TeamSpeak3\ts3query;
 class TeamSpeakStatisticsInstances
 {
     /**
-     * @var ts3query класс для взаимодействия с teamspeak 3
+     * @var teamSpeak класс для взаимодействия с teamspeak 3
      */
     private $ts3con;
 
@@ -32,7 +32,7 @@ class TeamSpeakStatisticsInstances
      */
     public function CollectionStatistics($server_id): void
     {
-        $this->ts3con = new ts3query($server_id);
+        $this->ts3con = new TeamSpeak($server_id);
         $db = new StatisticsInstances;
         $db->server_id = $server_id;
         $db->slot_usage = $this->GetSlotUsage();

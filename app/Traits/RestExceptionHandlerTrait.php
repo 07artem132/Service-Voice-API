@@ -34,7 +34,6 @@ use \Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 
 trait RestExceptionHandlerTrait
 {
-
     /**
      * Creates a new JSON response based on exception type.
      *
@@ -507,7 +506,7 @@ trait RestExceptionHandlerTrait
      * @param int $Instanse_ID
      * @return \Illuminate\Http\JsonResponse
      */
-    protected function InstanceConfigNotFoundException(integer $Instanse_ID)
+    protected function InstanceConfigNotFoundException(int $Instanse_ID)
     {
         return $this->jsonResponse([
             'status' => 'error',

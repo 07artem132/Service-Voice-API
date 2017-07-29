@@ -46,6 +46,26 @@ class TeamSpeak
     //region Работа с инстансом
 
     /**
+     * @param array $config
+     */
+    function instanceEdit(array $config): void
+    {
+        $this->connection->modify($config);
+
+        return;
+    }
+
+    function bindinglist(): array
+    {
+        $data = $this->connection->execute('bindinglist')->toArray()[0];
+
+        foreach ($data as $key => $value)
+            $data[$key] = (string)$value;
+
+        return $data;
+    }
+
+    /**
      * @return array
      */
     function serverlist(): array

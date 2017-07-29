@@ -7,7 +7,6 @@
  */
 namespace Api\Services\Auth;
 
-use Illuminate\Auth\AuthenticationException;
 use Sentinel;
 use Sentry;
 

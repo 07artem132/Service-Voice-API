@@ -159,6 +159,59 @@ return [
         ]
     ],
     'TeamSpeak' => [
+        'Instance' => [
+            'Edit' => [
+                'rules' => [
+                    'serverinstance_guest_serverquery_group' => [
+                        'integer',
+                        'filled'
+                    ],
+                    'serverinstance_template_serveradmin_group' => [
+                        'integer',
+                        'filled'
+                    ],
+                    'serverinstance_filetransfer_port' => [
+                        'integer',
+                        'filled'
+                    ],
+                    'serverinstance_max_download_total_bandwitdh' => [
+                        'integer',
+                        'filled'
+                    ],
+                    'serverinstance_max_upload_total_bandwitdh' => [
+                        'integer',
+                        'filled'
+                    ],
+                    'serverinstance_template_serverdefault_group' => [
+                        'integer',
+                        'filled'
+                    ],
+                    'serverinstance_template_channeldefault_group' => [
+                        'integer',
+                        'filled'
+                    ],
+                    'serverinstance_template_channeladmin_group' => [
+                        'integer',
+                        'filled'
+                    ],
+                    'serverinstance_serverquery_flood_commands' => [
+                        'integer',
+                        'filled'
+                    ],
+                    'serverinstance_serverquery_flood_time' => [
+                        'integer',
+                        'filled'
+                    ],
+                    'serverinstance_serverquery_flood_ban_time' => [
+                        'integer',
+                        'filled'
+                    ],
+                ],
+                'messages' => [
+                    'integer' => 'Ожидалось что в поле :attribute будет передано число (int)',
+                ],
+            ]
+        ],
         'VirtualServer' => [
             'Create' => [
                 'rules' => [
@@ -322,6 +375,7 @@ return [
                 ],
                 'messages' => [
                     'max' => 'Максимальное значение поля :attribute составляет :max (int)',
+                    'integer' => 'Ожидалось что в поле :attribute будет передано число (int)',
                 ],
             ],
             'Ban' => [

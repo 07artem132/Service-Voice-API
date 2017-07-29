@@ -4,7 +4,7 @@ namespace Api\Task;
 
 use Api\Servers;
 use Api\StatisticsVirtualServers;
-use Api\Services\TeamSpeak3\ts3query;
+use Api\Services\TeamSpeak3\TeamSpeak;
 
 /**
  * Class TeamSpeakStatisticsVirtualServersInstance
@@ -13,7 +13,7 @@ use Api\Services\TeamSpeak3\ts3query;
 class TeamSpeakStatisticsVirtualServersInstance
 {
     /**
-     * @var ts3query класс для взаимодействия с teamspeak 3
+     * @var teamSpeak класс для взаимодействия с teamspeak 3
      */
     private $ts3con;
 
@@ -31,8 +31,9 @@ class TeamSpeakStatisticsVirtualServersInstance
      */
     public function CollectionStatistics(int $server_id): void
     {
-        $this->ts3con = new ts3query($server_id);
-        $data = $this->ts3con->GetAllServerStatisticsInfo();
+        $this->ts3con = new TeamSpeak($server_id);
+        $data = $this->GetAllServerStatisticsInfo();
+
         foreach ($data as $VirtualServer) {
             $db = new StatisticsVirtualServers;
             $db->server_id = $server_id;
@@ -47,6 +48,20 @@ class TeamSpeakStatisticsVirtualServersInstance
         $this->ts3con->logout();
 
         return;
+    }
+
+    function GetAllServerStatisticsInfo()
+    {
+        $data = [];
+        foreach ($this->ts3con->ReturnConnection() as $VirtualServer) {
+            $data[$VirtualServer['virtualserver_id']]['unique_id'] = (string)$VirtualServer['virtualserver_unique_identifier'];
+            $data[$VirtualServer['virtualserver_id']]['user_online'] = (integer)$VirtualServer['virtualserver_clientsonline'];
+            $data[$VirtualServer['virtualserver_id']]['slot_usage'] = (integer)$VirtualServer['virtualserver_maxclients'];
+            $data[$VirtualServer['virtualserver_id']]['avg_ping'] = (string)$VirtualServer['virtualserver_total_ping'];
+            $data[$VirtualServer['virtualserver_id']]['avg_packetloss'] = (string)$VirtualServer['virtualserver_total_packetloss_total'];
+        }
+
+        return $data;
     }
 
 }

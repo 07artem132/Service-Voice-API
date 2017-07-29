@@ -18,3 +18,7 @@ php-image-resize - https://github.com/eventviva/php-image-resize
 ## Компоненты которые были удалены но будут использоваться в других частях API
 Charts - https://erik.cat/projects/Charts/docs/4
 <br/>
+## В дальнейшем использовать как хостинг файлов
+https://www.scaleway.com/virtual-cloud-servers/ (Сервер за 3 евро в месяц, дают 50 гб ssd)
+##Управление Iptables через API
+https://github.com/plugowski/iptables

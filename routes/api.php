@@ -17,145 +17,6 @@ Route::domain(env('APP_DOMAIN'))->prefix('v1/')->group(function () {
 
     Route::group(['middleware' => ['permissions:api.usage']], function () {
 
-        //region Статистика
-        ///////////////////////////СТАТИСТИКА/////////////////////////////////
-        //region Инстансы
-        ////////////////////////////Инстансы///////////////////////////////////
-        /////////////////////////ДОКУМЕНТИРОВАНО///////////////////////////////
-        Route::get('/teamspeak/instance/{server_id}/statistics/realtime', [
-            'as' => 'InstanceStatisticsControllerRealtime',
-            'uses' => 'TeamSpeakInstanceStatisticsController@Realtime',
-            'where' => [
-                'server_id' => '[0-9]+',
-            ],
-            'middleware' => 'permissions:api.teamspeak.instanse.statistics.realtime'
-        ]);
-        Route::get('/teamspeak/instance/{server_id}/statistics/day', [
-            'as' => 'InstanceStatisticsControllerDay',
-            'uses' => 'TeamSpeakInstanceStatisticsController@Day',
-            'where' => [
-                'server_id' => '[0-9]+',
-            ],
-            'middleware' => 'permissions:api.teamspeak.instanse.statistics.day'
-        ]);
-        Route::get('/teamspeak/instance/{server_id}/statistics/week', [
-            'as' => 'InstanceStatisticsControllerWeek',
-            'uses' => 'TeamSpeakInstanceStatisticsController@Week',
-            'where' => [
-                'server_id' => '[0-9]+',
-            ],
-            'middleware' => 'permissions:api.teamspeak.instanse.statistics.week'
-        ]);
-        Route::get('/teamspeak/instance/{server_id}/statistics/month', [
-            'as' => 'InstanceStatisticsControllerMonth',
-            'uses' => 'TeamSpeakInstanceStatisticsController@Month',
-            'where' => [
-                'server_id' => '[0-9]+',
-            ],
-            'middleware' => 'permissions:api.teamspeak.instanse.statistics.month'
-        ]);
-        Route::get('/teamspeak/instance/{server_id}/statistics/year', [
-            'as' => 'InstanceStatisticsControllerYear',
-            'uses' => 'TeamSpeakInstanceStatisticsController@Year',
-            'where' => [
-                'server_id' => '[0-9]+',
-            ],
-            'middleware' => 'permissions:api.teamspeak.instanse.statistics.year'
-        ]);
-        /////////////////////////////////////////////////////////////////////////
-        //endregion
-        //region Виртуальные TeamSpeak 3 сервера
-        //////////////////Виртуальные TeamSpeak 3 сервера///////////////////////
-        /////////////////////////ДОКУМЕНТИРОВАНО///////////////////////////////
-        Route::get('/teamspeak/instance/{server_id}/virtualserver/{bashe64uid}/statistics/realtime', [
-            'as' => 'VirtualServerStatisticsControllerRealtime',
-            'uses' => 'TeamSpeakVirtualServerStatisticsController@Realtime',
-            'where' => [
-                'server_id' => '^\d+$',
-                'bashe64uid' => '(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?',
-            ],
-            'middleware' => 'permissions:api.teamspeak.virtualserver.statistics.realtime'
-        ]);
-        Route::get('/teamspeak/instance/{server_id}/virtualserver/{bashe64uid}/statistics/day', [
-            'as' => 'VirtualServerStatisticsControllerDay',
-            'uses' => 'TeamSpeakVirtualServerStatisticsController@Day',
-            'where' => [
-                'server_id' => '^\d+$',
-                'bashe64uid' => '(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?',
-            ],
-            'middleware' => 'permissions:api.teamspeak.virtualserver.statistics.day'
-        ]);
-        Route::get('/teamspeak/instance/{server_id}/virtualserver/{bashe64uid}/statistics/week', [
-            'as' => 'VirtualServerStatisticsControllerWeek',
-            'uses' => 'TeamSpeakVirtualServerStatisticsController@Week',
-            'where' => [
-                'server_id' => '^\d+$',
-                'bashe64uid' => '(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?',
-            ],
-            'middleware' => 'permissions:api.teamspeak.virtualserver.statistics.week'
-        ]);
-        Route::get('/teamspeak/instance/{server_id}/virtualserver/{bashe64uid}/statistics/month', [
-            'as' => 'VirtualServerStatisticsControllerMonth',
-            'uses' => 'TeamSpeakVirtualServerStatisticsController@Month',
-            'where' => [
-                'server_id' => '^\d+$',
-                'bashe64uid' => '(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?',
-            ],
-            'middleware' => 'permissions:api.teamspeak.virtualserver.statistics.month'
-        ]);
-        Route::get('/teamspeak/instance/{server_id}/virtualserver/{bashe64uid}/statistics/year', [
-            'as' => 'VirtualServerStatisticsControllerYear',
-            'uses' => 'TeamSpeakVirtualServerStatisticsController@Year',
-            'where' => [
-                'server_id' => '^\d+$',
-                'bashe64uid' => '(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?',
-            ],
-            'middleware' => 'permissions:api.teamspeak.virtualserver.statistics.year'
-        ]);
-        //////////////////////////////////////////////////////////////////////
-        //endregion
-        //////////////////////////////////////////////////////////////////////
-        //endregion
-
-        //region Хелперы
-        ///////////////////////TEAMSPEAK 3 ХЕЛПЕРЫ///////////////////////////
-        /////////////////////////ДОКУМЕНТИРОВАНО/////////////////////////////
-        Route::get('/teamspeak/instance/{server_id}/blacklisted', [
-            'as' => 'TeamSpeakHelpersControllerInstanceIsBlacklisted',
-            'uses' => 'TeamSpeakHelpersController@InstanceIsBlacklisted',
-            'where' => [
-                'server_id' => '^\d+$',
-            ],
-            'middleware' => 'permissions:api.teamspeak.instance.blacklisted'
-        ]);
-
-        Route::get('/teamspeak/helpers/{ip}/blacklisted', [
-            'as' => 'TeamSpeakHelpersControllerIPv4IsBlacklisted',
-            'uses' => 'TeamSpeakHelpersController@IPv4IsBlacklisted',
-            'where' => [
-                'ip' => '^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$',
-            ],
-            'middleware' => 'permissions:api.teamspeak.helpers.blacklisted'
-        ]);
-
-        Route::get('/teamspeak/helpers/server/update/mirror/list', [
-            'as' => 'TeamSpeakHelpersControllerUpdateServerMirrorList',
-            'uses' => 'TeamSpeakHelpersController@UpdateServerMirrorList',
-            'middleware' => 'permissions:api.teamspeak.helpers.UpdateMirrorList'
-        ]);
-
-        Route::get('/teamspeak/instance/{server_id}/outdated', [
-            'as' => 'TeamSpeakHelpersControllerInstanceOutdatedCheck',
-            'uses' => 'TeamSpeakHelpersController@InstanceOutdatedCheck',
-            'where' => [
-                'server_id' => '^\d+$',
-            ],
-            'middleware' => 'permissions:api.teamspeak.instance.outdated'
-        ]);
-
-        //////////////////////////////////////////////////////////////////////
-        //endregion
-
         //region Домены (PowerDNS)
         ///////////////////ВЗАИМОДЕЙСТВИЕ С ДОМЕНАМИ//////////////////////////
         /////////////////////////ДОКУМЕНТИРОВАНО/////////////////////////////
@@ -215,6 +76,77 @@ Route::domain(env('APP_DOMAIN'))->prefix('v1/')->group(function () {
                 'domain' => '^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\-]*[A-Za-z0-9])$',
             ],
             'middleware' => 'permissions:api.domain.delete'
+        ]);
+
+        //////////////////////////////////////////////////////////////////////
+        //endregion
+
+        //region TeamSpeak 3
+        //region TeamSpeak 3 инстансы
+        //////////////////////ВЗАИМОДЕЙСТВИЕ С ИНСТАНСОМ//////////////////////
+        /////////////////////////ДОКУМЕНТИРОВАНО/////////////////////////////
+        Route::get('/teamspeak/instance/{server_id}/hostinfo', [
+            'as' => 'TeamSpeakInstanseControllerHostInfo',
+            'uses' => 'TeamSpeakInstanseController@HostInfo',
+            'where' => [
+                'server_id' => '^\d+$',
+            ],
+            'middleware' => 'permissions:api.teamspeak.instance.hostinfo'
+        ]);
+
+        Route::get('/teamspeak/instance/{server_id}/instanceinfo', [
+            'as' => 'TeamSpeakInstanseControllerInstanceInfo',
+            'uses' => 'TeamSpeakInstanseController@InstanceInfo',
+            'where' => [
+                'server_id' => '^\d+$',
+            ],
+            'middleware' => 'permissions:api.teamspeak.instance.instanceinfo'
+        ]);
+
+        Route::get('/teamspeak/instance/{server_id}/version', [
+            'as' => 'TeamSpeakInstanseControllerVersion',
+            'uses' => 'TeamSpeakInstanseController@Version',
+            'where' => [
+                'server_id' => '^\d+$',
+            ],
+            'middleware' => 'permissions:api.teamspeak.instance.version'
+        ]);
+
+        Route::get('/teamspeak/instance/{server_id}/serverlist', [
+            'as' => 'TeamSpeakInstanseControllerServerList',
+            'uses' => 'TeamSpeakInstanseController@ServerList',
+            'where' => [
+                'server_id' => '^\d+$',
+            ],
+            'middleware' => 'permissions:api.teamspeak.instance.serverlist'
+        ]);
+
+        Route::get('/teamspeak/instance/{server_id}/bindinglist', [
+            'as' => 'TeamSpeakInstanseControllerBindList',
+            'uses' => 'TeamSpeakInstanseController@BindList',
+            'where' => [
+                'server_id' => '^\d+$',
+            ],
+            'middleware' => 'permissions:api.teamspeak.instance.bindinglist'
+        ]);
+
+        Route::get('/teamspeak/instance/{server_id}/log/{last_pos}', [
+            'as' => 'TeamSpeakInstanseControllerGetLog',
+            'uses' => 'TeamSpeakInstanseController@GetLog',
+            'where' => [
+                'server_id' => '^\d+$',
+                'last_pos' => '^\d+$',
+            ],
+            'middleware' => 'permissions:api.teamspeak.instance.log'
+        ]);
+
+        Route::put('/teamspeak/instance/{server_id}/edit', [
+            'as' => 'TeamSpeakInstanseControllerEdit',
+            'uses' => 'TeamSpeakInstanseController@Edit',
+            'where' => [
+                'server_id' => '^\d+$',
+            ],
+            'middleware' => 'permissions:api.teamspeak.instance.edit'
         ]);
 
         //////////////////////////////////////////////////////////////////////
@@ -414,6 +346,146 @@ Route::domain(env('APP_DOMAIN'))->prefix('v1/')->group(function () {
         //////////////////////////////////////////////////////////////////////
         //endregion
 
+        //region Статистика
+        ///////////////////////////СТАТИСТИКА/////////////////////////////////
+        //region Инстансы
+        ////////////////////////////Инстансы///////////////////////////////////
+        /////////////////////////ДОКУМЕНТИРОВАНО///////////////////////////////
+        Route::get('/teamspeak/instance/{server_id}/statistics/realtime', [
+            'as' => 'InstanceStatisticsControllerRealtime',
+            'uses' => 'TeamSpeakInstanceStatisticsController@Realtime',
+            'where' => [
+                'server_id' => '[0-9]+',
+            ],
+            'middleware' => 'permissions:api.teamspeak.instanse.statistics.realtime'
+        ]);
+        Route::get('/teamspeak/instance/{server_id}/statistics/day', [
+            'as' => 'InstanceStatisticsControllerDay',
+            'uses' => 'TeamSpeakInstanceStatisticsController@Day',
+            'where' => [
+                'server_id' => '[0-9]+',
+            ],
+            'middleware' => 'permissions:api.teamspeak.instanse.statistics.day'
+        ]);
+        Route::get('/teamspeak/instance/{server_id}/statistics/week', [
+            'as' => 'InstanceStatisticsControllerWeek',
+            'uses' => 'TeamSpeakInstanceStatisticsController@Week',
+            'where' => [
+                'server_id' => '[0-9]+',
+            ],
+            'middleware' => 'permissions:api.teamspeak.instanse.statistics.week'
+        ]);
+        Route::get('/teamspeak/instance/{server_id}/statistics/month', [
+            'as' => 'InstanceStatisticsControllerMonth',
+            'uses' => 'TeamSpeakInstanceStatisticsController@Month',
+            'where' => [
+                'server_id' => '[0-9]+',
+            ],
+            'middleware' => 'permissions:api.teamspeak.instanse.statistics.month'
+        ]);
+        Route::get('/teamspeak/instance/{server_id}/statistics/year', [
+            'as' => 'InstanceStatisticsControllerYear',
+            'uses' => 'TeamSpeakInstanceStatisticsController@Year',
+            'where' => [
+                'server_id' => '[0-9]+',
+            ],
+            'middleware' => 'permissions:api.teamspeak.instanse.statistics.year'
+        ]);
+        /////////////////////////////////////////////////////////////////////////
+        //endregion
+        //region Виртуальные TeamSpeak 3 сервера
+        //////////////////Виртуальные TeamSpeak 3 сервера///////////////////////
+        /////////////////////////ДОКУМЕНТИРОВАНО///////////////////////////////
+        Route::get('/teamspeak/instance/{server_id}/virtualserver/{bashe64uid}/statistics/realtime', [
+            'as' => 'VirtualServerStatisticsControllerRealtime',
+            'uses' => 'TeamSpeakVirtualServerStatisticsController@Realtime',
+            'where' => [
+                'server_id' => '^\d+$',
+                'bashe64uid' => '(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?',
+            ],
+            'middleware' => 'permissions:api.teamspeak.virtualserver.statistics.realtime'
+        ]);
+        Route::get('/teamspeak/instance/{server_id}/virtualserver/{bashe64uid}/statistics/day', [
+            'as' => 'VirtualServerStatisticsControllerDay',
+            'uses' => 'TeamSpeakVirtualServerStatisticsController@Day',
+            'where' => [
+                'server_id' => '^\d+$',
+                'bashe64uid' => '(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?',
+            ],
+            'middleware' => 'permissions:api.teamspeak.virtualserver.statistics.day'
+        ]);
+        Route::get('/teamspeak/instance/{server_id}/virtualserver/{bashe64uid}/statistics/week', [
+            'as' => 'VirtualServerStatisticsControllerWeek',
+            'uses' => 'TeamSpeakVirtualServerStatisticsController@Week',
+            'where' => [
+                'server_id' => '^\d+$',
+                'bashe64uid' => '(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?',
+            ],
+            'middleware' => 'permissions:api.teamspeak.virtualserver.statistics.week'
+        ]);
+        Route::get('/teamspeak/instance/{server_id}/virtualserver/{bashe64uid}/statistics/month', [
+            'as' => 'VirtualServerStatisticsControllerMonth',
+            'uses' => 'TeamSpeakVirtualServerStatisticsController@Month',
+            'where' => [
+                'server_id' => '^\d+$',
+                'bashe64uid' => '(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?',
+            ],
+            'middleware' => 'permissions:api.teamspeak.virtualserver.statistics.month'
+        ]);
+        Route::get('/teamspeak/instance/{server_id}/virtualserver/{bashe64uid}/statistics/year', [
+            'as' => 'VirtualServerStatisticsControllerYear',
+            'uses' => 'TeamSpeakVirtualServerStatisticsController@Year',
+            'where' => [
+                'server_id' => '^\d+$',
+                'bashe64uid' => '(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?',
+            ],
+            'middleware' => 'permissions:api.teamspeak.virtualserver.statistics.year'
+        ]);
+        //////////////////////////////////////////////////////////////////////
+        //endregion
+        //////////////////////////////////////////////////////////////////////
+        //endregion
+
+        //region Хелперы
+        ///////////////////////TEAMSPEAK 3 ХЕЛПЕРЫ///////////////////////////
+        /////////////////////////ДОКУМЕНТИРОВАНО/////////////////////////////
+        Route::get('/teamspeak/instance/{server_id}/blacklisted', [
+            'as' => 'TeamSpeakHelpersControllerInstanceIsBlacklisted',
+            'uses' => 'TeamSpeakHelpersController@InstanceIsBlacklisted',
+            'where' => [
+                'server_id' => '^\d+$',
+            ],
+            'middleware' => 'permissions:api.teamspeak.instance.blacklisted'
+        ]);
+
+        Route::get('/teamspeak/helpers/{ip}/blacklisted', [
+            'as' => 'TeamSpeakHelpersControllerIPv4IsBlacklisted',
+            'uses' => 'TeamSpeakHelpersController@IPv4IsBlacklisted',
+            'where' => [
+                'ip' => '^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$',
+            ],
+            'middleware' => 'permissions:api.teamspeak.helpers.blacklisted'
+        ]);
+
+        Route::get('/teamspeak/helpers/server/update/mirror/list', [
+            'as' => 'TeamSpeakHelpersControllerUpdateServerMirrorList',
+            'uses' => 'TeamSpeakHelpersController@UpdateServerMirrorList',
+            'middleware' => 'permissions:api.teamspeak.helpers.UpdateMirrorList'
+        ]);
+
+        Route::get('/teamspeak/instance/{server_id}/outdated', [
+            'as' => 'TeamSpeakHelpersControllerInstanceOutdatedCheck',
+            'uses' => 'TeamSpeakHelpersController@InstanceOutdatedCheck',
+            'where' => [
+                'server_id' => '^\d+$',
+            ],
+            'middleware' => 'permissions:api.teamspeak.instance.outdated'
+        ]);
+
+        //////////////////////////////////////////////////////////////////////
+        //endregion
+        //endregion
+
         //region Токены (По ним идентифицируется пользователь)
         /////////////////////////////ТОКЕНЫ/////////////////////////////////////
         Route::delete('/token/{token}', [
@@ -497,59 +569,6 @@ Route::domain(env('APP_DOMAIN'))->prefix('v1/')->group(function () {
         ////////////////////////////////////////////////////////////////////////
         //endregion
 
-        //region TeamSpeak 3 инстансы
-        //////////////////////ВЗАИМОДЕЙСТВИЕ С ИНСТАНСОМ//////////////////////
-        Route::get('/teamspeak/instance/{server_id}/hostinfo', [
-            'as' => 'TeamSpeakInstanceQueryHostinfo',
-            'uses' => 'Api\TeamSpeak\InstanceQuery@hostinfo',
-            'where' => [
-                'server_id' => '[0-9]+',
-            ],
-            'middleware' => 'permissions:api.teamspeak.instance.hostinfo'
-        ]);
-
-        Route::get('/teamspeak/instance/{server_id}/instanceinfo', [
-            'as' => 'TeamSpeakInstanceQueryInstanceinfo',
-            'uses' => 'Api\TeamSpeak\InstanceQuery@instanceinfo',
-            'where' => [
-                'server_id' => '[0-9]+',
-            ],
-            'middleware' => 'permissions:api.teamspeak.instance.instanceinfo'
-        ]);
-
-        Route::get('/teamspeak/instance/{server_id}/version', [
-            'as' => 'TeamSpeakInstanceQueryVersion',
-            'uses' => 'Api\TeamSpeak\InstanceQuery@version',
-            'where' => [
-                'server_id' => '[0-9]+',
-            ],
-            'middleware' => 'permissions:api.teamspeak.instance.version'
-        ]);
-
-        Route::get('/teamspeak/instance/{server_id}/serverlist', [
-            'as' => 'TeamSpeakInstanceQueryServerlist',
-            'uses' => 'Api\TeamSpeak\InstanceQuery@serverlist',
-            'where' => [
-                'server_id' => '[0-9]+',
-            ],
-            'middleware' => 'permissions:api.teamspeak.instance.serverlist'
-        ]);
-
-        Route::get('/teamspeak/instance/{server_id}/log/{last_pos}', [
-            'as' => 'TeamSpeakInstanceQueryInstanceLog',
-            'uses' => 'Api\TeamSpeak\InstanceQuery@GetInstanceLog',
-            'where' => [
-                'server_id' => '[0-9]+',
-                'last_pos' => '[0-9]+',
-            ],
-            'middleware' => 'permissions:api.teamspeak.instance.log'
-        ]);
-        //////////////////////////////////////////////////////////////////////
-        //endregion
-
-        ////////////////////////////////Бекапы////////////////////////////////
-
-        //////////////////////////////////////////////////////////////////////
     });
 });
 
