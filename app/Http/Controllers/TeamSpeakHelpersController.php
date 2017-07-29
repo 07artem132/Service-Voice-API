@@ -204,7 +204,7 @@ class TeamSpeakHelpersController extends Controller
      * @apiGroup Helpers
      * @apiVersion 1.0.0
      * @apiDescription Сверяет текушую версию и доступную из репозитория (который указан в конфигурации)
-     * @apiSampleRequest /teamspeak/instance/:server_id/outdated
+     * @apiSampleRequest /v1/teamspeak/instance/:server_id/outdated
      * @apiHeader {String} X-token Ваш токен для работы с API.
      * @apiSuccess (Success code 200) {String} status  Всегда содержит значение "success".
      * @apiPermission api.teamspeak.instance.outdated
