@@ -16,7 +16,6 @@ class ColumAddLastRunTaskTable extends Migration
         Schema::table('tasks', function (Blueprint $table) {
             $table->string('last_run')->after('description')->nullable();
         });
-
     }
 
     /**
