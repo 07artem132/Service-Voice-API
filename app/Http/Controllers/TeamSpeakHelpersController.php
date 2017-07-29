@@ -11,7 +11,7 @@ namespace Api\Http\Controllers;
 use Api\Servers;
 use Illuminate\Http\JsonResponse;
 use Api\Services\TeamSpeak3\Update;
-use Api\Services\TeamSpeak3\ts3query;
+use Api\Services\TeamSpeak3\teamSpeak;
 use Api\Traits\RestSuccessResponseTrait;
 use Api\Services\TeamSpeak3\BlacklistCheck;
 
@@ -20,7 +20,7 @@ class TeamSpeakHelpersController extends Controller
     use RestSuccessResponseTrait;
 
     /**
-     * @api {get} /teamspeak/instance/:server_id/blacklisted Проверка инстанса на блек/грей лист
+     * @api {get} /v1/teamspeak/instance/:server_id/blacklisted Проверка инстанса на блек/грей лист
      * @apiName Instance Is Blacklisted
      * @apiGroup Helpers
      * @apiVersion 1.0.0
@@ -62,7 +62,7 @@ class TeamSpeakHelpersController extends Controller
     }
 
     /**
-     * @api {get} /teamspeak/helpers/:ip/blacklisted Проверка ipv4 на блек/грей лист
+     * @api {get} /v1/teamspeak/helpers/:ip/blacklisted Проверка ipv4 на блек/грей лист
      * @apiName ipv4 Is Blacklisted
      * @apiGroup Helpers
      * @apiVersion 1.0.0
@@ -102,7 +102,7 @@ class TeamSpeakHelpersController extends Controller
     }
 
     /**
-     * @api {get} /teamspeak/helpers/server/update/mirror/list Зеркала для обновления сервера
+     * @api {get} /v1/teamspeak/helpers/server/update/mirror/list Зеркала для обновления сервера
      * @apiName Update Server Mirror List
      * @apiGroup Helpers
      * @apiVersion 1.0.0
@@ -199,7 +199,7 @@ class TeamSpeakHelpersController extends Controller
     }
 
     /**
-     * @api {get} /teamspeak/instance/:server_id/outdated Актуальность инстанса(версия)
+     * @api {get} /v1/teamspeak/instance/:server_id/outdated Актуальность инстанса(версия)
      * @apiName Instance Outdated Check
      * @apiGroup Helpers
      * @apiVersion 1.0.0
@@ -229,7 +229,7 @@ class TeamSpeakHelpersController extends Controller
      */
     function InstanceOutdatedCheck(int $server_id): JsonResponse
     {
-        $ts3conn = new ts3query($server_id);;
+        $ts3conn = new teamSpeak($server_id);;
         $OutdatedChecker = new Update;
 
         $version = (string)$ts3conn->version()['version'];

@@ -77,7 +77,7 @@ class TeamSpeakVirtualServerIconController extends Controller
 
         $data = $ts3conn->GetVirtualServerIconList();
 
-        if ($ts3conn->GetVirtualServerIconList() === null)
+        if ($data === null)
             $data = 'empty';
 
         return $this->jsonResponse($data);
@@ -91,7 +91,7 @@ class TeamSpeakVirtualServerIconController extends Controller
      * @apiDescription Возврашает ссылку по которой можно скачать иконку (Так же данную ссылку можно использовать для встраивания в сайт).
      * @apiParam {Number} server_id Уникальный ID TeamSpeak3 инстанса в API.
      * @apiParam {String} bashe64uid Уникальный идентификатор виртуального сервера (virtualserver_unique_identifier) закодированный в bashe64
-     * @apiParam {Number} icon_id crc32 хен иконки которую необходимо скачать.
+     * @apiParam {Number} icon_id crc32 хеш иконки которую необходимо скачать.
      * @apiSampleRequest /v1/teamspeak/instance/:server_id/virtualserver/:bashe64uid/icon/:icon_id
      * @apiHeader {String} X-token Ваш токен для работы с API.
      * @apiSuccess (Success code 200) {String} status  Всегда содержит значение "success".
@@ -192,7 +192,7 @@ class TeamSpeakVirtualServerIconController extends Controller
      * @apiDescription Удаляет иконку с виртуального TeamSpeak 3 сервера
      * @apiParam {Number} server_id Уникальный ID TeamSpeak3 инстанса в API.
      * @apiParam {String} bashe64uid Уникальный идентификатор виртуального сервера (virtualserver_unique_identifier) закодированный в bashe64
-     * @apiParam {Number} icon_id crc32 хен иконки которую необходимо скачать.
+     * @apiParam {Number} icon_id crc32 хеш иконки которую необходимо скачать.
      * @apiSampleRequest } /v1/teamspeak/instance/:server_id/virtualserver/:bashe64uid/icon/:icon_id
      * @apiHeader {String} X-token Ваш токен для работы с API.
      * @apiSuccess (Success code 200) {String} status  Всегда содержит значение "success".

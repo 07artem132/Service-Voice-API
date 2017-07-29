@@ -32,7 +32,7 @@ class TeamSpeakVirtualServerStatisticsController
     private $uid;
 
     /**
-     * @api {get} /teamspeak/instance/:server_id/virtualserver/:bashe64uid/statistics/year За год
+     * @api {get} /v1/teamspeak/instance/:server_id/virtualserver/:bashe64uid/statistics/year За год
      * @apiName Get VirtualServer Statistics Year
      * @apiGroup Virtual Server Statistics
      * @apiVersion 1.0.0
@@ -95,7 +95,7 @@ class TeamSpeakVirtualServerStatisticsController
         return $this->jsonResponse($data);
     }
     /**
-     * @api {get} /teamspeak/instance/:server_id/virtualserver/:bashe64uid/statistics/month За месяц
+     * @api {get} /v1/teamspeak/instance/:server_id/virtualserver/:bashe64uid/statistics/month За месяц
      * @apiName Get VirtualServer Statistics Month
      * @apiGroup Virtual Server Statistics
      * @apiVersion 1.0.0
@@ -158,7 +158,7 @@ class TeamSpeakVirtualServerStatisticsController
         return $this->jsonResponse($data);
     }
     /**
-     * @api {get} /teamspeak/instance/:server_id/virtualserver/:bashe64uid/statistics/week За неделю
+     * @api {get} /v1/teamspeak/instance/:server_id/virtualserver/:bashe64uid/statistics/week За неделю
      * @apiName Get VirtualServer Statistics Week
      * @apiGroup Virtual Server Statistics
      * @apiVersion 1.0.0
@@ -221,7 +221,7 @@ class TeamSpeakVirtualServerStatisticsController
         return $this->jsonResponse($data);
     }
     /**
-     * @api {get} /teamspeak/instance/:server_id/virtualserver/:bashe64uid/statistics/day За сутки
+     * @api {get} /v1/teamspeak/instance/:server_id/virtualserver/:bashe64uid/statistics/day За сутки
      * @apiName Get VirtualServer Statistics Day
      * @apiGroup Virtual Server Statistics
      * @apiVersion 1.0.0
@@ -284,7 +284,7 @@ class TeamSpeakVirtualServerStatisticsController
         return $this->jsonResponse($data);
     }
     /**
-     * @api {get} /teamspeak/instance/:server_id/virtualserver/:bashe64uid/statistics/realtime В реальном времени
+     * @api {get} /v1/teamspeak/instance/:server_id/virtualserver/:bashe64uid/statistics/realtime В реальном времени
      * @apiName Get VirtualServer Statistics Realtime
      * @apiGroup Virtual Server Statistics
      * @apiVersion 1.0.0

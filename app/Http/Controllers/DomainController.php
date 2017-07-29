@@ -25,7 +25,7 @@ class DomainController extends Controller
     use RestHelperTrait;
 
     /**
-     * @api {get} /domain Список доменов
+     * @api {get} /v1/domain Список доменов
      * @apiName Domain list
      * @apiGroup Domain
      * @apiVersion 1.0.0
@@ -78,7 +78,7 @@ class DomainController extends Controller
         return $this->jsonResponse($DomainList);
     }
     /**
-     * @api {get} /domain/{domain}/record/formated Отформатированный список записей домена
+     * @api {get} /v1/domain/{domain}/record/formated Отформатированный список записей домена
      * @apiName Domain record formated list
      * @apiGroup Domain
      * @apiVersion 1.0.0
@@ -247,7 +247,7 @@ class DomainController extends Controller
     }
 
     /**
-     * @api {get} /domain/:domain/record Cписок записей домена
+     * @api {get} /v1/domain/:domain/record Cписок записей домена
      * @apiName Domain record list
      * @apiGroup Domain
      * @apiVersion 1.0.0
@@ -418,7 +418,7 @@ class DomainController extends Controller
     }
 
     /**
-     * @api {post} /domain Создать домен
+     * @api {post} /v1/domain Создать домен
      * @apiName Domain Add
      * @apiGroup Domain
      * @apiVersion 1.0.0
@@ -522,7 +522,7 @@ class DomainController extends Controller
         return $this->jsonResponse($Response);
     }
     /**
-     * @api {post} /domain Удалить домен
+     * @api {post} /v1/domain Удалить домен
      * @apiName Domain delete
      * @apiGroup Domain
      * @apiVersion 1.0.0
@@ -554,7 +554,7 @@ class DomainController extends Controller
         return $this->jsonResponse(null);
     }
     /**
-     * @api {post} domain/{domain}/record Создать запись
+     * @api {post} /v1/domain/{domain}/record Создать запись
      * @apiName Domain Record Add
      * @apiGroup Domain
      * @apiVersion 1.0.0
@@ -625,7 +625,7 @@ class DomainController extends Controller
     }
 
     /**
-     * @api {DELETE} domain/{domain}/record Удалить запись
+     * @api {DELETE} /v1/domain/{domain}/record Удалить запись
      * @apiName Domain Record Delete
      * @apiGroup Domain
      * @apiVersion 1.0.0

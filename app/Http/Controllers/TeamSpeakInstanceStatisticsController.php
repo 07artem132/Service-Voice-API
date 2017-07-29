@@ -29,7 +29,7 @@ class TeamSpeakInstanceStatisticsController extends Controller
     private $server_id;
 
     /**
-     * @api {get} /teamspeak/instance/:server_id/statistics/year За год
+     * @api {get} /v1/teamspeak/instance/:server_id/statistics/year За год
      * @apiName Get Instanse Statistics Year
      * @apiGroup Instance Statistics
      * @apiVersion 1.0.0
@@ -86,7 +86,7 @@ class TeamSpeakInstanceStatisticsController extends Controller
         return $this->jsonResponse($data);
     }
     /**
-     * @api {get} /teamspeak/instance/:server_id/statistics/month За месяц
+     * @api {get} /v1/teamspeak/instance/:server_id/statistics/month За месяц
      * @apiName Get Instanse Statistics Month
      * @apiGroup Instance Statistics
      * @apiVersion 1.0.0
@@ -143,7 +143,7 @@ class TeamSpeakInstanceStatisticsController extends Controller
         return $this->jsonResponse($data);
     }
     /**
-     * @api {get} /teamspeak/instance/:server_id/statistics/week За неделю
+     * @api {get} /v1/teamspeak/instance/:server_id/statistics/week За неделю
      * @apiName Get Instanse Statistics Veek
      * @apiGroup Instance Statistics
      * @apiVersion 1.0.0
@@ -200,7 +200,7 @@ class TeamSpeakInstanceStatisticsController extends Controller
         return $this->jsonResponse($data);
     }
     /**
-     * @api {get} /teamspeak/instance/:server_id/statistics/day За сутки
+     * @api {get} /v1/teamspeak/instance/:server_id/statistics/day За сутки
      * @apiName Get Instanse Statistics Day
      * @apiGroup Instance Statistics
      * @apiVersion 1.0.0
@@ -257,7 +257,7 @@ class TeamSpeakInstanceStatisticsController extends Controller
         return $this->jsonResponse($data);
     }
     /**
-     * @api {get} /teamspeak/instance/:server_id/statistics/realtime В реальном времени
+     * @api {get} /v1/teamspeak/instance/:server_id/statistics/realtime В реальном времени
      * @apiName Get Instanse Statistics Realtime
      * @apiGroup Instance Statistics
      * @apiVersion 1.0.0

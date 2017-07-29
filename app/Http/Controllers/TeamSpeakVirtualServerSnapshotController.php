@@ -31,7 +31,7 @@ class TeamSpeakVirtualServerSnapshotController extends Controller
     private $uid;
 
     /**
-     * @api {post} /api/teamspeak/instance/:server_id/virtualserver/:bashe64uid/snapshot Создать snapshot
+     * @api {post} /v1/teamspeak/instance/:server_id/virtualserver/:bashe64uid/snapshot Создать snapshot
      * @apiName Create virtual server snapshot
      * @apiGroup Snapshots
      * @apiVersion 1.0.0
@@ -92,7 +92,7 @@ class TeamSpeakVirtualServerSnapshotController extends Controller
     }
 
     /**
-     * @api {get} /api/teamspeak/instance/:server_id/virtualserver/:bashe64uid/snapshot/:snapshot_id  Получить snapshot
+     * @api {get} /v1/teamspeak/instance/:server_id/virtualserver/:bashe64uid/snapshot/:snapshot_id  Получить snapshot
      * @apiName Get snapshot virtual server from id
      * @apiGroup Snapshots
      * @apiVersion 1.0.0
@@ -146,7 +146,7 @@ class TeamSpeakVirtualServerSnapshotController extends Controller
     }
 
     /**
-     * @api {get} /api/teamspeak/instance/:server_id/virtualserver/:bashe64uid/snapshot/ Список всех snapshot
+     * @api {get} /v1/teamspeak/instance/:server_id/virtualserver/:bashe64uid/snapshot/ Список всех snapshot
      * @apiName Get list all snapshot virtual server
      * @apiGroup Snapshots
      * @apiVersion 1.0.0
@@ -215,7 +215,7 @@ class TeamSpeakVirtualServerSnapshotController extends Controller
     }
 
     /**
-     * @api {delete} /api/teamspeak/instance/:server_id/virtualserver/:bashe64uid/snapshot/:snapshot_id Удалить snapshot
+     * @api {delete} /v1/teamspeak/instance/:server_id/virtualserver/:bashe64uid/snapshot/:snapshot_id Удалить snapshot
      * @apiName Delete virtual server snapshot
      * @apiGroup Snapshots
      * @apiVersion 1.0.0
