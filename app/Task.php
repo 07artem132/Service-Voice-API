@@ -33,6 +33,7 @@ use Illuminate\Database\Eloquent\Model;
  * @mixin \Eloquent
  * @property string|null $last_run
  * @method static \Illuminate\Database\Eloquent\Builder|\Api\Task whereLastRun($value)
+ * @property-read \Illuminate\Database\Eloquent\Collection|\Api\TaskLog[] $log
  */
 class Task extends Model
 {

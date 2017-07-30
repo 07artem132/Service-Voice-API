@@ -38,6 +38,10 @@ use DB;
  * @method static \Illuminate\Database\Eloquent\Builder|\Api\StatisticsTeamspeakVirtualServers whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\Api\StatisticsTeamspeakVirtualServers whereUserOnline($value)
  * @mixin \Eloquent
+ * @property int $instance_id
+ * @property-read \Api\TeamspeakInstances $instance
+ * @method static \Illuminate\Database\Eloquent\Builder|\Api\StatisticsTeamspeakVirtualServers instanceId($instance_id)
+ * @method static \Illuminate\Database\Eloquent\Builder|\Api\StatisticsTeamspeakVirtualServers whereInstanceId($value)
  */
 class StatisticsTeamspeakVirtualServers extends Model
 {

@@ -22,6 +22,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\Api\TaskLog whereTaskId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\Api\TaskLog whereUpdatedAt($value)
  * @mixin \Eloquent
+ * @property-read \Api\Task $task
  */
 class TaskLog extends Model
 {

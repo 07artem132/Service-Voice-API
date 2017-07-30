@@ -25,6 +25,9 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\Api\SnapshotsTeamspeakVirtualServers whereUniqueId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\Api\SnapshotsTeamspeakVirtualServers whereUpdatedAt($value)
  * @mixin \Eloquent
+ * @property int $instance_id
+ * @property-read \Api\TeamspeakInstances $instance
+ * @method static \Illuminate\Database\Eloquent\Builder|\Api\SnapshotsTeamspeakVirtualServers whereInstanceId($value)
  */
 class SnapshotsTeamspeakVirtualServers extends Model
 {

@@ -18,6 +18,10 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\Api\UserTeamspeakInstances whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\Api\UserTeamspeakInstances whereUserId($value)
  * @mixin \Eloquent
+ * @property string $instance_id
+ * @property-read \Api\TeamspeakInstances $instance
+ * @property-read \Api\User $user
+ * @method static \Illuminate\Database\Eloquent\Builder|\Api\UserTeamspeakInstances whereInstanceId($value)
  */
 class UserTeamspeakInstances extends Model
 {

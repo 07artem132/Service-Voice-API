@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\Model;
  * Api\UserTeamSpeakVirtualServer
  *
  * @mixin \Eloquent
+ * @property-read \Api\TeamspeakInstances $instance
+ * @property-read \Api\User $user
  */
 class UserTeamSpeakVirtualServer extends Model
 {

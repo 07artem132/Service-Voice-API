@@ -17,6 +17,10 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\Api\GroupTeamspeakInstances whereServerId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\Api\GroupTeamspeakInstances whereUpdatedAt($value)
  * @mixin \Eloquent
+ * @property int $instance_id
+ * @property-read \Api\Group $group
+ * @property-read \Api\TeamspeakInstances $instance
+ * @method static \Illuminate\Database\Eloquent\Builder|\Api\GroupTeamspeakInstances whereInstanceId($value)
  */
 class GroupTeamspeakInstances extends Model
 {

@@ -37,6 +37,11 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Query\Builder|\Api\UserToken withTrashed()
  * @method static \Illuminate\Database\Query\Builder|\Api\UserToken withoutTrashed()
  * @mixin \Eloquent
+ * @property-read \Illuminate\Database\Eloquent\Collection|\Api\TokenTeamspeakVirtualServers[] $TeamspeakVirtualServers
+ * @property-read \Api\TokenPrivileges $privileges
+ * @property-read \Illuminate\Database\Eloquent\Collection|\Api\TokenTeamspeakInstances[] $servers
+ * @property-read \Api\User $user
+ * @method static \Illuminate\Database\Eloquent\Builder|\Api\UserToken userWhere($user_id)
  */
 class UserToken extends Model
 {

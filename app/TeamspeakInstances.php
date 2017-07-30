@@ -32,6 +32,13 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\Api\TeamspeakInstances whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\Api\TeamspeakInstances whereUsername($value)
  * @mixin \Eloquent
+ * @property-read \Illuminate\Database\Eloquent\Collection|\Api\SnapshotsTeamspeakVirtualServers[] $snapshots
+ * @property-read \Illuminate\Database\Eloquent\Collection|\Api\StatisticsTeamspeakInstances[] $statisticsInstances
+ * @property-read \Illuminate\Database\Eloquent\Collection|\Api\StatisticsTeamspeakVirtualServers[] $statisticsVirtualServers
+ * @property-read \Illuminate\Database\Eloquent\Collection|\Api\TokenTeamspeakInstances[] $tokenTeamSpeakInstances
+ * @property-read \Illuminate\Database\Eloquent\Collection|\Api\TokenTeamspeakVirtualServers[] $tokenTeamSpeakVirtualServers
+ * @property-read \Illuminate\Database\Eloquent\Collection|\Api\UserTeamspeakInstances[] $userTeamSpeakInstances
+ * @property-read \Illuminate\Database\Eloquent\Collection|\Api\UserTeamSpeakVirtualServer[] $userTeamSpeakVirtualServers
  */
 class TeamspeakInstances extends Model
 {

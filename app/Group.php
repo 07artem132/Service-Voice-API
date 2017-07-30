@@ -20,6 +20,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\Api\Group whereSlug($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\Api\Group whereUpdatedAt($value)
  * @mixin \Eloquent
+ * @property-read \Illuminate\Database\Eloquent\Collection|\Api\GroupTeamspeakInstances[] $Servers
  */
 class Group extends Model
 {
