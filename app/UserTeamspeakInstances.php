@@ -21,5 +21,9 @@ use Illuminate\Database\Eloquent\Model;
  */
 class UserTeamspeakInstances extends Model
 {
-    //
+    public function instance()
+    {
+        return $this->belongsTo('Api\TeamSpeakInstances', 'id', 'instance_id');
+    }
+
 }
