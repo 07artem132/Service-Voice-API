@@ -2,8 +2,8 @@
 
 namespace Api\Task;
 
-use Api\Servers;
-use Api\StatisticsInstances;
+use Api\TeamspeakInstances;
+use Api\StatisticsTeamspeakInstances;
 use Api\Services\TeamSpeak3\TeamSpeak;
 
 /**
@@ -19,7 +19,7 @@ class TeamSpeakStatisticsInstances
 
     function CronCallback()
     {
-        $servers = Servers::Active()->TeamSpeak()->get();
+        $servers = TeamspeakInstances::Active()->get();
 
         foreach ($servers as $server) {
             $this->CollectionStatistics($server->id);
@@ -27,14 +27,14 @@ class TeamSpeakStatisticsInstances
     }
 
     /**
-     * @param $server_id
+     * @param $instance_id уникальный идентификатор teamspeak 3 инстанса
      * @return null
      */
-    public function CollectionStatistics($server_id): void
+    public function CollectionStatistics(int $instance_id): void
     {
-        $this->ts3con = new TeamSpeak($server_id);
-        $db = new StatisticsInstances;
-        $db->server_id = $server_id;
+        $this->ts3con = new TeamSpeak($instance_id);
+        $db = new StatisticsTeamspeakInstances;
+        $db->instance_id = $instance_id;
         $db->slot_usage = $this->GetSlotUsage();
         $db->server_runing = $this->GetRuningVirtualServer();
         $db->user_online = $this->GetUserOnline();

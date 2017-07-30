@@ -8,9 +8,9 @@
 
 namespace Api\Task;
 
-use Api\SnapshotsVirtualServers;
+use Api\TeamspeakInstances;
 use Api\Services\TeamSpeak3\TeamSpeak;
-use Api\Servers;
+use Api\SnapshotsTeamspeakVirtualServers;
 
 /**
  * Class TeamSpeakSnapshotsVirtualServers
@@ -25,7 +25,7 @@ class TeamSpeakSnapshotsVirtualServers
 
     function CronCallback()
     {
-        $servers = Servers::Active()->TeamSpeak()->get();
+        $servers = TeamspeakInstances::Active()->get();
 
         foreach ($servers as $server) {
             $this->CreateSnapshots($server->id);
@@ -33,15 +33,15 @@ class TeamSpeakSnapshotsVirtualServers
     }
 
     /**
-     * @param int $server_id уникальный идентификатор сервера
+     * @param int $instance_id уникальный идентификатор teamspeak 3 инстанса
      */
-    public function CreateSnapshots(int $server_id): void
+    public function CreateSnapshots(int $instance_id): void
     {
-        $this->ts3con = new TeamSpeak($server_id);
+        $this->ts3con = new TeamSpeak($instance_id);
         $data = $this->GetAllServersSnapshots();
         foreach ($data as $VirtualServerSnapshots) {
-            $db = new SnapshotsVirtualServers;
-            $db->server_id = $server_id;
+            $db = new SnapshotsTeamspeakVirtualServers;
+            $db->instance_id = $instance_id;
             $db->unique_id = $VirtualServerSnapshots['unique_id'];
             $db->port = $VirtualServerSnapshots['port'];
             $db->snapshot = $VirtualServerSnapshots['snapshot'];
@@ -58,7 +58,6 @@ class TeamSpeakSnapshotsVirtualServers
      */
     function GetAllServersSnapshots(): array
     {
-        $data = [];
         foreach ($this->ts3con->ReturnConnection() as $VirtualServer) {
             $data[$VirtualServer['virtualserver_id']]['port'] = (int)$VirtualServer['virtualserver_port'];
             $data[$VirtualServer['virtualserver_id']]['unique_id'] = (string)$VirtualServer['virtualserver_unique_identifier'];
