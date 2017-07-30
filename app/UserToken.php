@@ -57,14 +57,14 @@ class UserToken extends Model
 
     }
 
-    public function User()
+    public function user()
     {
-        return $this->hasOne('Api\User', 'id');
+        return $this->belongsTo('Api\User', 'id', 'user_id');
     }
 
     public function servers()
     {
-        return $this->hasMany('Api\TokenServers', 'token_id');
+        return $this->hasMany('Api\TokenTeamspeakInstances', 'token_id');
     }
 
     public function privileges()
