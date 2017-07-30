@@ -23,7 +23,7 @@ class UserTeamspeakInstances extends Model
 {
     public function instance()
     {
-        return $this->belongsTo('Api\TeamSpeakInstances', 'id', 'instance_id');
+        return $this->belongsTo('Api\TeamspeakInstances', 'id', 'instance_id');
     }
 
     public function user()
