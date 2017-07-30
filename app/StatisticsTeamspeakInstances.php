@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use DB;
 
 /**
- * Api\StatisticsInstances
+ * Api\StatisticsTeamspeakInstances
  *
  * @property int $id
  * @property int $server_id
@@ -15,32 +15,32 @@ use DB;
  * @property int $user_online
  * @property \Carbon\Carbon|null $created_at
  * @property \Carbon\Carbon|null $updated_at
- * @method static \Illuminate\Database\Eloquent\Builder|\Api\StatisticsInstances dayAvage()
- * @method static \Illuminate\Database\Eloquent\Builder|\Api\StatisticsInstances fiveMinutesAvage()
- * @method static \Illuminate\Database\Eloquent\Builder|\Api\StatisticsInstances halfHourAvage()
- * @method static \Illuminate\Database\Eloquent\Builder|\Api\StatisticsInstances hourAvage()
- * @method static \Illuminate\Database\Eloquent\Builder|\Api\StatisticsInstances serverID($server_id)
- * @method static \Illuminate\Database\Eloquent\Builder|\Api\StatisticsInstances statDay()
- * @method static \Illuminate\Database\Eloquent\Builder|\Api\StatisticsInstances statMonth()
- * @method static \Illuminate\Database\Eloquent\Builder|\Api\StatisticsInstances statRealtime()
- * @method static \Illuminate\Database\Eloquent\Builder|\Api\StatisticsInstances statWeek()
- * @method static \Illuminate\Database\Eloquent\Builder|\Api\StatisticsInstances statYear()
- * @method static \Illuminate\Database\Eloquent\Builder|\Api\StatisticsInstances whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\Api\StatisticsInstances whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\Api\StatisticsInstances whereServerId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\Api\StatisticsInstances whereServerRuning($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\Api\StatisticsInstances whereSlotUsage($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\Api\StatisticsInstances whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\Api\StatisticsInstances whereUserOnline($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\Api\StatisticsTeamspeakInstances dayAvage()
+ * @method static \Illuminate\Database\Eloquent\Builder|\Api\StatisticsTeamspeakInstances fiveMinutesAvage()
+ * @method static \Illuminate\Database\Eloquent\Builder|\Api\StatisticsTeamspeakInstances halfHourAvage()
+ * @method static \Illuminate\Database\Eloquent\Builder|\Api\StatisticsTeamspeakInstances hourAvage()
+ * @method static \Illuminate\Database\Eloquent\Builder|\Api\StatisticsTeamspeakInstances serverID($server_id)
+ * @method static \Illuminate\Database\Eloquent\Builder|\Api\StatisticsTeamspeakInstances statDay()
+ * @method static \Illuminate\Database\Eloquent\Builder|\Api\StatisticsTeamspeakInstances statMonth()
+ * @method static \Illuminate\Database\Eloquent\Builder|\Api\StatisticsTeamspeakInstances statRealtime()
+ * @method static \Illuminate\Database\Eloquent\Builder|\Api\StatisticsTeamspeakInstances statWeek()
+ * @method static \Illuminate\Database\Eloquent\Builder|\Api\StatisticsTeamspeakInstances statYear()
+ * @method static \Illuminate\Database\Eloquent\Builder|\Api\StatisticsTeamspeakInstances whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\Api\StatisticsTeamspeakInstances whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\Api\StatisticsTeamspeakInstances whereServerId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\Api\StatisticsTeamspeakInstances whereServerRuning($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\Api\StatisticsTeamspeakInstances whereSlotUsage($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\Api\StatisticsTeamspeakInstances whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\Api\StatisticsTeamspeakInstances whereUserOnline($value)
  * @mixin \Eloquent
  */
-class StatisticsInstances extends Model
+class StatisticsTeamspeakInstances extends Model
 {
-    protected $hidden = ['id', 'updated_at', 'server_id'];
+    protected $hidden = ['id', 'updated_at', 'instance_id'];
 
-    public function scopeServerID($query, $server_id)
+    public function scopeInstanceId($query, $instance_id)
     {
-        return $query->where('server_id', $server_id);
+        return $query->where('instance_id', $instance_id);
     }
 
     public function scopeStatYear($query)
@@ -95,4 +95,10 @@ class StatisticsInstances extends Model
             ->select(DB::raw('avg(slot_usage) as slot_usage ,avg(server_runing) as server_runing,avg(user_online) as user_online,created_at'))
             ->groupBy(DB::raw('MONTH(created_at), DAYOFMONTH(created_at)'));
     }
+
+    public function instance()
+    {
+        return $this->belongsTo('Api\TeamspeakInstances', 'id','instance_id');
+    }
+
 }
