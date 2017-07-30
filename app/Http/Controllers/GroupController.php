@@ -9,8 +9,8 @@
 namespace Api\Http\Controllers;
 
 use Api\Group;
-use Api\Servers;
-use Api\GroupServer;
+use Api\TeamspeakInstances;
+use Api\GroupTeamspeakInstances;
 use Illuminate\Http\Request;
 use Api\Traits\RestHelperTrait;
 use Api\Exceptions\RequestIsNotJson;
@@ -40,7 +40,7 @@ class GroupController extends Controller
             throw new GroupNotFoundException($group);
         }
 
-        GroupServer::where('group_id', $Group->id)->delete();
+        GroupTeamspeakInstances::where('group_id', $Group->id)->delete();
         Group::where('slug', $group)->delete();
 
         return $this->jsonResponse();
@@ -84,7 +84,7 @@ class GroupController extends Controller
      */
     function ServerGroupList(string $group)
     {
-        $GroupList = Group::with('Servers')->Group($group)->get();
+        $GroupList = Group::with('TeamspeakInstances')->Group($group)->get();
 
         return $this->jsonResponse($GroupList);
     }
@@ -98,17 +98,17 @@ class GroupController extends Controller
         }
 
         try {
-            $server = Servers::where('id', $server_id)->firstOrFail();
+            $server = TeamspeakInstances::where('id', $server_id)->firstOrFail();
         } catch (ModelNotFoundException $e) {
             throw new ServerNotFoundException($server_id);
         }
-        if (GroupServer::Server($server_id)->first() != null)
+        if (GroupTeamspeakInstances::Server($server_id)->first() != null)
             throw new ServerGroupExistException($server_id, $group);
 
-        //  $GroupServer = new GroupServer;
-        //  $GroupServer->server_id = $server->id;
-        //  $GroupServer->group_id = $Group->id;
-        // $GroupServer->saveOrFail();
+        //  $GroupTeamspeakInstances = new GroupTeamspeakInstances;
+        //  $GroupTeamspeakInstances->server_id = $server->id;
+        //  $GroupTeamspeakInstances->group_id = $Group->id;
+        // $GroupTeamspeakInstances->saveOrFail();
 
         return $this->jsonResponse(null);
     }
@@ -122,17 +122,17 @@ class GroupController extends Controller
         }
 
         try {
-            $server = Servers::where('id', $server_id)->firstOrFail();
+            $server = TeamspeakInstances::where('id', $server_id)->firstOrFail();
         } catch (ModelNotFoundException $e) {
             throw new ServerNotFoundException($server_id);
         }
 
-        $GroupServer = GroupServer::Server($server_id)->first();
+        $GroupServer = GroupTeamspeakInstances::Server($server_id)->first();
 
         if ($GroupServer === null)
             throw new ServerGroupNotAssociatedException($server_id, $group);
 
-        GroupServer::where('server_id', $server_id)->delete();
+        GroupTeamspeakInstances::where('server_id', $server_id)->delete();
 
         return $this->jsonResponse(null);
 

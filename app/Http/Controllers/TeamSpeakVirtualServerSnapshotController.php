@@ -8,7 +8,7 @@
 
 namespace Api\Http\Controllers;
 
-use Api\SnapshotsVirtualServers;
+use Api\SnapshotsTeamspeakVirtualServers;
 use Illuminate\Http\JsonResponse;
 use Api\Services\TeamSpeak3\teamSpeak;
 use Api\Traits\RestSuccessResponseTrait;
@@ -77,7 +77,7 @@ class TeamSpeakVirtualServerSnapshotController extends Controller
         $serverinfo = $ts3conn->serverinfo()[0];
         $ts3conn->logout();
 
-        $db = new SnapshotsVirtualServers;
+        $db = new SnapshotsTeamspeakVirtualServers;
         $db->server_id = $server_id;
         $db->port = $serverinfo['virtualserver_port'];
         $db->unique_id = $this->uid;
@@ -136,7 +136,7 @@ class TeamSpeakVirtualServerSnapshotController extends Controller
         $this->uid = base64_decode($bashe64uid);
         $this->server_id = $server_id;
 
-        $SnapshotsVirtualServers = SnapshotsVirtualServers::UserSnapshot($this->server_id, $this->uid, $snapshot_id)->first();
+        $SnapshotsVirtualServers = SnapshotsTeamspeakVirtualServers::UserSnapshot($this->server_id, $this->uid, $snapshot_id)->first();
         //TODO если пользователь обращается НЕ к своему снапшоту нужно бросить исключение
 
         if (empty($SnapshotsVirtualServers))
@@ -199,7 +199,7 @@ class TeamSpeakVirtualServerSnapshotController extends Controller
         $this->uid = base64_decode($bashe64uid);
         $this->server_id = $server_id;
 
-        $SnapshotsVirtualServers = SnapshotsVirtualServers::SnapshotList($this->uid, $this->server_id)->get();
+        $SnapshotsVirtualServers = SnapshotsTeamspeakVirtualServers::SnapshotList($this->uid, $this->server_id)->get();
 
         if ($SnapshotsVirtualServers->count() === 0)
             return $this->jsonResponse('empty');
@@ -254,7 +254,7 @@ class TeamSpeakVirtualServerSnapshotController extends Controller
         $this->uid = base64_decode($bashe64uid);
         $this->server_id = $server_id;
 
-        $DeleteRow = SnapshotsVirtualServers::SnapshotList($this->uid, $this->server_id)->Snapshot($snapshot_id)->delete();
+        $DeleteRow = SnapshotsTeamspeakVirtualServers::SnapshotList($this->uid, $this->server_id)->Snapshot($snapshot_id)->delete();
         //TODO если пользователь хочет удалить НЕ свойснапшот нужно бросить исключение
 
         return $this->jsonResponse(['Удалено элементов' => $DeleteRow]);

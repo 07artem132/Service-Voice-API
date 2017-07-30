@@ -10,7 +10,7 @@ namespace Api\Http\Controllers;
 
 use Auth;
 use Api\UserToken;
-use Api\TokenServers;
+use Api\TokenTeamspeakInstances;
 use Api\TokenPrivileges;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
@@ -59,7 +59,7 @@ class TokenController extends Controller
 
         $token = UserToken::UserWhere(Auth::id())->Token($token)->firstOrFail();
 
-        TokenServers::where('token_id', '=', $token->id)->delete();
+        TokenTeamspeakInstances::where('token_id', '=', $token->id)->delete();
         TokenTeamspeakVirtualServers::where('token_id', '=', $token->id)->delete();
         TokenPrivileges::where('token_id', '=', $token->id)->delete();
         UserToken::Token($token->token)->delete();
@@ -163,10 +163,10 @@ class TokenController extends Controller
      * @apiDescription Создает токен <br/><br/>
      * <b>При создании вам необходимо передать параметры</b><br/>
      *{<br/>
-     * &nbsp;"privilege":[<br/>
-     * &nbsp;&nbsp;&nbsp;"api.usage",<br/>
-     * &nbsp;&nbsp;&nbsp;&nbsp;"api.token.list"<br/>
-     * &nbsp;],<br/>
+     * &nbsp;"privilege":{<br/>
+     * &nbsp;&nbsp;&nbsp;"api.usage":true,<br/>
+     * &nbsp;&nbsp;&nbsp;&nbsp;"api.token.list":true<br/>
+     * &nbsp;},<br/>
      * &nbsp;"allow_ip":"*",<br/>
      * &nbsp;"app_type":"1",<br/>
      * &nbsp;"server_allow":[<br/>
@@ -289,7 +289,7 @@ class TokenController extends Controller
     function SaveAssociationTokenToServers(int $token_id, array $servers_id): void
     {
         for ($i = 0; $i < count($servers_id); $i++) {
-            $TokenServersDbSave = new TokenServers;
+            $TokenServersDbSave = new TokenTeamspeakInstances;
             $TokenServersDbSave->token_id = $token_id;
             $TokenServersDbSave->server_id = $servers_id[$i];
             $TokenServersDbSave->saveOrFail();
@@ -337,7 +337,7 @@ class TokenController extends Controller
      */
     function VerifiAllowPriv(\stdClass $AllowPrivList, array $RequestedPrivileges): void
     {
-        foreach ($RequestedPrivileges as $key)
+        foreach ($RequestedPrivileges as $key => $value)
             if (!key_exists($key, $AllowPrivList)) {
                 echo 'error no priviliges' . '<br/>';
                 //TODO реализовать исключение (Запрашиваемая привелегия не разрешена)

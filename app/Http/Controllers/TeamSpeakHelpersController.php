@@ -8,7 +8,7 @@
 
 namespace Api\Http\Controllers;
 
-use Api\Servers;
+use Api\TeamspeakInstances;
 use Illuminate\Http\JsonResponse;
 use Api\Services\TeamSpeak3\Update;
 use Api\Services\TeamSpeak3\teamSpeak;
@@ -53,7 +53,7 @@ class TeamSpeakHelpersController extends Controller
      */
     function InstanceIsBlacklisted(int $server_id): JsonResponse
     {
-        $ipAddress = Servers::find($server_id)->ipaddress;
+        $ipAddress = TeamspeakInstances::find($server_id)->ipaddress;
 
         $BlacklistCheck = new BlacklistCheck();
         $data = $BlacklistCheck->isBlacklisted($ipAddress);

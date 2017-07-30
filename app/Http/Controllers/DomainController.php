@@ -27,7 +27,7 @@ class DomainController extends Controller
     /**
      * @api {get} /v1/domain Список доменов
      * @apiName Domain list
-     * @apiGroup Domain
+     * @apiGroup Domain PowerDNS
      * @apiVersion 1.0.0
      * @apiDescription Возвращает список доменов с которыми можно взаимодействовать.
      * @apiSampleRequest /domain
@@ -80,7 +80,7 @@ class DomainController extends Controller
     /**
      * @api {get} /v1/domain/{domain}/record/formated Отформатированный список записей домена
      * @apiName Domain record formated list
-     * @apiGroup Domain
+     * @apiGroup Domain PowerDNS
      * @apiVersion 1.0.0
      * @apiDescription Возвращает отформатированный список DNS записей домена
      * @apiSampleRequest /domain/{domain}/record/formated
@@ -249,7 +249,7 @@ class DomainController extends Controller
     /**
      * @api {get} /v1/domain/:domain/record Cписок записей домена
      * @apiName Domain record list
-     * @apiGroup Domain
+     * @apiGroup Domain PowerDNS
      * @apiVersion 1.0.0
      * @apiDescription Возвращает список DNS записей домена
      * @apiSampleRequest /domain/:domain/record
@@ -420,7 +420,7 @@ class DomainController extends Controller
     /**
      * @api {post} /v1/domain Создать домен
      * @apiName Domain Add
-     * @apiGroup Domain
+     * @apiGroup Domain PowerDNS
      * @apiVersion 1.0.0
      * @apiDescription Создает домен. <br/><br/>
      * <b>При запросе обязательно необходимо передать RAW данные, пример данных</b>:<br/><br/>
@@ -524,7 +524,7 @@ class DomainController extends Controller
     /**
      * @api {post} /v1/domain Удалить домен
      * @apiName Domain delete
-     * @apiGroup Domain
+     * @apiGroup Domain PowerDNS
      * @apiVersion 1.0.0
      * @apiDescription Удаляет домен
      * @apiSampleRequest /domain
@@ -556,7 +556,7 @@ class DomainController extends Controller
     /**
      * @api {post} /v1/domain/{domain}/record Создать запись
      * @apiName Domain Record Add
-     * @apiGroup Domain
+     * @apiGroup Domain PowerDNS
      * @apiVersion 1.0.0
      * @apiDescription Создает запись для домена. <br/><br/>
      * Возможно создание нескольких записей за 1 запрос <br/><br/>
@@ -627,7 +627,7 @@ class DomainController extends Controller
     /**
      * @api {DELETE} /v1/domain/{domain}/record Удалить запись
      * @apiName Domain Record Delete
-     * @apiGroup Domain
+     * @apiGroup Domain PowerDNS
      * @apiVersion 1.0.0
      * @apiDescription Удаляет запись домена. <br/><br/>
      * Возможно создание нескольких записей за 1 запрос <br/><br/>
