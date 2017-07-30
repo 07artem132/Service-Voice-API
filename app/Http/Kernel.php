@@ -83,6 +83,14 @@ class Kernel extends HttpKernel
          */
         'TokenVerifi' => \Api\Http\Middleware\TokenVerifi::class,
         /**
+         * Проверяем есть ли у токена права на работу с переданным в url сервером или виртуальным teamspeak 3 сервером
+         */
+        'TokenVerifiTeamspeakVirtualServersAllow' => \Api\Http\Middleware\TokenVerifiTeamSpeakVitrualServerAllow::class,
+        /**
+         * Проверяем есть ли у токена права на работу с переданным в url сервером или виртуальным teamspeak 3 сервером
+         */
+        'TokenVerifiTeamSpeakServerAllow' => \Api\Http\Middleware\TokenVerifiTeamSpeakServerAllow::class,
+        /**
          * Проверяем разрешено ли использование токена с этого IP адреса
          */
         'TokenVerifiAllowIP' => \Api\Http\Middleware\TokenVerifiAllowIP::class,
