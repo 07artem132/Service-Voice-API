@@ -12,4 +12,10 @@ class TokenPrivileges extends Model
     protected $dates = ['deleted_at'];
 
     protected $hidden = ['id', 'token_id','created_at','deleted_at'];
+
+    public function token()
+    {
+        return $this->belongsTo('Api\UserToken', 'id', 'token_id');
+    }
+
 }
