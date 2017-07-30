@@ -12,7 +12,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $name
  * @property \Carbon\Carbon|null $created_at
  * @property \Carbon\Carbon|null $updated_at
- * @property-read \Illuminate\Database\Eloquent\Collection|\Api\GroupServer[] $Servers
+ * @property-read \Illuminate\Database\Eloquent\Collection|\Api\GroupTeamspeakInstances[] $TeamspeakInstances
  * @method static \Illuminate\Database\Eloquent\Builder|\Api\Group group($group)
  * @method static \Illuminate\Database\Eloquent\Builder|\Api\Group whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\Api\Group whereId($value)
@@ -27,7 +27,7 @@ class Group extends Model
 
     public function Servers()
     {
-        return $this->hasMany('Api\GroupServer', 'group_id');
+        return $this->hasMany('Api\GroupTeamspeakInstances', 'group_id');
     }
 
     public function scopeGroup($query, $group)
