@@ -12,4 +12,15 @@ class TokenTeamspeakVirtualServers extends Model
     protected $dates = ['deleted_at'];
 
     protected $hidden = ['id', 'token_id','updated_at','deleted_at'];
+
+    public function token()
+    {
+        return $this->belongsTo('Api\UserToken', 'id', 'token_id');
+    }
+
+    public function instance()
+    {
+        return $this->belongsTo('Api\TeamSpeakInstances', 'id', 'instance_id');
+    }
+
 }
