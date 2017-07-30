@@ -25,5 +25,9 @@ use Illuminate\Database\Eloquent\Model;
  */
 class TaskLog extends Model
 {
-    //
+    public function task()
+    {
+        return $this->belongsTo('Api\Task', 'id','task_id');
+    }
+
 }

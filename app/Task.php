@@ -53,4 +53,8 @@ class Task extends Model
         return $query->where('is_enabled', 1);
     }
 
+    function log()
+    {
+        return $this->hasMany('Api\TaskLog', 'task_id', 'id');
+    }
 }
