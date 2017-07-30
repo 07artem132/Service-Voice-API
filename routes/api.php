@@ -163,8 +163,12 @@ Route::domain(env('APP_DOMAIN'))->prefix('v1/')->group(function () {
             'where' => [
                 'server_id' => '^\d+$',
             ],
-            'middleware' => 'permissions:api.teamspeak.virtualserver.create'
+            'middleware' => [
+                'permissions:api.teamspeak.virtualserver.create',
+                'TokenVerifiTeamspeakVirtualServersAllow'
+            ]
         ]);
+
         Route::delete('/teamspeak/instance/{server_id}/virtualserver/{bashe64uid}/delete', [
             'as' => 'TeamSpeakVirtualServerControllerDelete',
             'uses' => 'TeamSpeakVirtualServerController@Delete',
@@ -172,7 +176,10 @@ Route::domain(env('APP_DOMAIN'))->prefix('v1/')->group(function () {
                 'server_id' => '^\d+$',
                 'bashe64uid' => '(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?',
             ],
-            'middleware' => 'permissions:api.teamspeak.virtualserver.delete'
+            'middleware' => [
+                'permissions:api.teamspeak.virtualserver.delete',
+                'TokenVerifiTeamspeakVirtualServersAllow'
+            ]
         ]);
 
         Route::get('/teamspeak/instance/{server_id}/virtualserver/{bashe64uid}/stop', [
@@ -182,8 +189,12 @@ Route::domain(env('APP_DOMAIN'))->prefix('v1/')->group(function () {
                 'server_id' => '^\d+$',
                 'bashe64uid' => '(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?',
             ],
-            'middleware' => 'permissions:api.teamspeak.virtualserver.stop'
+            'middleware' => [
+                'permissions:api.teamspeak.virtualserver.stop',
+                'TokenVerifiTeamspeakVirtualServersAllow'
+            ]
         ]);
+
         Route::get('/teamspeak/instance/{server_id}/virtualserver/{bashe64uid}/start', [
             'as' => 'TeamSpeakVirtualServerControllerStart',
             'uses' => 'TeamSpeakVirtualServerController@Start',
@@ -191,7 +202,10 @@ Route::domain(env('APP_DOMAIN'))->prefix('v1/')->group(function () {
                 'server_id' => '^\d+$',
                 'bashe64uid' => '(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?',
             ],
-            'middleware' => 'permissions:api.teamspeak.virtualserver.start'
+            'middleware' => [
+                'permissions:api.teamspeak.virtualserver.start',
+                'TokenVerifiTeamspeakVirtualServersAllow'
+            ]
         ]);
 
         Route::get('/teamspeak/instance/{server_id}/virtualserver/{bashe64uid}/log/{last_pos}', [
@@ -202,8 +216,12 @@ Route::domain(env('APP_DOMAIN'))->prefix('v1/')->group(function () {
                 'last_pos' => '^\d+$',
                 'bashe64uid' => '(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?',
             ],
-            'middleware' => 'permissions:api.teamspeak.virtualserver.log'
+            'middleware' => [
+                'permissions:api.teamspeak.virtualserver.log',
+                'TokenVerifiTeamspeakVirtualServersAllow'
+            ]
         ]);
+
         Route::get('/teamspeak/instance/{server_id}/virtualserver/{bashe64uid}/serverinfo', [
             'as' => 'TeamSpeakVirtualServerControllerServerInfo',
             'uses' => 'TeamSpeakVirtualServerController@ServerInfo',
@@ -211,7 +229,10 @@ Route::domain(env('APP_DOMAIN'))->prefix('v1/')->group(function () {
                 'server_id' => '^\d+$',
                 'bashe64uid' => '(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?',
             ],
-            'middleware' => 'permissions:api.teamspeak.virtualserver.serverinfo'
+            'middleware' => [
+                'permissions:api.teamspeak.virtualserver.serverinfo',
+                'TokenVerifiTeamspeakVirtualServersAllow'
+            ]
         ]);
         //////////////////////////////////////////////////////////////////////
         //endregion
@@ -225,8 +246,12 @@ Route::domain(env('APP_DOMAIN'))->prefix('v1/')->group(function () {
                 'server_id' => '^\d+$',
                 'bashe64uid' => '(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?',
             ],
-            'middleware' => 'permissions:api.teamspeak.virtualserver.snapshot.create'
+            'middleware' => [
+                'permissions:api.teamspeak.virtualserver.snapshot.create',
+                'TokenVerifiTeamspeakVirtualServersAllow'
+            ]
         ]); // создать
+
         Route::get('/teamspeak/instance/{server_id}/virtualserver/{bashe64uid}/snapshot/{snapshot_id}', [
             'as' => 'SnapshotControllerGet',
             'uses' => 'TeamSpeakVirtualServerSnapshotController@Get',
@@ -235,8 +260,12 @@ Route::domain(env('APP_DOMAIN'))->prefix('v1/')->group(function () {
                 'snapshot_id' => '^\d+$',
                 'bashe64uid' => '(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?',
             ],
-            'middleware' => 'permissions:api.teamspeak.virtualserver.snapshot.get'
+            'middleware' => [
+                'permissions:api.teamspeak.virtualserver.snapshot.get',
+                'TokenVerifiTeamspeakVirtualServersAllow'
+            ]
         ]);
+
         Route::get('/teamspeak/instance/{server_id}/virtualserver/{bashe64uid}/snapshot', [
             'as' => 'SnapshotControllerGetList',
             'uses' => 'TeamSpeakVirtualServerSnapshotController@GetList',
@@ -244,8 +273,12 @@ Route::domain(env('APP_DOMAIN'))->prefix('v1/')->group(function () {
                 'server_id' => '^\d+$',
                 'bashe64uid' => '(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?',
             ],
-            'middleware' => 'permissions:api.teamspeak.virtualserver.snapshot.list'
+            'middleware' => [
+                'permissions:api.teamspeak.virtualserver.snapshot.list',
+                'TokenVerifiTeamspeakVirtualServersAllow'
+            ]
         ]);
+
         Route::delete('/teamspeak/instance/{server_id}/virtualserver/{bashe64uid}/snapshot/{snapshot_id}', [
             'as' => 'SnapshotControllerDelete',
             'uses' => 'TeamSpeakVirtualServerSnapshotController@Delete',
@@ -254,7 +287,10 @@ Route::domain(env('APP_DOMAIN'))->prefix('v1/')->group(function () {
                 'snapshot_id' => '^\d+$',
                 'bashe64uid' => '(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?',
             ],
-            'middleware' => 'permissions:api.teamspeak.virtualserver.snapshot.delete'
+            'middleware' => [
+                'permissions:api.teamspeak.virtualserver.snapshot.delete',
+                'TokenVerifiTeamspeakVirtualServersAllow'
+            ]
         ]);
         //////////////////////////////////////////////////////////////////////
         //endregion
@@ -268,8 +304,12 @@ Route::domain(env('APP_DOMAIN'))->prefix('v1/')->group(function () {
                 'server_id' => '^\d+$',
                 'bashe64uid' => '(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?',
             ],
-            'middleware' => 'permissions:api.teamspeak.virtualserver.icon.list'
+            'middleware' => [
+                'permissions:api.teamspeak.virtualserver.icon.list',
+                'TokenVerifiTeamspeakVirtualServersAllow'
+            ]
         ]);
+
         Route::get('/teamspeak/instance/{server_id}/virtualserver/{bashe64uid}/icon/{icon_id}', [
             'as' => 'TeamSpeakIconControllerDownload',
             'uses' => 'TeamSpeakVirtualServerIconController@Download',
@@ -278,8 +318,12 @@ Route::domain(env('APP_DOMAIN'))->prefix('v1/')->group(function () {
                 'icon_id' => '^\d+$',
                 'bashe64uid' => '(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?',
             ],
-            'middleware' => 'permissions:api.teamspeak.virtualserver.icon.download'
+            'middleware' => [
+                'permissions:api.teamspeak.virtualserver.icon.download',
+                'TokenVerifiTeamspeakVirtualServersAllow'
+            ]
         ]);
+
         Route::post('/teamspeak/instance/{server_id}/virtualserver/{bashe64uid}/icon', [
             'as' => 'TeamSpeakIconControllerUpload',
             'uses' => 'TeamSpeakVirtualServerIconController@Upload',
@@ -287,8 +331,12 @@ Route::domain(env('APP_DOMAIN'))->prefix('v1/')->group(function () {
                 'server_id' => '^\d+$',
                 'bashe64uid' => '(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?',
             ],
-            'middleware' => 'permissions:api.teamspeak.virtualserver.icon.upload'
+            'middleware' => [
+                'permissions:api.teamspeak.virtualserver.icon.upload',
+                'TokenVerifiTeamspeakVirtualServersAllow'
+            ]
         ]);
+
         Route::delete('/teamspeak/instance/{server_id}/virtualserver/{bashe64uid}/icon/{icon_id}', [
             'as' => 'TeamSpeakIconControllerDelete',
             'uses' => 'TeamSpeakVirtualServerIconController@Delete',
@@ -297,7 +345,10 @@ Route::domain(env('APP_DOMAIN'))->prefix('v1/')->group(function () {
                 'icon_id' => '^\d+$',
                 'bashe64uid' => '(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?',
             ],
-            'middleware' => 'permissions:api.teamspeak.virtualserver.icon.delete'
+            'middleware' => [
+                'permissions:api.teamspeak.virtualserver.icon.delete',
+                'TokenVerifiTeamspeakVirtualServersAllow'
+            ]
         ]);
         //////////////////////////////////////////////////////////////////////
         //endregion
@@ -311,8 +362,12 @@ Route::domain(env('APP_DOMAIN'))->prefix('v1/')->group(function () {
                 'server_id' => '[0-9]+',
                 'bashe64uid' => '(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?',
             ],
-            'middleware' => 'permissions:api.teamspeak.virtualserver.ban.list'
+            'middleware' => [
+                'permissions:api.teamspeak.virtualserver.ban.list',
+                'TokenVerifiTeamspeakVirtualServersAllow'
+            ]
         ]);
+
         Route::post('/teamspeak/instance/{server_id}/virtualserver/{bashe64uid}/ban', [
             'as' => 'VirtualServerBanControllersCreate',
             'uses' => 'TeamSpeakVirtualServerBanControllers@Create',
@@ -320,8 +375,12 @@ Route::domain(env('APP_DOMAIN'))->prefix('v1/')->group(function () {
                 'server_id' => '[0-9]+',
                 'bashe64uid' => '(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?',
             ],
-            'middleware' => 'permissions:api.teamspeak.virtualserver.ban.create'
+            'middleware' => [
+                'permissions:api.teamspeak.virtualserver.ban.create',
+                'TokenVerifiTeamspeakVirtualServersAllow'
+            ]
         ]);
+
         Route::delete('/teamspeak/instance/{server_id}/virtualserver/{bashe64uid}/ban/clear', [
             'as' => 'VirtualServerBanControllersListClear',
             'uses' => 'TeamSpeakVirtualServerBanControllers@ListClear',
@@ -329,8 +388,12 @@ Route::domain(env('APP_DOMAIN'))->prefix('v1/')->group(function () {
                 'server_id' => '[0-9]+',
                 'bashe64uid' => '(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?',
             ],
-            'middleware' => 'permissions:api.teamspeak.virtualserver.ban.clear'
+            'middleware' => [
+                'permissions:api.teamspeak.virtualserver.ban.clear',
+                'TokenVerifiTeamspeakVirtualServersAllow'
+            ]
         ]);
+
         Route::delete('/teamspeak/instance/{server_id}/virtualserver/{bashe64uid}/ban/{banid}', [
             'as' => 'VirtualServerBanControllersDelete',
             'uses' => 'TeamSpeakVirtualServerBanControllers@Delete',
@@ -339,7 +402,10 @@ Route::domain(env('APP_DOMAIN'))->prefix('v1/')->group(function () {
                 'banid' => '[0-9]+',
                 'bashe64uid' => '(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?',
             ],
-            'middleware' => 'permissions:api.teamspeak.virtualserver.ban.delete'
+            'middleware' => [
+                'permissions:api.teamspeak.virtualserver.ban.delete',
+                'TokenVerifiTeamspeakVirtualServersAllow'
+            ]
         ]);
         //////////////////////////////////////////////////////////////////////
         //endregion
@@ -403,8 +469,12 @@ Route::domain(env('APP_DOMAIN'))->prefix('v1/')->group(function () {
                 'server_id' => '^\d+$',
                 'bashe64uid' => '(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?',
             ],
-            'middleware' => 'permissions:api.teamspeak.virtualserver.statistics.realtime'
+            'middleware' => [
+                'permissions:api.teamspeak.virtualserver.statistics.realtime',
+                'TokenVerifiTeamspeakVirtualServersAllow'
+            ]
         ]);
+
         Route::get('/teamspeak/instance/{server_id}/virtualserver/{bashe64uid}/statistics/day', [
             'as' => 'VirtualServerStatisticsControllerDay',
             'uses' => 'TeamSpeakVirtualServerStatisticsController@Day',
@@ -412,8 +482,12 @@ Route::domain(env('APP_DOMAIN'))->prefix('v1/')->group(function () {
                 'server_id' => '^\d+$',
                 'bashe64uid' => '(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?',
             ],
-            'middleware' => 'permissions:api.teamspeak.virtualserver.statistics.day'
+            'middleware' => [
+                'permissions:api.teamspeak.virtualserver.statistics.day',
+                'TokenVerifiTeamspeakVirtualServersAllow'
+            ]
         ]);
+
         Route::get('/teamspeak/instance/{server_id}/virtualserver/{bashe64uid}/statistics/week', [
             'as' => 'VirtualServerStatisticsControllerWeek',
             'uses' => 'TeamSpeakVirtualServerStatisticsController@Week',
@@ -421,8 +495,12 @@ Route::domain(env('APP_DOMAIN'))->prefix('v1/')->group(function () {
                 'server_id' => '^\d+$',
                 'bashe64uid' => '(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?',
             ],
-            'middleware' => 'permissions:api.teamspeak.virtualserver.statistics.week'
+            'middleware' => [
+                'permissions:api.teamspeak.virtualserver.statistics.week',
+                'TokenVerifiTeamspeakVirtualServersAllow'
+            ]
         ]);
+
         Route::get('/teamspeak/instance/{server_id}/virtualserver/{bashe64uid}/statistics/month', [
             'as' => 'VirtualServerStatisticsControllerMonth',
             'uses' => 'TeamSpeakVirtualServerStatisticsController@Month',
@@ -430,8 +508,12 @@ Route::domain(env('APP_DOMAIN'))->prefix('v1/')->group(function () {
                 'server_id' => '^\d+$',
                 'bashe64uid' => '(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?',
             ],
-            'middleware' => 'permissions:api.teamspeak.virtualserver.statistics.month'
+            'middleware' => [
+                'permissions:api.teamspeak.virtualserver.statistics.month',
+                'TokenVerifiTeamspeakVirtualServersAllow'
+            ]
         ]);
+
         Route::get('/teamspeak/instance/{server_id}/virtualserver/{bashe64uid}/statistics/year', [
             'as' => 'VirtualServerStatisticsControllerYear',
             'uses' => 'TeamSpeakVirtualServerStatisticsController@Year',
@@ -439,7 +521,10 @@ Route::domain(env('APP_DOMAIN'))->prefix('v1/')->group(function () {
                 'server_id' => '^\d+$',
                 'bashe64uid' => '(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?',
             ],
-            'middleware' => 'permissions:api.teamspeak.virtualserver.statistics.year'
+            'middleware' => [
+                'permissions:api.teamspeak.virtualserver.statistics.year',
+                'TokenVerifiTeamspeakVirtualServersAllow'
+            ]
         ]);
         //////////////////////////////////////////////////////////////////////
         //endregion
@@ -455,7 +540,9 @@ Route::domain(env('APP_DOMAIN'))->prefix('v1/')->group(function () {
             'where' => [
                 'server_id' => '^\d+$',
             ],
-            'middleware' => 'permissions:api.teamspeak.instance.blacklisted'
+            'middleware' => [
+                'permissions:api.teamspeak.instance.blacklisted'
+            ]
         ]);
 
         Route::get('/teamspeak/helpers/{ip}/blacklisted', [
@@ -464,13 +551,17 @@ Route::domain(env('APP_DOMAIN'))->prefix('v1/')->group(function () {
             'where' => [
                 'ip' => '^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$',
             ],
-            'middleware' => 'permissions:api.teamspeak.helpers.blacklisted'
+            'middleware' => [
+                'permissions:api.teamspeak.helpers.blacklisted'
+            ]
         ]);
 
         Route::get('/teamspeak/helpers/server/update/mirror/list', [
             'as' => 'TeamSpeakHelpersControllerUpdateServerMirrorList',
             'uses' => 'TeamSpeakHelpersController@UpdateServerMirrorList',
-            'middleware' => 'permissions:api.teamspeak.helpers.UpdateMirrorList'
+            'middleware' => [
+                'permissions:api.teamspeak.helpers.UpdateMirrorList'
+            ]
         ]);
 
         Route::get('/teamspeak/instance/{server_id}/outdated', [
@@ -479,7 +570,9 @@ Route::domain(env('APP_DOMAIN'))->prefix('v1/')->group(function () {
             'where' => [
                 'server_id' => '^\d+$',
             ],
-            'middleware' => 'permissions:api.teamspeak.instance.outdated'
+            'middleware' => [
+                'permissions:api.teamspeak.instance.outdated'
+            ]
         ]);
 
         //////////////////////////////////////////////////////////////////////
@@ -488,6 +581,7 @@ Route::domain(env('APP_DOMAIN'))->prefix('v1/')->group(function () {
 
         //region Токены (По ним идентифицируется пользователь)
         /////////////////////////////ТОКЕНЫ/////////////////////////////////////
+        /////////////////////////ДОКУМЕНТИРОВАНО/////////////////////////////
         Route::delete('/token/{token}', [
             'as' => 'TokenControllerDelete',
             'uses' => 'TokenController@Delete',
