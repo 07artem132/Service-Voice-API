@@ -6,6 +6,7 @@ use Api\Exceptions\AuthenticationException;
 use Sentinel;
 use Closure;
 use Auth;
+use Api\UserToken;
 
 class CheckPermissions
 {
@@ -19,8 +20,12 @@ class CheckPermissions
      */
     public function handle($request, Closure $next, $permissions)
     {
-        if (!Sentinel::findById(Auth::id())->hasAccess(explode(':', $permissions))) {
 
+        $token = $request->header('X-token');
+        $tokenDB = UserToken::Token($token)->firstOrFail();
+        $TokenPrivileges = json_decode($tokenDB->privileges->privilege);
+
+        if (!array_key_exists($permissions, $TokenPrivileges)) {
             return response()->json([
                 'status' => 'error',
                 'message' => 'Нет привилегии: ' . $permissions
