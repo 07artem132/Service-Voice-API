@@ -31,9 +31,10 @@ class GroupTeamspeakInstances extends Model
     {
         return $this->belongsTo('Api\Group', 'id','group_id');
     }
+
     public function instance()
     {
-        return $this->hasOne('Api\TeamspeakInstances','id','server_id');
+        return $this->hasOne('Api\TeamspeakInstances','id','instance_id');
     }
 
 
