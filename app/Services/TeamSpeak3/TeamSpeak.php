@@ -9,7 +9,7 @@
 
 namespace Api\Services\TeamSpeak3;
 
-use Api\Servers;
+use Api\TeamspeakInstances;
 use TeamSpeak3;
 use TeamSpeak3_Helper_Convert;
 use TeamSpeak3_Node_Host;
@@ -367,7 +367,7 @@ class TeamSpeak
         $Options = 'timeout=' . config('TeamSpeak.connection.timeout');
         $Options .= '&blocking=' . config('TeamSpeak.connection.blocking');
         $Options .= '&nickname=' . config('TeamSpeak.connection.nickname');
-        $url = "serverquery://{$this->InstanceConfig->username}:{$this->InstanceConfig->password}@{$this->InstanceConfig->ipaddress}:{$this->InstanceConfig->port}/$Options";
+        $url = "serverquery://{$this->InstanceConfig->username}:{$this->InstanceConfig->password}@{$this->InstanceConfig->hostname}:{$this->InstanceConfig->port}/$Options";
         $url .= '#' . config('TeamSpeak.connection.flags');
         return $url;
     }
@@ -412,9 +412,9 @@ class TeamSpeak
      * @return mixed
      * @throws InstanceConfigNotFoundException
      */
-    function GetInstanceConfig(int $InstanceID): Servers
+    function GetInstanceConfig(int $InstanceID): TeamspeakInstances
     {
-        $config = Servers::where('id', '=', $InstanceID)->first();
+        $config = TeamspeakInstances::where('id', '=', $InstanceID)->first();
         if (empty($config))
             throw new InstanceConfigNotFoundException($InstanceID);
 
