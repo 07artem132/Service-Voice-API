@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use DB;
 
 /**
- * Api\StatisticsVirtualServers
+ * Api\StatisticsTeamspeakVirtualServers
  *
  * @property int $id
  * @property int $server_id
@@ -17,35 +17,35 @@ use DB;
  * @property float $avg_packetloss
  * @property \Carbon\Carbon|null $created_at
  * @property \Carbon\Carbon|null $updated_at
- * @method static \Illuminate\Database\Eloquent\Builder|\Api\StatisticsVirtualServers dayAvage()
- * @method static \Illuminate\Database\Eloquent\Builder|\Api\StatisticsVirtualServers fiveMinutesAvage()
- * @method static \Illuminate\Database\Eloquent\Builder|\Api\StatisticsVirtualServers halfHourAvage()
- * @method static \Illuminate\Database\Eloquent\Builder|\Api\StatisticsVirtualServers hourAvage()
- * @method static \Illuminate\Database\Eloquent\Builder|\Api\StatisticsVirtualServers serverID($server_id)
- * @method static \Illuminate\Database\Eloquent\Builder|\Api\StatisticsVirtualServers statDay()
- * @method static \Illuminate\Database\Eloquent\Builder|\Api\StatisticsVirtualServers statMonth()
- * @method static \Illuminate\Database\Eloquent\Builder|\Api\StatisticsVirtualServers statRealtime()
- * @method static \Illuminate\Database\Eloquent\Builder|\Api\StatisticsVirtualServers statWeek()
- * @method static \Illuminate\Database\Eloquent\Builder|\Api\StatisticsVirtualServers statYear()
- * @method static \Illuminate\Database\Eloquent\Builder|\Api\StatisticsVirtualServers virtualServerUID($unique_id)
- * @method static \Illuminate\Database\Eloquent\Builder|\Api\StatisticsVirtualServers whereAvgPacketloss($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\Api\StatisticsVirtualServers whereAvgPing($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\Api\StatisticsVirtualServers whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\Api\StatisticsVirtualServers whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\Api\StatisticsVirtualServers whereServerId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\Api\StatisticsVirtualServers whereSlotUsage($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\Api\StatisticsVirtualServers whereUniqueId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\Api\StatisticsVirtualServers whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\Api\StatisticsVirtualServers whereUserOnline($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\Api\StatisticsTeamspeakVirtualServers dayAvage()
+ * @method static \Illuminate\Database\Eloquent\Builder|\Api\StatisticsTeamspeakVirtualServers fiveMinutesAvage()
+ * @method static \Illuminate\Database\Eloquent\Builder|\Api\StatisticsTeamspeakVirtualServers halfHourAvage()
+ * @method static \Illuminate\Database\Eloquent\Builder|\Api\StatisticsTeamspeakVirtualServers hourAvage()
+ * @method static \Illuminate\Database\Eloquent\Builder|\Api\StatisticsTeamspeakVirtualServers serverID($server_id)
+ * @method static \Illuminate\Database\Eloquent\Builder|\Api\StatisticsTeamspeakVirtualServers statDay()
+ * @method static \Illuminate\Database\Eloquent\Builder|\Api\StatisticsTeamspeakVirtualServers statMonth()
+ * @method static \Illuminate\Database\Eloquent\Builder|\Api\StatisticsTeamspeakVirtualServers statRealtime()
+ * @method static \Illuminate\Database\Eloquent\Builder|\Api\StatisticsTeamspeakVirtualServers statWeek()
+ * @method static \Illuminate\Database\Eloquent\Builder|\Api\StatisticsTeamspeakVirtualServers statYear()
+ * @method static \Illuminate\Database\Eloquent\Builder|\Api\StatisticsTeamspeakVirtualServers virtualServerUID($unique_id)
+ * @method static \Illuminate\Database\Eloquent\Builder|\Api\StatisticsTeamspeakVirtualServers whereAvgPacketloss($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\Api\StatisticsTeamspeakVirtualServers whereAvgPing($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\Api\StatisticsTeamspeakVirtualServers whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\Api\StatisticsTeamspeakVirtualServers whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\Api\StatisticsTeamspeakVirtualServers whereServerId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\Api\StatisticsTeamspeakVirtualServers whereSlotUsage($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\Api\StatisticsTeamspeakVirtualServers whereUniqueId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\Api\StatisticsTeamspeakVirtualServers whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\Api\StatisticsTeamspeakVirtualServers whereUserOnline($value)
  * @mixin \Eloquent
  */
-class StatisticsVirtualServers extends Model
+class StatisticsTeamspeakVirtualServers extends Model
 {
     protected $hidden = ['id', 'updated_at', 'server_id', 'unique_id'];
 
-    public function scopeServerID($query, $server_id)
+    public function scopeInstanceId($query, $instance_id)
     {
-        return $query->where('server_id', $server_id);
+        return $query->where('instance_id', $instance_id);
     }
 
     public function scopeVirtualServerUID($query, $unique_id)
@@ -104,6 +104,11 @@ class StatisticsVirtualServers extends Model
         return $query
             ->select(DB::raw('avg(slot_usage) as slot_usage ,avg(user_online) as user_online,avg(avg_ping) as avg_ping,avg(avg_packetloss) as avg_packetloss,created_at'))
             ->groupBy(DB::raw('MONTH(created_at), DAYOFMONTH(created_at)'));
+    }
+
+    public function instance()
+    {
+        return $this->belongsTo('Api\TeamspeakInstances', 'id','instance_id');
     }
 
 }
