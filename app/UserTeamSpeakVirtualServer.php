@@ -11,5 +11,9 @@ use Illuminate\Database\Eloquent\Model;
  */
 class UserTeamSpeakVirtualServer extends Model
 {
-    //
+    public function instance()
+    {
+        return $this->belongsTo('Api\TeamSpeakInstances', 'id', 'instance_id');
+    }
+
 }
