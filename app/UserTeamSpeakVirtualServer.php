@@ -16,4 +16,8 @@ class UserTeamSpeakVirtualServer extends Model
         return $this->belongsTo('Api\TeamSpeakInstances', 'id', 'instance_id');
     }
 
+    public function user()
+    {
+        return $this->belongsTo('Api\User', 'id', 'user_id');
+    }
 }
