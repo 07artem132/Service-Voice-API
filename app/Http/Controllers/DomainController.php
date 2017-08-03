@@ -425,7 +425,7 @@ class DomainController extends Controller
      * @apiDescription Создает домен. <br/><br/>
      * <b>При запросе обязательно необходимо передать RAW данные, пример данных</b>:<br/><br/>
      * {<br/>
-     * &nbsp; "domain":"example04.org.",<br/>
+     * &nbsp; "name":"example04.org.",<br/>
      * &nbsp; "kind":"master",<br/>
      * &nbsp; "nameservers":[<br/>
      * &nbsp;&nbsp;&nbsp;&nbsp; "ns01.example04.org.",<br/>
