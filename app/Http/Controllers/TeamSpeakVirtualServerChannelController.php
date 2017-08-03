@@ -361,6 +361,63 @@ class TeamSpeakVirtualServerChannelController extends Controller
         return $this->jsonResponse(null);
     }
 
+    /**
+     * @api {PUT} /v1/teamspeak/instance/:server_id/virtualserver/:bashe64uid/channel/:channelid Изменить
+     * @apiName Edit channel virtual server
+     * @apiGroup Virtual Server Channel
+     * @apiVersion 1.0.0
+     * @apiDescription Изменяет канал <br/><br/>
+     * <b>Вы можете передать следуюшие параметры:</b><br/>
+     *  channel_name <br/>
+     *  channel_topic<br/>
+     *  channel_description<br/>
+     *  channel_password<br/>
+     *  channel_codec<br/>
+     *  channel_codec_quality<br/>
+     *  channel_maxclients<br/>
+     *  channel_maxfamilyclients<br/>
+     *  channel_order<br/>
+     *  channel_flag_permanent<br/>
+     *  channel_flag_semi_permanent<br/>
+     *  channel_flag_temporary<br/>
+     *  channel_flag_default<br/>
+     *  channel_flag_maxclients_unlimited<br/>
+     *  channel_flag_maxfamilyclients_unlimited<br/>
+     *  channel_flag_maxfamilyclients_inherited<br/>
+     *  channel_needed_talk_power<br/>
+     *  channel_name_phonetic<br/>
+     *  channel_icon_id<br/>
+     *  channel_codec_is_unencrypted<br/>
+     *  cpid<br/>
+     * @apiSampleRequest /api/teamspeak/instance/:server_id/virtualserver/:bashe64uid/channel
+     * @apiParam {Number} server_id Уникальный ID TeamSpeak3 инстанса в API.
+     * @apiParam {String} bashe64uid Уникальный идентификатор виртуального сервера (virtualserver_unique_identifier) закодированный в bashe64
+     * @apiParam {Number} channelid Уникальный ID канала на TeamSpeak3 инстансе.
+     * @apiHeader {String} Content-Type  Установите значение "application/json" потому как ожидается что вы отправите json
+     * @apiHeader {String} X-token Ваш токен для работы с API.
+     * @apiSuccess (Success code 200) {String} status  Всегда содержит значение "success".
+     * @apiSuccess (Success code 200) {Object}  data  Содержит запрашиваемую информацию.
+     * @apiPermission api.teamspeak.virtualserver.channel.list
+     * @apiUse INVALID_SERVER_ID
+     * @apiUse SOURCE_NOT_AVAILABLE
+     * @apiUse FIELD_NOT_SPECIFIED
+     * @apiUse INVALID_IP_ADDRESS
+     * @apiUse INVALID_TOKEN
+     * @apiUse REQUEST_LIMIT_EXCEEDED
+     * @apiUse TOKEN_IS_BLOCKED
+     * @apiSuccessExample {json} Успешно выполненный запрос:
+     *     HTTP/1.1 200 OK
+     *{
+     *  "status":"success",
+     *}
+     */
+    /**
+     * @param Request $request
+     * @param int $instance_id
+     * @param string $bashe64uid
+     * @param int $channelid
+     * @return JsonResponse
+     */
     function Edit(Request $request, int $instance_id, string $bashe64uid, int $channelid): JsonResponse
     {
         $this->instance_id = $instance_id;
