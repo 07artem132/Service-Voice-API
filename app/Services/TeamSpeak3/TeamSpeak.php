@@ -227,6 +227,12 @@ class TeamSpeak
         return (string)$this->connection->snapshotCreate();
     }
 
+    function VirtualServerSnapshotRestore($Snapshot): void
+    {
+        $this->connection->snapshotDeploy($Snapshot);
+        return;
+    }
+
     /**
      * @param array $config
      * @return array
@@ -290,6 +296,70 @@ class TeamSpeak
         return $ReturnData;
     }
 
+    //endregion
+
+    //region Каналы
+    /**
+     * @return array
+     */
+    function VirtualServerChannelList(): array
+    {
+        $Result = (array)$this->connection->execute('channellist -topic -flags -voice -limits -icon')->toAssocArray("cid");
+
+        foreach ($Result as $key => $value) {
+            $Return[$key] = (array)$value;
+            $Return[$key]['channel_topic'] = (string)$Return[$key]['channel_topic'];
+            $Return[$key]['channel_name'] = (string)$Return[$key]['channel_name'];
+        }
+
+        return $Return;
+    }
+
+    /**
+     * @param $channelid
+     * @return array
+     */
+    function VirtualServerChannelInfo($channelid): array
+    {
+        $Result = (array)$this->connection->execute('channelinfo cid=' . $channelid)->toArray();
+
+        foreach ($Result[0] as $key => $value)
+            $Return[$key] = (string)$value;
+
+        return $Return;
+    }
+
+    /**
+     * @param $channelid
+     */
+    function VirtualServerChannelDelete($channelid): void
+    {
+        $this->connection->execute('channeldelete cid=' . $channelid . ' force=1');
+
+        return;
+    }
+
+    function VirtualServerChannelCreate($properties): int
+    {
+        $result = (int)$this->connection->channelCreate($properties);
+        return $result;
+    }
+
+    function VirtualServerChannelMove($channelid, $properties): void
+    {
+        $this->connection->channelMove($channelid, $properties['channel_parent_id'], $properties['channel_sort_order']);
+        return;
+    }
+
+    function VirtualServerChannelEdit($channelid, $properties): void
+    {
+        $this->connection = $this->connection->channelGetById($channelid);
+
+        foreach ($properties as $key => $value)
+            $this->connection[$key] = $value;
+
+        return;
+    }
     //endregion
 
     //endregion
