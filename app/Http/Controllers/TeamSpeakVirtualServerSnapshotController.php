@@ -8,9 +8,10 @@
 
 namespace Api\Http\Controllers;
 
+use Storage;
 use Api\SnapshotsTeamspeakVirtualServers;
 use Illuminate\Http\JsonResponse;
-use Api\Services\TeamSpeak3\teamSpeak;
+use Api\Services\TeamSpeak3\TeamSpeak;
 use Api\Traits\RestSuccessResponseTrait;
 
 /**
@@ -24,16 +25,16 @@ class TeamSpeakVirtualServerSnapshotController extends Controller
     /**
      * @var int Уникальный идентификатор сервера
      */
-    private $server_id;
+    private $instance_id;
     /**
      * @var string Уникальный идентификатор виртуального сервера
      */
     private $uid;
 
     /**
-     * @api {post} /v1/teamspeak/instance/:server_id/virtualserver/:bashe64uid/snapshot Создать snapshot
+     * @api {post} /v1/teamspeak/instance/:server_id/virtualserver/:bashe64uid/snapshot Создать
      * @apiName Create virtual server snapshot
-     * @apiGroup Snapshots
+     * @apiGroup Virtual Server Snapshot
      * @apiVersion 1.0.0
      * @apiDescription Создает снимок (Snapshot) виртуального сервера
      * и возврашает информацию о том была ли успешно выполнена операция
@@ -63,22 +64,24 @@ class TeamSpeakVirtualServerSnapshotController extends Controller
      * }
      */
     /**
-     * @param int $server_id Уникальный идентификатор сервера
+     * @param int $instance_id Уникальный идентификатор сервера
      * @param string $bashe64uid Уникальный идентификатор виртуального сервера
      * @return JsonResponse Обьект с данными для ответа
      */
-    function Create(int $server_id, string $bashe64uid): JsonResponse
+    function Create(int $instance_id, string $bashe64uid): JsonResponse
     {
         $this->uid = base64_decode($bashe64uid);
+        $this->instance_id = $instance_id;
 
-        $ts3conn = new teamSpeak($server_id);
+        $ts3conn = new TeamSpeak($instance_id);
         $ts3conn->serverGetByUid($this->uid);
+
         $snapshot = $ts3conn->snapshotCreate();
         $serverinfo = $ts3conn->serverinfo()[0];
         $ts3conn->logout();
 
         $db = new SnapshotsTeamspeakVirtualServers;
-        $db->server_id = $server_id;
+        $db->instance_id = $instance_id;
         $db->port = $serverinfo['virtualserver_port'];
         $db->unique_id = $this->uid;
         $db->snapshot = $snapshot;
@@ -92,9 +95,9 @@ class TeamSpeakVirtualServerSnapshotController extends Controller
     }
 
     /**
-     * @api {get} /v1/teamspeak/instance/:server_id/virtualserver/:bashe64uid/snapshot/:snapshot_id  Получить snapshot
+     * @api {get} /v1/teamspeak/instance/:server_id/virtualserver/:bashe64uid/snapshot/:snapshot_id  Получить
      * @apiName Get snapshot virtual server from id
-     * @apiGroup Snapshots
+     * @apiGroup Virtual Server Snapshot
      * @apiVersion 1.0.0
      * @apiDescription Возврашает снимок (Snapshot) виртуального сервера
      * @apiSampleRequest /api/teamspeak/instance/:server_id/virtualserver/:bashe64uid/snapshot/:snapshot_id
@@ -146,9 +149,116 @@ class TeamSpeakVirtualServerSnapshotController extends Controller
     }
 
     /**
-     * @api {get} /v1/teamspeak/instance/:server_id/virtualserver/:bashe64uid/snapshot/ Список всех snapshot
+     * @api {get} /api/teamspeak/instance/:server_id/virtualserver/:bashe64uid/snapshot/:snapshot_id/download  Ссылка на скачивание
+     * @apiName Get download link snapshot virtual server from id
+     * @apiGroup Virtual Server Snapshot
+     * @apiVersion 1.0.0
+     * @apiDescription Возврашает ссылку на скачивание снимока (Snapshot'a) виртуального сервера
+     * @apiSampleRequest /api/teamspeak/instance/:server_id/virtualserver/:bashe64uid/snapshot/:snapshot_id/download
+     * @apiParam {Number} server_id Уникальный ID TeamSpeak3 инстанса в API.
+     * @apiParam {String} bashe64uid Уникальный идентификатор виртуального сервера (virtualserver_unique_identifier) закодированный в bashe64
+     * @apiParam {Number} snapshot_id Уникальный ID снимка (snapshot) виртуального TeamSpeak3 сервера.
+     * @apiHeader {String} X-token Ваш токен для работы с API.
+     * @apiSuccess (Success code 200) {String} status  Всегда содержит значение "success".
+     * @apiSuccess (Success code 200) {Object}  data  Содержит запрошенную информацию.
+     * @apiPermission api.teamspeak.virtualserver.snapshot.download
+     * @apiUse INVALID_SERVER_ID
+     * @apiUse SOURCE_NOT_AVAILABLE
+     * @apiUse FIELD_NOT_SPECIFIED
+     * @apiUse INVALID_IP_ADDRESS
+     * @apiUse INVALID_TOKEN
+     * @apiUse REQUEST_LIMIT_EXCEEDED
+     * @apiUse TOKEN_IS_BLOCKED
+     * @apiSuccessExample {json} Успешно выполненный запрос:
+     *     HTTP/1.1 200 OK
+     *    {
+     * "status":"success",
+     * "data":{
+     *      "url":  "http://api-dev.service-voice.com/storage/teamspeak3/snapshot/c8a52c96f9f68113d1a11862053fb05a014b2b8b",
+     *    }
+     * }
+     */
+    /**
+     * @param int $instance_id
+     * @param string $bashe64uid
+     * @param int $snapshot_id
+     * @return JsonResponse
+     */
+    function Download(int $instance_id, string $bashe64uid, int $snapshot_id): JsonResponse
+    {
+        $this->uid = base64_decode($bashe64uid);
+        $this->instance_id = $instance_id;
+        $this->snapshot_id = $snapshot_id;
+
+        $storage = config('TeamSpeak.snapshot.storage');
+        $FileName = sha1($this->instance_id . $this->uid . $this->snapshot_id);
+        $path = config('TeamSpeak.snapshot.path') . $FileName;
+
+        $SnapshotsVirtualServers = SnapshotsTeamspeakVirtualServers::UserSnapshot($this->instance_id, $this->uid, $this->snapshot_id)->first();
+        //TODO если пользователь обращается НЕ к своему снапшоту нужно бросить исключение
+
+        if (empty($SnapshotsVirtualServers))
+            return $this->jsonResponse('empty');
+
+
+        if (!Storage::disk($storage)->exists($path))
+            Storage::disk($storage)->put($path, $SnapshotsVirtualServers->snapshot);
+
+        $data['url'] = Storage::disk($storage)->url($path);
+
+        return $this->jsonResponse($data);
+    }
+
+    /**
+     * @api {get} /api/teamspeak/instance/:server_id/virtualserver/:bashe64uid/snapshot/:snapshot_id/restore  Востановить
+     * @apiName Restore snapshot virtual server from uid
+     * @apiGroup Virtual Server Snapshot
+     * @apiVersion 1.0.0
+     * @apiDescription Востанавливает виртуальный сервер из снапшота
+     * @apiSampleRequest /api/teamspeak/instance/:server_id/virtualserver/:bashe64uid/snapshot/:snapshot_id/restore
+     * @apiParam {Number} server_id Уникальный ID TeamSpeak3 инстанса в API.
+     * @apiParam {String} bashe64uid Уникальный идентификатор виртуального сервера (virtualserver_unique_identifier) закодированный в bashe64
+     * @apiParam {Number} snapshot_id Уникальный ID снимка (snapshot) виртуального TeamSpeak3 сервера.
+     * @apiHeader {String} X-token Ваш токен для работы с API.
+     * @apiSuccess (Success code 200) {String} status  Всегда содержит значение "success".
+     * @apiPermission api.teamspeak.virtualserver.snapshot.restore
+     * @apiUse INVALID_SERVER_ID
+     * @apiUse SOURCE_NOT_AVAILABLE
+     * @apiUse FIELD_NOT_SPECIFIED
+     * @apiUse INVALID_IP_ADDRESS
+     * @apiUse INVALID_TOKEN
+     * @apiUse REQUEST_LIMIT_EXCEEDED
+     * @apiUse TOKEN_IS_BLOCKED
+     * @apiSuccessExample {json} Успешно выполненный запрос:
+     *     HTTP/1.1 200 OK
+     * {
+     * "status":"success",
+     * }
+     */
+    /**
+     * @param int $instance_id
+     * @param string $bashe64uid
+     * @param int $snapshot_id
+     * @return JsonResponse
+     */
+    function Restore(int $instance_id, string $bashe64uid, int $snapshot_id): JsonResponse
+    {
+        $this->uid = base64_decode($bashe64uid);
+        $this->instance_id = $instance_id;
+        $this->snapshot_id = $snapshot_id;
+
+        $SnapshotsVirtualServers = SnapshotsTeamspeakVirtualServers::UserSnapshot($this->instance_id, $this->uid, $this->snapshot_id)->firstOrFail();
+
+        $ts3conn = new TeamSpeak($this->instance_id, $this->uid);
+        $ts3conn->VirtualServersnapshotRestore($SnapshotsVirtualServers->snapshot);
+
+        return $this->jsonResponse(null);
+    }
+
+    /**
+     * @api {get} /v1/teamspeak/instance/:server_id/virtualserver/:bashe64uid/snapshot Список
      * @apiName Get list all snapshot virtual server
-     * @apiGroup Snapshots
+     * @apiGroup Virtual Server Snapshot
      * @apiVersion 1.0.0
      * @apiDescription Возврашает список снимоков (Snapshot) виртуального сервера
      * @apiSampleRequest /api/teamspeak/instance/:server_id/virtualserver/:bashe64uid/snapshot/
@@ -192,14 +302,14 @@ class TeamSpeakVirtualServerSnapshotController extends Controller
      * @param string $bashe64uid Уникальный идентификатор виртуального сервера
      * @return JsonResponse Обьект с данными для ответа
      */
-    function GetList(int $server_id, string $bashe64uid): JsonResponse
+    function GetList(int $instance_id, string $bashe64uid): JsonResponse
     {
         $data = [];
 
         $this->uid = base64_decode($bashe64uid);
-        $this->server_id = $server_id;
+        $this->instance_id = $instance_id;
 
-        $SnapshotsVirtualServers = SnapshotsTeamspeakVirtualServers::SnapshotList($this->uid, $this->server_id)->get();
+        $SnapshotsVirtualServers = SnapshotsTeamspeakVirtualServers::SnapshotList($this->uid, $this->instance_id)->get();
 
         if ($SnapshotsVirtualServers->count() === 0)
             return $this->jsonResponse('empty');
@@ -215,9 +325,9 @@ class TeamSpeakVirtualServerSnapshotController extends Controller
     }
 
     /**
-     * @api {delete} /v1/teamspeak/instance/:server_id/virtualserver/:bashe64uid/snapshot/:snapshot_id Удалить snapshot
+     * @api {delete} /v1/teamspeak/instance/:server_id/virtualserver/:bashe64uid/snapshot/:snapshot_id Удалить
      * @apiName Delete virtual server snapshot
-     * @apiGroup Snapshots
+     * @apiGroup Virtual Server Snapshot
      * @apiVersion 1.0.0
      * @apiDescription Удаляет снимок (Snapshot) виртуального сервера
      * и возврашает информацию о том была ли успешно выполнена операция
