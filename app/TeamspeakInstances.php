@@ -59,11 +59,6 @@ class TeamspeakInstances extends Model
      * @param $query
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function scopeTeamSpeak($query)
-    {
-        return $query->where('type', '=', 'teamspeak');
-    }
-
     public function snapshots()
     {
         return $this->hasMany('Api\SnapshotsTeamspeakVirtualServers', 'instance_id', 'id');
@@ -98,6 +93,5 @@ class TeamspeakInstances extends Model
     {
         return $this->hasMany('Api\UserTeamSpeakVirtualServer', 'instance_id', 'id');
     }
-
 
 }
