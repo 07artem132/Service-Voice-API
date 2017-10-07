@@ -42,7 +42,7 @@ class SnapshotsTeamspeakVirtualServers extends Model
     {
         return $query->where(
             [
-                ['server_id', '=', $server_id],
+                ['instance_id', '=', $server_id],
                 ['unique_id', '=', $uid],
                 ['id', '=', $snapshot_id]
             ]
@@ -54,7 +54,7 @@ class SnapshotsTeamspeakVirtualServers extends Model
     {
         return $query->select('id', 'created_at')->where(
             [
-                ['server_id', '=', $server_id],
+                ['instance_id', '=', $server_id],
                 ['unique_id', '=', $uid],
             ]
         );
