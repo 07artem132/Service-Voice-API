@@ -80,7 +80,7 @@ class TeamSpeakInstanceStatisticsController extends Controller
         $this->server_id = $server_id;
 
         $data = Cache::remember('InstanseStatisticsYearServerID-' . $server_id, Carbon::now()->addMinutes(config('ApiCache.TeamSpeak.Statistics.Instanse.Year')), function () {
-            return StatisticsTeamspeakInstances::ServerID($this->server_id)->StatYear()->DayAvage()->get();
+            return StatisticsTeamspeakInstances::InstanceId($this->server_id)->StatYear()->DayAvage()->get();
         });
 
         return $this->jsonResponse($data);
@@ -137,7 +137,7 @@ class TeamSpeakInstanceStatisticsController extends Controller
         $this->server_id = $server_id;
 
         $data = Cache::remember('InstanseStatisticsMonthServerID-' . $server_id, Carbon::now()->addMinutes(config('ApiCache.TeamSpeak.Statistics.Instanse.Month')), function () {
-            return StatisticsTeamspeakInstances::ServerID($this->server_id)->StatMonth()->HourAvage()->get();
+            return StatisticsTeamspeakInstances::InstanceId($this->server_id)->StatMonth()->HourAvage()->get();
         });
 
         return $this->jsonResponse($data);
@@ -194,7 +194,7 @@ class TeamSpeakInstanceStatisticsController extends Controller
         $this->server_id = $server_id;
 
         $data = Cache::remember('InstanseStatisticsWeekServerID-' . $server_id, Carbon::now()->addMinutes(config('ApiCache.TeamSpeak.Statistics.Instanse.Week')), function () {
-            return StatisticsTeamspeakInstances::ServerID($this->server_id)->StatWeek()->HalfHourAvage()->get();
+            return StatisticsTeamspeakInstances::InstanceId($this->server_id)->StatWeek()->HalfHourAvage()->get();
         });
 
         return $this->jsonResponse($data);
@@ -251,7 +251,7 @@ class TeamSpeakInstanceStatisticsController extends Controller
         $this->server_id = $server_id;
 
         $data = Cache::remember('InstanseStatisticsDayServerID-' . $server_id, Carbon::now()->addMinutes(config('ApiCache.TeamSpeak.Statistics.Instanse.Day')), function () {
-            return StatisticsTeamspeakInstances::ServerID($this->server_id)->StatDay()->FiveMinutesAvage()->get();
+            return StatisticsTeamspeakInstances::InstanceId($this->server_id)->StatDay()->FiveMinutesAvage()->get();
         });
 
         return $this->jsonResponse($data);
@@ -309,7 +309,7 @@ class TeamSpeakInstanceStatisticsController extends Controller
         $this->server_id = $server_id;
 
         $data = Cache::remember('InstanseStatisticsRealtimeServerID-' . $server_id, Carbon::now()->addMinutes(config('ApiCache.TeamSpeak.Statistics.Instanse.Realtime')), function () {
-            return StatisticsTeamspeakInstances::ServerID($this->server_id)->StatRealtime()->get();
+            return StatisticsTeamspeakInstances::InstanceId($this->server_id)->StatRealtime()->get();
         });
 
         return $this->jsonResponse($data);

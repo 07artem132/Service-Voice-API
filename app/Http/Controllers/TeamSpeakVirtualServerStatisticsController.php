@@ -89,7 +89,7 @@ class TeamSpeakVirtualServerStatisticsController
         $this->uid = base64_decode($uid);
 
         $data = Cache::remember('VirtualServerStatisticsYearServerID-' . $server_id . '-VirtualServerUID-' . $this->uid, Carbon::now()->addMinutes(config('ApiCache.TeamSpeak.Statistics.VirtualServer.Year')), function () {
-            return StatisticsTeamspeakVirtualServers::ServerID($this->server_id)->VirtualServerUID($this->uid)->StatYear()->DayAvage()->get();
+            return StatisticsTeamspeakVirtualServers::InstanceId($this->server_id)->VirtualServerUID($this->uid)->StatYear()->DayAvage()->get();
         });
 
         return $this->jsonResponse($data);
@@ -152,7 +152,7 @@ class TeamSpeakVirtualServerStatisticsController
         $this->uid = base64_decode($uid);
 
         $data = Cache::remember('VirtualServerStatisticsMonthServerID-' . $server_id . '-VirtualServerUID-' . $this->uid, Carbon::now()->addMinutes(config('ApiCache.TeamSpeak.Statistics.VirtualServer.Month')), function () {
-            return StatisticsTeamspeakVirtualServers::ServerID($this->server_id)->VirtualServerUID($this->uid)->StatMonth()->HourAvage()->get();
+            return StatisticsTeamspeakVirtualServers::InstanceId($this->server_id)->VirtualServerUID($this->uid)->StatMonth()->HourAvage()->get();
         });
 
         return $this->jsonResponse($data);
@@ -215,7 +215,7 @@ class TeamSpeakVirtualServerStatisticsController
         $this->uid = base64_decode($uid);
 
         $data = Cache::remember('VirtualServerStatisticsWeekServerID-' . $server_id . '-VirtualServerUID-' . $this->uid, Carbon::now()->addMinutes(config('ApiCache.TeamSpeak.Statistics.VirtualServer.Week')), function () {
-            return StatisticsTeamspeakVirtualServers::ServerID($this->server_id)->VirtualServerUID($this->uid)->StatWeek()->HalfHourAvage()->get();
+            return StatisticsTeamspeakVirtualServers::InstanceId($this->server_id)->VirtualServerUID($this->uid)->StatWeek()->HalfHourAvage()->get();
         });
 
         return $this->jsonResponse($data);
@@ -278,7 +278,7 @@ class TeamSpeakVirtualServerStatisticsController
         $this->uid = base64_decode($uid);
 
         $data = Cache::remember('VirtualServerStatisticsDayServerID-' . $server_id . '-VirtualServerUID-' . $this->uid, Carbon::now()->addMinutes(config('ApiCache.TeamSpeak.Statistics.VirtualServer.Day')), function () {
-            return StatisticsTeamspeakVirtualServers::ServerID($this->server_id)->VirtualServerUID($this->uid)->StatDay()->FiveMinutesAvage()->get();
+            return StatisticsTeamspeakVirtualServers::InstanceId($this->server_id)->VirtualServerUID($this->uid)->StatDay()->FiveMinutesAvage()->get();
         });
 
         return $this->jsonResponse($data);
@@ -342,7 +342,7 @@ class TeamSpeakVirtualServerStatisticsController
         $this->uid = base64_decode($uid);
 
         $data = Cache::remember('VirtualServerStatisticsRealtimeServerID-' . $server_id . '-VirtualServerUID-' . $this->uid, Carbon::now()->addMinutes(config('ApiCache.TeamSpeak.Statistics.VirtualServer.Realtime')), function () {
-            return StatisticsTeamspeakVirtualServers::ServerID($this->server_id)->VirtualServerUID($this->uid)->StatRealtime()->get();
+            return StatisticsTeamspeakVirtualServers::InstanceId($this->server_id)->VirtualServerUID($this->uid)->StatRealtime()->get();
         });
 
         return $this->jsonResponse($data);
