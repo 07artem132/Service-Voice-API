@@ -11,6 +11,10 @@ return [
         'storage' => 'public',
         'path' => '/teamspeak3/icon/',
     ],
+    'file' => [
+        'storage' => 'public',
+        'path' => '/teamspeak3/file/',
+    ],
     'snapshot' => [
         'storage' => 'public',
         'path' => '/teamspeak3/snapshot/',
