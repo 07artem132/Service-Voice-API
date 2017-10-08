@@ -219,6 +219,8 @@ class TeamSpeak
         return;
     }
 
+    //region Снапшоты
+
     /**
      * @return string
      */
@@ -232,6 +234,36 @@ class TeamSpeak
         $this->connection->snapshotDeploy($Snapshot);
         return;
     }
+    //endregion
+
+    //region Токены
+    function VirtualServerTokenlList(): array
+    {
+        try {
+            $data = $this->connection->privilegeKeyList(false);
+        } catch (TeamSpeak3_Adapter_ServerQuery_Exception $e) {
+            if ($e->getMessage() === 'database empty result set')
+                return [null];
+        }
+
+        foreach ($data as $Token => $param)
+            foreach ($param as $key => $value)
+                $ReturnData[$Token][$key] = (string)$value;
+
+        return $ReturnData;
+    }
+
+    function VirtualServerTokenDelete(string $Token): void
+    {
+        $this->connection->privilegeKeyDelete($Token);
+        return;
+    }
+
+    function VirtualServerTokenCreate($groupID, $description): string
+    {
+        return (string)$this->connection->privilegeKeyCreate(TeamSpeak3::TOKEN_SERVERGROUP, $groupID, 0, $description);
+    }
+    //endregion
 
     /**
      * @param array $config
@@ -286,7 +318,7 @@ class TeamSpeak
             $data = $this->connection->banList();
         } catch (TeamSpeak3_Adapter_ServerQuery_Exception $e) {
             if ($e->getMessage() === 'database empty result set')
-                return 'empty';
+                return [null];
         }
 
         foreach ($data as $banID => $Param)
@@ -371,7 +403,7 @@ class TeamSpeak
      * @param string $cpw
      * @return string
      */
-    function DownloadFile(int $cid, string $name, string $cpw): string
+    function DownloadFile(int $cid, string $name, string $cpw = ''): string
     {
         $download = $this->connection->transferInitDownload(rand(0x0000, 0xFFFF), $cid, $name, $cpw);
         $transfer = TeamSpeak3::factory("filetransfer://" . (strstr($download["host"], ":") !== FALSE ? "[" . $download["host"] . "]" : $download["host"]) . ":" . $download["port"]);;
@@ -385,6 +417,41 @@ class TeamSpeak
     {
         try {
             $data = $this->connection->channelFileList('0', '', '/icons');
+        } catch (TeamSpeak3_Adapter_ServerQuery_Exception  $e) {
+            if ($e->getMessage() === 'database empty result set')
+                return null;
+        }
+
+        for ($i = 0; $i < count($data); $i++) {
+            $data[$i]['path'] = (string)$data[$i]['path'];
+            $data[$i]['name'] = (string)$data[$i]['name'];
+            $data[$i]['src'] = (string)$data[$i]['src'];
+        }
+
+        return $data;
+    }
+
+    function VirtualServerChannelFileList($cid): ?array
+    {
+        try {
+            $data = $this->connection->channelFileList($cid, '', '/', false);
+            do {
+                $flag = false;
+                for ($i = 0; $i < count($data); $i++) {
+                    if ($data[$i]["type"] == TeamSpeak3::FILE_TYPE_DIRECTORY) {
+                        $flag = true;
+                        $path = $data[$i]["src"];
+                        unset($data[$i]);
+                        try {
+                            $data = array_merge($data, $this->connection->channelFileList($cid, '', $path, false));
+                        } catch (TeamSpeak3_Adapter_ServerQuery_Exception  $e) {
+                            if ($e->getMessage() === 'database empty result set') {
+                                $data = array_merge($data, []);
+                            }
+                        }
+                    }
+                }
+            } while ($flag != false);
         } catch (TeamSpeak3_Adapter_ServerQuery_Exception  $e) {
             if ($e->getMessage() === 'database empty result set')
                 return null;
@@ -427,7 +494,7 @@ class TeamSpeak
         return;
     }
 
-    //endregion
+//endregion
 
     /**
      * @return string
