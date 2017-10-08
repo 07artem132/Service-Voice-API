@@ -50,6 +50,18 @@ class EventServiceProvider extends ServiceProvider
         'Api\Events\CronLocked' => [
             'Api\Listeners\LogCronLockedFile',
         ],
+        'Illuminate\Cache\Events\CacheHit' => [
+            'Api\Listeners\LogCacheHit',
+        ],
+        'Illuminate\Cache\Events\CacheMissed' => [
+            'Api\Listeners\LogCacheMissed',
+        ],
+        'Illuminate\Cache\Events\KeyWritten' => [
+            'Api\Listeners\LogKeyWritten',
+        ],
+        'Illuminate\Cache\Events\KeyForgotten' => [
+            'Api\Listeners\LogKeyForgotten',
+        ],
 
     ];
 
