@@ -10,6 +10,7 @@ namespace Api\Http\Middleware;
 
 use Api\UserToken;
 use Closure;
+use Api\Exceptions\TeamspeakVirtualServersNotAllowExceptions;
 
 class TokenVerifiTeamSpeakVitrualServerAllow
 {

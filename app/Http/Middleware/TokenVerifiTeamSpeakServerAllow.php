@@ -10,6 +10,7 @@ namespace Api\Http\Middleware;
 
 use Api\UserToken;
 use Closure;
+use Api\Exceptions\TeamspeakServersNotAllowExceptions;
 
 class TokenVerifiTeamSpeakServerAllow
 {
@@ -19,7 +20,7 @@ class TokenVerifiTeamSpeakServerAllow
         $server_id = (int)$request->server_id;
         $token = $request->header('X-token');
 
-        $result = UserToken::with('servers', 'TeamspeakVirtualServers')->where('token', '=', $token)->first();
+        $result = UserToken::with('servers')->where('token', '=', $token)->first();
 
         $AllowServers = $result->servers->toArray();
 
