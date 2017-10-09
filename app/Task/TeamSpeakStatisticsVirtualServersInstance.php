@@ -54,9 +54,8 @@ class TeamSpeakStatisticsVirtualServersInstance
     {
         $data = [];
         foreach ($this->ts3con->ReturnConnection() as $VirtualServer) {
-
-            if ((string)$VirtualServer['virtualserver_status'] != 'online') ;
-            continue;
+            if ((string)$VirtualServer['virtualserver_status'] != 'online')
+                continue;
 
             $data[$VirtualServer['virtualserver_id']]['unique_id'] = (string)$VirtualServer['virtualserver_unique_identifier'];
             $data[$VirtualServer['virtualserver_id']]['user_online'] = (integer)$VirtualServer['virtualserver_clientsonline'];
