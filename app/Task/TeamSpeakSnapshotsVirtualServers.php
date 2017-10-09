@@ -45,7 +45,6 @@ class TeamSpeakSnapshotsVirtualServers
                 $db = new SnapshotsTeamspeakVirtualServers;
                 $db->instance_id = $instance_id;
                 $db->unique_id = $VirtualServerSnapshots['unique_id'];
-                $db->port = $VirtualServerSnapshots['port'];
                 $db->snapshot = $VirtualServerSnapshots['snapshot'];
                 $db->save();
             }
