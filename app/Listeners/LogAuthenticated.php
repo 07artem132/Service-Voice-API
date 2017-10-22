@@ -11,24 +11,21 @@ use Debugbar;
  * Class LogAuthenticated
  * @package Api\Listeners
  */
-class LogAuthenticated
-{
-    /**
-     * LogAuthenticated constructor.
-     */
-    public function __construct()
-    {
-        //
-    }
+class LogAuthenticated {
+	/**
+	 * LogAuthenticated constructor.
+	 */
+	public function __construct() {
+		//
+	}
 
-    /**
-     * Handle the event.
-     *
-     * @param  Authenticated $event
-     * @return void
-     */
-    public function handle(Authenticated $event)
-    {
-        Debugbar::addMessage($event);
-    }
+	/**
+	 * Handle the event.
+	 *
+	 * @param  Authenticated $event
+	 *
+	 * @return void
+	 */
+	public function handle( Authenticated $event ) {
+	}
 }

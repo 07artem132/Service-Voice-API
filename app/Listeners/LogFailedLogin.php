@@ -29,6 +29,5 @@ class LogFailedLogin
      */
     public function handle(Failed $event)
     {
-        Debugbar::addMessage($event);
     }
 }
