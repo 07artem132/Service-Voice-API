@@ -26,14 +26,15 @@ class AppServiceProvider extends ServiceProvider
     {
 
         $this->app->register(\Sentry\SentryLaravel\SentryLaravelServiceProvider::class);
+	    $loader = \Illuminate\Foundation\AliasLoader::getInstance();
 
-        if ($this->app->environment() !== 'production') {
+	    $loader->alias('Sentry', 'Sentry\SentryLaravel\SentryFacade::class');
+
+	    if ($this->app->environment() !== 'production') {
             $this->app->register('Barryvdh\Debugbar\ServiceProvider');
             $this->app->register('Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider');
 
-            $loader = \Illuminate\Foundation\AliasLoader::getInstance();
             $loader->alias('Debugbar', 'Barryvdh\Debugbar\Facade');
-            $loader->alias('Sentry', 'Sentry\SentryLaravel\SentryFacade::class');
         }
     }
 }
