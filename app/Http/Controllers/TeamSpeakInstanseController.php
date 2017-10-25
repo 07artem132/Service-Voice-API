@@ -8,6 +8,7 @@
 
 namespace Api\Http\Controllers;
 
+use Api\Http\Requests\TeamSpeakInstanseEditRequest;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Api\Exceptions\RequestIsNotJson;
@@ -113,16 +114,8 @@ class TeamSpeakInstanseController extends Controller
      * @return JsonResponse
      * @throws RequestIsNotJson
      */
-    function Edit(Request $request, int $server_id): JsonResponse
+    function Edit(TeamSpeakInstanseEditRequest $request, int $server_id): JsonResponse
     {
-        if (!$request->isJson())
-            throw new RequestIsNotJson();
-
-        $rules = config('ApiValidation.TeamSpeak.Instance.Edit.rules');
-        $messages = config('ApiValidation.TeamSpeak.Instance.Edit.messages');
-
-        $this->validate($request, $rules, $messages);
-
         $ts3conn = new TeamSpeak($server_id);
 
         $ts3conn->instanceedit($request->all());
