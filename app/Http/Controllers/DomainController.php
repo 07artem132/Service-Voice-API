@@ -8,11 +8,10 @@
 
 namespace Api\Http\Controllers;
 
-use Illuminate\Http\Request;
+use Api\Http\Requests\DomainRecordDeleteRequest;
 use Api\Traits\RestHelperTrait;
 use Illuminate\Http\JsonResponse;
 use Api\Services\Domain\PowerDNS;
-use Api\Exceptions\RequestIsNotJson;
 use Api\Http\Requests\DomainAddRequest;
 use Api\Traits\RestSuccessResponseTrait;
 use Api\Http\Requests\DomainRecordAddRequest;
@@ -242,7 +241,7 @@ class DomainController extends Controller {
 	 * @return JsonResponse Обьект с данными для ответа
 	 */
 	function RecordFormatedList( string $domain ): JsonResponse {
-		$this->PowerDNS         = new PowerDNS();
+		$this->PowerDNS   = new PowerDNS();
 		$DomainRecordList = $this->PowerDNS->DomainRecordFormatedList( $domain );
 
 		return $this->jsonResponse( $DomainRecordList );
@@ -413,7 +412,7 @@ class DomainController extends Controller {
 	 * @return JsonResponse Обьект с данными для ответа
 	 */
 	function RecordList( string $domain ): JsonResponse {
-		$this->PowerDNS         = new PowerDNS();
+		$this->PowerDNS   = new PowerDNS();
 		$DomainRecordList = $this->PowerDNS->DomainRecordList( $domain );
 
 		return $this->jsonResponse( $DomainRecordList );
@@ -509,7 +508,7 @@ class DomainController extends Controller {
 	 */
 	function Add( DomainAddRequest $request ): JsonResponse {
 		$this->PowerDNS = new PowerDNS();
-		$Response = $this->PowerDNS->DomainCreate(
+		$Response       = $this->PowerDNS->DomainCreate(
 			$request->input( 'name' ),
 			$request->input( 'kind' ),
 			$request->input( 'nameservers' )
@@ -664,7 +663,7 @@ class DomainController extends Controller {
 	 * @return JsonResponse Обьект с данными для ответа
 	 * @throws RequestIsNotJson Возникает в случае если переданные данные не являются json
 	 */
-	function RecordDelete( Request $request, string $domain ): JsonResponse {
+	function RecordDelete( DomainRecordDeleteRequest $request, string $domain ): JsonResponse {
 		$this->PowerDNS = new PowerDNS();
 		$this->PowerDNS->DomainRecordDelete(
 			$domain,

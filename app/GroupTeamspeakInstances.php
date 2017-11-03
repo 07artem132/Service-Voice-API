@@ -23,10 +23,10 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\Api\GroupTeamspeakInstances whereInstanceId( $value )
  */
 class GroupTeamspeakInstances extends Model {
-	protected $hidden = [ 'created_at', 'updated_at' ];
+	protected $hidden = [ 'created_at', 'updated_at','group_id' ];
 
-	public function scopeServer( $query, $server_id ) {
-		$query->where( 'server_id', '=', $server_id );
+	public function scopeGetInstance( $query, $instance_id ) {
+		$query->where( 'instance_id', '=', $instance_id );
 	}
 
 	public function group() {

@@ -26,7 +26,7 @@ class Group extends Model
 {
     protected $hidden = ['created_at', 'id', 'updated_at'];
 
-    public function Servers()
+    public function TeamspeakInstances()
     {
         return $this->hasMany('Api\GroupTeamspeakInstances', 'group_id');
     }
