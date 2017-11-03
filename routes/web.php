@@ -17,3 +17,14 @@ Route::get('/', function () {
 });
 
 Route::get('/test', 'TestControllers@index')->name('test');//->middleware();
+
+Route::get('/registration', [
+	'as' => 'UserRegistrationControllerFormRender',
+	'uses' => 'UserRegistrationController@Form',
+]);
+
+
+Route::post('/registration', [
+	'as' => 'UserRegistrationControllerRegistration',
+	'uses' => 'UserRegistrationController@Registration',
+]);

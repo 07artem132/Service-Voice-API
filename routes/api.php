@@ -82,7 +82,7 @@ Route::domain(env('APP_DOMAIN'))->prefix('v1/')->group(function () {
         //endregion
 
         //region TeamSpeak 3
-        //region TeamSpeak 3 инстансы
+        //region Инстансы
         //////////////////////ВЗАИМОДЕЙСТВИЕ С ИНСТАНСОМ//////////////////////
         /////////////////////////ДОКУМЕНТИРОВАНО/////////////////////////////
         Route::get('/teamspeak/instance/{server_id}/hostinfo', [
@@ -152,7 +152,7 @@ Route::domain(env('APP_DOMAIN'))->prefix('v1/')->group(function () {
         //////////////////////////////////////////////////////////////////////
         //endregion
 
-        //region Виртуальные TeamSpeak 3 сервера
+        //region Виртуальные сервера
         ///////////////ВЗАИМОДЕЙСТВИЕ С ВИРТУАЛЬНЫМИ СЕРВЕРАМИ////////////////
         //region Базовое
         /////////////////////////////Базовое/////////////////////////////////
@@ -571,6 +571,51 @@ Route::domain(env('APP_DOMAIN'))->prefix('v1/')->group(function () {
         ]);
         //////////////////////////////////////////////////////////////////////
         //endregion
+        //region Токены
+        //////////////////////////////Токены//////////////////////////////////
+        /////////////////////////ДОКУМЕНТИРОВАНО/////////////////////////////////
+        Route::get('/teamspeak/instance/{server_id}/virtualserver/{bashe64uid}/token', [
+            'as' => 'TeamSpeakVirtualServerTokenControllerList',
+            'uses' => 'TeamSpeakVirtualServerTokenController@List',
+            'where' => [
+                'server_id' => '^\d+$',
+                'bashe64uid' => '(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?',
+            ],
+            'middleware' => [
+                'permissions:api.teamspeak.virtualserver.token.list',
+                'TokenVerifiTeamspeakVirtualServersAllow'
+            ]
+        ]);
+
+        Route::post('/teamspeak/instance/{server_id}/virtualserver/{bashe64uid}/token', [
+            'as' => 'TeamSpeakVirtualServerTokenControllerCreate',
+            'uses' => 'TeamSpeakVirtualServerTokenController@Create',
+            'where' => [
+                'server_id' => '^\d+$',
+                'bashe64uid' => '(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?',
+            ],
+            'middleware' => [
+                'permissions:api.teamspeak.virtualserver.token.create',
+                'TokenVerifiTeamspeakVirtualServersAllow'
+            ]
+        ]);
+
+        Route::delete('/teamspeak/instance/{server_id}/virtualserver/{bashe64uid}/token/{bashe64token}', [
+            'as' => 'TeamSpeakVirtualServerTokenControllerDelete',
+            'uses' => 'TeamSpeakVirtualServerTokenController@Delete',
+            'where' => [
+                'server_id' => '^\d+$',
+                'bashe64token' =>  '(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?',
+                'bashe64uid' => '(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?',
+            ],
+            'middleware' => [
+                'permissions:api.teamspeak.virtualserver.token.delete',
+                'TokenVerifiTeamspeakVirtualServersAllow'
+            ]
+        ]);
+        //////////////////////////////////////////////////////////////////////
+        //endregion
+
         //////////////////////////////////////////////////////////////////////
         //endregion
 
@@ -690,7 +735,52 @@ Route::domain(env('APP_DOMAIN'))->prefix('v1/')->group(function () {
         ]);
         //////////////////////////////////////////////////////////////////////
         //endregion
-        //////////////////////////////////////////////////////////////////////
+	    //region Групп инстансов
+	    //////////////////Статистика групп инстансов///////////////////////
+	    /////////////////////////ДОКУМЕНТИРОВАНО///////////////////////////////
+	    Route::get('/teamspeak/instance/group/{group}/statistics/realtime', [
+		    'as' => 'TeamSpeakInstanceStatisticsGroupControllerRealtime',
+		    'uses' => 'TeamSpeakInstanceStatisticsGroupController@Realtime',
+		    'where' => [
+			    'group' => '^[A-Za-z]+$',
+		    ],
+		    //'middleware' => 'permissions:api.teamspeak.instanse.statistics.realtime'
+	    ]);
+	    Route::get('/teamspeak/instance/group/{group}/statistics/day', [
+		    'as' => 'TeamSpeakInstanceStatisticsGroupControllerDay',
+		    'uses' => 'TeamSpeakInstanceStatisticsGroupController@Day',
+		    'where' => [
+			    'group' => '^[A-Za-z]+$',
+		    ],
+		    //'middleware' => 'permissions:api.teamspeak.instanse.statistics.realtime'
+	    ]);
+	    Route::get('/teamspeak/instance/group/{group}/statistics/week', [
+		    'as' => 'TeamSpeakInstanceStatisticsGroupControllerWeek',
+		    'uses' => 'TeamSpeakInstanceStatisticsGroupController@Week',
+		    'where' => [
+			    'group' => '^[A-Za-z]+$',
+		    ],
+		    //'middleware' => 'permissions:api.teamspeak.instanse.statistics.realtime'
+	    ]);
+	    Route::get('/teamspeak/instance/group/{group}/statistics/month', [
+		    'as' => 'TeamSpeakInstanceStatisticsGroupControllerMonth',
+		    'uses' => 'TeamSpeakInstanceStatisticsGroupController@Month',
+		    'where' => [
+			    'group' => '^[A-Za-z]+$',
+		    ],
+		    //'middleware' => 'permissions:api.teamspeak.instanse.statistics.realtime'
+	    ]);
+	    Route::get('/teamspeak/instance/group/{group}/statistics/year', [
+		    'as' => 'TeamSpeakInstanceStatisticsGroupControllerYear',
+		    'uses' => 'TeamSpeakInstanceStatisticsGroupController@Year',
+		    'where' => [
+			    'group' => '^[A-Za-z]+$',
+		    ],
+		    //'middleware' => 'permissions:api.teamspeak.instanse.statistics.realtime'
+	    ]);
+
+	    //endregion
+	    //////////////////////////////////////////////////////////////////////
         //endregion
 
         //region Хелперы
@@ -739,7 +829,60 @@ Route::domain(env('APP_DOMAIN'))->prefix('v1/')->group(function () {
 
         //////////////////////////////////////////////////////////////////////
         //endregion
-        //endregion
+
+	    //region Группы серверов
+	    /////////////////////////////Группы серверов/////////////////////////////////////
+	    /////////////////////////ДОКУМЕНТИРОВАНО/////////////////////////////
+	    Route::delete('/teamspeak/instance/group/{group}', [
+		    'as' => 'GroupDelete',
+		    'uses' => 'TeamSpeakInstancesGroupController@Delete',
+		    'where' => [
+			    'group' => '^[A-Za-z]+$',
+		    ],
+		    'middleware' => ['permissions:api.teamspeak.instance.group.delete']
+	    ]);
+
+	    Route::get('/teamspeak/instance/group', [
+		    'as' => 'GroupList',
+		    'uses' => 'TeamSpeakInstancesGroupController@List',
+		    'middleware' => ['permissions:api.teamspeak.instance.group.list']
+	    ]);
+
+	    Route::post('/teamspeak/instance/group', [
+		    'as' => 'GroupCreate',
+		    'uses' => 'TeamSpeakInstancesGroupController@Create',
+		    'middleware' => ['permissions:api.teamspeak.instance.group.create']
+	    ]);
+
+	    Route::get('/teamspeak/instance/group/{group}', [
+		    'as' => 'ServerGroupList',
+		    'uses' => 'TeamSpeakInstancesGroupController@ServerGroupList',
+		    'middleware' => ['permissions:api.teamspeak.instance.group.instance.list']
+	    ]);
+
+	    Route::post('/teamspeak/instance/group/{group}/{server_id}', [
+		    'as' => 'ServerAddGroup',
+		    'uses' => 'TeamSpeakInstancesGroupController@ServerAddGroup',
+		    'where' => [
+			    'group' => '^[A-Za-z]+$',
+			    'server_id' => '^[0-9]+$',
+		    ],
+		    'middleware' => ['permissions:api.teamspeak.instance.group.instance.add']
+	    ]);
+
+	    Route::delete('/teamspeak/instance/group/{group}/{server_id}', [
+		    'as' => 'ServerRemoveGroup',
+		    'uses' => 'TeamSpeakInstancesGroupController@ServerRemoveGroup',
+		    'where' => [
+			    'group' => '^[A-Za-z]+$',
+			    'server_id' => '^[0-9]+$',
+		    ],
+		    'middleware' => ['permissions:api.teamspeak.instance.group.instance.remove']
+	    ]);
+	    ////////////////////////////////////////////////////////////////////////
+	    //endregion
+
+	    //endregion
 
         //region Токены (По ним идентифицируется пользователь)
         /////////////////////////////ТОКЕНЫ/////////////////////////////////////
@@ -777,56 +920,21 @@ Route::domain(env('APP_DOMAIN'))->prefix('v1/')->group(function () {
         ////////////////////////////////////////////////////////////////////////
         //endregion
 
-        //region Группы серверов
-        /////////////////////////////Группы серверов/////////////////////////////////////
-        Route::delete('/group/{group}', [
-            'as' => 'GroupDelete',
-            'uses' => 'Api\Group\GroupController@Delete',
-            'where' => [
-                'group' => '^[A-Za-z]+$',
-            ],
-            'middleware' => ['permissions:api.group.delete']
-        ]);
+	    //region Работы с пользователями (локальными)
 
-        Route::get('/group', [
-            'as' => 'GroupList',
-            'uses' => 'Api\Group\GroupController@List',
-            'middleware' => ['permissions:api.group.list']
-        ]);
+	    Route::delete('/userid/{user_id}', [
+		    'as' => 'TokenControllerDelete',
+		    'uses' => 'TokenController@Delete',
+		    'where' => [
+			    'id' => '^\d+$',
+		    ],
+		    'middleware' => [
+			    'permissions:api.token.delete'
+		    ]
+	    ]);
 
-        Route::post('/group', [
-            'as' => 'GroupCreate',
-            'uses' => 'Api\Group\GroupController@Create',
-            'middleware' => ['permissions:api.group.create']
-        ]);
+	    //endregion
 
-        Route::get('/group/{group}', [
-            'as' => 'ServerGroupList',
-            'uses' => 'Api\Group\GroupController@ServerGroupList',
-            'middleware' => ['permissions:api.group.server.list']
-        ]);
-
-        Route::post('/group/{group}/{server_id}', [
-            'as' => 'ServerAddGroup',
-            'uses' => 'Api\Group\GroupController@ServerAddGroup',
-            'where' => [
-                'group' => '^[A-Za-z]+$',
-                'server_id' => '[0-9]+',
-            ],
-            'middleware' => ['permissions:api.group.server.add']
-        ]);
-
-        Route::delete('/group/{group}/{server_id}', [
-            'as' => 'ServerRemoveGroup',
-            'uses' => 'Api\Group\GroupController@ServerRemoveGroup',
-            'where' => [
-                'group' => '^[A-Za-z]+$',
-                'server_id' => '[0-9]+',
-            ],
-            'middleware' => ['permissions:api.group.server.remove']
-        ]);
-        ////////////////////////////////////////////////////////////////////////
-        //endregion
 
     });
 });
