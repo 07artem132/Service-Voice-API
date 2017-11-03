@@ -157,7 +157,7 @@ class TeamSpeakInstancesGroupController extends Controller {
 	}
 
 	/**
-	 * @api {get} /v1/teamspeak/instance/group/:group_slug Список инстансов в группе
+	 * @api {get} /v1/teamspeak/instance/group/:group_slug Список в группе
 	 * @apiName TeamSpeak Instances Group Instances Group list
 	 * @apiGroup TeamSpeak Instances Group
 	 * @apiVersion 1.0.0
@@ -257,7 +257,7 @@ class TeamSpeakInstancesGroupController extends Controller {
 	}
 
 	/**
-	 * @api {delete} /v1/teamspeak/instance/group/:group_slug/:server_id Удалить инстанс из группы
+	 * @api {delete} /v1/teamspeak/instance/group/:group_slug/:server_id Удалить из группы
 	 * @apiName TeamSpeak Instances Group Instance Group delete
 	 * @apiGroup TeamSpeak Instances Group
 	 * @apiVersion 1.0.0
