@@ -23,6 +23,7 @@ class TeamSpeakSnapshotsVirtualServers {
 	private $ts3con;
 	private $KeepDays;
 	private $CreateDisabledServers;
+	private $instance_id;
 
 	public function __construct() {
 		$this->KeepDays              = config( 'TeamSpeakSnapshotsVirtualServers.KeepDays' );
@@ -30,10 +31,17 @@ class TeamSpeakSnapshotsVirtualServers {
 	}
 
 	function CronCallback() {
+
+
 		$servers = TeamspeakInstances::Active()->get();
 
+		if ( ini_set( "memory_limit", $servers->count() * 15000000 ) != true ) {
+			throw  new \Exception( "Не удалось изменить memory_limit" );
+		}
+
 		foreach ( $servers as $server ) {
-			$this->CreateSnapshots( $server->id );
+			$this->instance_id = $server->id;
+			$this->CreateSnapshots();
 		}
 
 		$this->RemoveOldSnapshots();
@@ -42,21 +50,19 @@ class TeamSpeakSnapshotsVirtualServers {
 	/**
 	 * @param int $instance_id уникальный идентификатор teamspeak 3 инстанса
 	 */
-	public function CreateSnapshots( int $instance_id ): void {
-		$this->ts3con = new TeamSpeak( $instance_id );
-		$data         = $this->GetAllServersSnapshots();
+	public function CreateSnapshots(): void {
+		$this->ts3con = new TeamSpeak( $this->instance_id );
+
+		$data = $this->GetAllServersSnapshots();
 
 		if ( ! empty( $data ) ) {
-			foreach ( $data as $VirtualServerSnapshots ) {
-				$db              = new SnapshotsTeamspeakVirtualServers;
-				$db->instance_id = $instance_id;
-				$db->unique_id   = $VirtualServerSnapshots['unique_id'];
-				$db->snapshot    = $VirtualServerSnapshots['snapshot'];
-				$db->save();
-			}
+			SnapshotsTeamspeakVirtualServers::insert( $data );
 		}
 
 		$this->ts3con->logout();
+		unset( $this->ts3con, $data );
+		gc_collect_cycles();
+		gc_mem_caches();
 
 		return;
 	}
@@ -65,13 +71,24 @@ class TeamSpeakSnapshotsVirtualServers {
 	 * @return array набор данных подготовленных для сохранения в базу данных.
 	 */
 	function GetAllServersSnapshots(): ?array {
-		foreach ( $this->ts3con->ReturnConnection() as $VirtualServer ) {
-			if ( (string) $VirtualServer['virtualserver_status'] != 'online' && ! $this->CreateDisabledServers ) {
-				continue;
-			}
+		$i = 0;
+		try {
+			foreach ( $this->ts3con->ReturnConnection()->serverList() as $VirtualServer ) {
+				if ( (string) $VirtualServer['virtualserver_status'] != 'online' && ! $this->CreateDisabledServers ) {
+					continue;
+				}
 
-			$data[ $VirtualServer['virtualserver_id'] ]['unique_id'] = (string) $VirtualServer['virtualserver_unique_identifier'];
-			$data[ $VirtualServer['virtualserver_id'] ]['snapshot']  = (string) $VirtualServer->snapshotCreate();
+				$data[ $i ]['instance_id'] = $this->instance_id;
+				$data[ $i ]['unique_id']   = (string) $VirtualServer['virtualserver_unique_identifier'];
+				$data[ $i ]['snapshot']    = (string) $VirtualServer->snapshotCreate();
+				$i ++;
+			}
+		} catch ( \Exception $e ) {
+			if ( $e->getMessage() === 'database empty result set' ) {
+				$this->ts3con->logout();
+
+				return null;
+			}
 		}
 
 		return $data;
