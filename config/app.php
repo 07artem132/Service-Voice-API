@@ -177,8 +177,8 @@ return [
         Api\Providers\EventServiceProvider::class,
         Api\Providers\RouteServiceProvider::class,
 
-        //https://github.com/liebig/cron
-        'Liebig\Cron\Laravel5ServiceProvider',
+        //https://github.com/liebig/cron Перенесено в CronServiceProvider
+        //'Liebig\Cron\Laravel5ServiceProvider',
 
         // https://cartalyst.com/manual/sentinel/2.0
         Cartalyst\Sentinel\Laravel\SentinelServiceProvider::class,
