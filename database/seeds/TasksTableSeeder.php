@@ -46,6 +46,17 @@ class TasksTableSeeder extends Seeder {
 			'created_at'  => date( "Y-m-d H:i:s" ),
 			'updated_at'  => date( "Y-m-d H:i:s" ),
 		] );
-
+		Task::create( [
+			'id'          => 3,
+			'priority'     => 1002,
+			'class_name'  => 'Api\Task\TeamSpeakStatisticsInstancesCacheUpdate',
+			'is_enabled'  => 1,
+			'is_periodic' => 1,
+			'frequency'   => '* * * * *',
+			'name'        => 'Обновление кеша для teamspeak 3 инстансов (статистика)',
+			'description' => '',
+			'created_at'  => date( "Y-m-d H:i:s" ),
+			'updated_at'  => date( "Y-m-d H:i:s" ),
+		] );
 	}
 }
