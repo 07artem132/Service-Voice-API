@@ -72,9 +72,9 @@
                 </div>
 
                 <div class="links">
-                    <a href="https://service-voice.com/">Сайт</a>
+                    <a href="http://service-voice.com/">Сайт</a>
                     <a href="http://my.service-voice.com/">Биллинг</a>
-                    <a href="http://{{env('APP_DOMAIN')}}/docs/">Документация</a>
+                    <a href="{{ url('docs/') }}">Документация</a>
                     <a href="http://partner.service-voice.com/">Партнерам</a>
                 </div>
             </div>
