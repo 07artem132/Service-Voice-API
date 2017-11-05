@@ -72,7 +72,7 @@ class TeamSpeakInstanceStatisticsGroupController {
 		$statistics = Cache::remember( 'InstanseStatisticsYearGroup-' . $group, Carbon::now()->addMinutes( config( 'ApiCache.TeamSpeak.Statistics.Group.Year' ) ), function () use ( $group ) {
 			$ServerGroupList = Group::Group( $group )->firstOrFail();
 
-			$Instances = $ServerGroupList->Servers->toArray();
+			$Instances = $ServerGroupList->TeamspeakInstances->toArray();
 
 			for ( $i = 0; $i < count( $Instances ); $i ++ ) {
 				$Instance = $Instances[ $i ]['instance_id'];
@@ -139,7 +139,7 @@ class TeamSpeakInstanceStatisticsGroupController {
 		$statistics = Cache::remember( 'InstanseStatisticsMonthGroup-' . $group, Carbon::now()->addMinutes( config( 'ApiCache.TeamSpeak.Statistics.Group.Month' ) ), function () use ( $group ) {
 			$ServerGroupList = Group::Group( $group )->firstOrFail();
 
-			$Instances = $ServerGroupList->Servers->toArray();
+			$Instances = $ServerGroupList->TeamspeakInstances->toArray();
 
 			for ( $i = 0; $i < count( $Instances ); $i ++ ) {
 				$Instance = $Instances[ $i ]['instance_id'];
@@ -206,7 +206,7 @@ class TeamSpeakInstanceStatisticsGroupController {
 		$statistics = Cache::remember( 'InstanseStatisticsWeekGroup-' . $group, Carbon::now()->addMinutes( config( 'ApiCache.TeamSpeak.Statistics.Group.Week' ) ), function () use ( $group ) {
 			$ServerGroupList = Group::Group( $group )->firstOrFail();
 
-			$Instances = $ServerGroupList->Servers->toArray();
+			$Instances = $ServerGroupList->TeamspeakInstances->toArray();
 
 			for ( $i = 0; $i < count( $Instances ); $i ++ ) {
 				$Instance = $Instances[ $i ]['instance_id'];
@@ -273,7 +273,7 @@ class TeamSpeakInstanceStatisticsGroupController {
 		$statistics = Cache::remember( 'InstanseStatisticsDayGroup-' . $group, Carbon::now()->addMinutes( config( 'ApiCache.TeamSpeak.Statistics.Group.Day' ) ), function () use ( $group ) {
 			$ServerGroupList = Group::Group( $group )->firstOrFail();
 
-			$Instances = $ServerGroupList->Servers->toArray();
+			$Instances = $ServerGroupList->TeamspeakInstances->toArray();
 
 			for ( $i = 0; $i < count( $Instances ); $i ++ ) {
 				$Instance = $Instances[ $i ]['instance_id'];
@@ -342,7 +342,7 @@ class TeamSpeakInstanceStatisticsGroupController {
 		$statistics = Cache::remember( 'InstanseStatisticsRealtimeGroup-' . $group, Carbon::now()->addMinutes( config( 'ApiCache.TeamSpeak.Statistics.Group.Realtime' ) ), function () use ( $group ) {
 			$ServerGroupList = Group::Group( $group )->firstOrFail();
 
-			$Instances = $ServerGroupList->Servers->toArray();
+			$Instances = $ServerGroupList->TeamspeakInstances->toArray();
 
 			for ( $i = 0; $i < count( $Instances ); $i ++ ) {
 				$Instance = $Instances[ $i ]['instance_id'];
