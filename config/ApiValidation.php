@@ -66,7 +66,7 @@ return [
 					'name'               => [
 						'required',
 						'string',
-						"regex:/^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\-]*[A-Za-z0-9])\.$/",
+//						"regex:/^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\-]*[A-Za-z0-9])\.$/",
 					],
 					'type'               => [
 						'required',
@@ -86,7 +86,7 @@ return [
 					'records.*.content'  => [
 						'required',
 						'string',
-						'ip'
+//						'ip'
 					],
 					'records.*.disabled' => [
 						'required',
@@ -113,7 +113,7 @@ return [
 					'name'               => [
 						'required',
 						'string',
-						"regex:/^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\-]*[A-Za-z0-9])\.$/",
+//						"regex:/^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\-]*[A-Za-z0-9])\.$/",
 					],
 					'type'               => [
 						'required',
@@ -133,7 +133,7 @@ return [
 					'records.*.content'  => [
 						'required',
 						'string',
-						'ip'
+//						'ip'
 					],
 					'records.*.disabled' => [
 						'required',

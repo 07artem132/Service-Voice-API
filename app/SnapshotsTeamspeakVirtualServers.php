@@ -28,6 +28,7 @@ use DB;
  * @property int $instance_id
  * @property-read \Api\TeamspeakInstances $instance
  * @method static \Illuminate\Database\Eloquent\Builder|\Api\SnapshotsTeamspeakVirtualServers whereInstanceId( $value )
+ * @method static \Illuminate\Database\Eloquent\Builder|\Api\SnapshotsTeamspeakVirtualServers getOlder($day)
  */
 class SnapshotsTeamspeakVirtualServers extends Model {
 	protected $hidden = [ 'unique_id', 'server_id', 'id', 'updated_at' ];

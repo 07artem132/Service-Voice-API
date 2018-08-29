@@ -21,6 +21,8 @@ use Illuminate\Database\Eloquent\Model;
  * @property-read \Api\Group $group
  * @property-read \Api\TeamspeakInstances $instance
  * @method static \Illuminate\Database\Eloquent\Builder|\Api\GroupTeamspeakInstances whereInstanceId( $value )
+ * @method static \Illuminate\Database\Eloquent\Builder|\Api\GroupTeamspeakInstances getInstance($instance_id)
+ * @method static \Illuminate\Database\Eloquent\Builder|\Api\GroupTeamspeakInstances groupID($group_id)
  */
 class GroupTeamspeakInstances extends Model {
 	protected $hidden = [ 'created_at', 'updated_at','group_id' ];

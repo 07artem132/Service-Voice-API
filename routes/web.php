@@ -20,3 +20,8 @@ Route::post('/registration', [
 	'as' => 'UserRegistrationControllerRegistration',
 	'uses' => 'UserRegistrationController@Registration',
 ]);
+
+
+Route::get('/test', [
+	'uses' => 'WelcomeController@test'
+]);

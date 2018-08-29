@@ -76,7 +76,7 @@ class TeamSpeakInstanseController extends Controller
     }
 
     /**
-     * @api {get} /v1/teamspeak/instance/:server_id/edit Изменение конфигурации
+     * @api {put} /v1/teamspeak/instance/:server_id/edit Изменение конфигурации
      * @apiName TeamSpeak 3 instance edit
      * @apiGroup Instance
      * @apiVersion 1.0.0
@@ -253,7 +253,7 @@ class TeamSpeakInstanseController extends Controller
 
     /**
      * @api {get} /v1/teamspeak/instance/:server_id/serverlist Список виртуальных серверов
-     * @apiName TeamSpeak 3 instance Version
+     * @apiName TeamSpeak 3 instance list
      * @apiGroup Instance
      * @apiVersion 1.0.0
      * @apiDescription Отображает список виртуальных серверов, включая их идентификатор, статус, количество клиентов в Интернете и т. Д.

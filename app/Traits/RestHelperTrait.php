@@ -13,6 +13,12 @@ use Api\Exceptions\InvalidJSON;
 
 trait RestHelperTrait
 {
+	/**
+	 * @param $index
+	 *
+	 * @return mixed
+	 * @throws UndefinedPOSTIndex
+	 */
     protected function IssetPOST($index)
     {
         if (!isset($_POST[$index])) {
@@ -21,6 +27,11 @@ trait RestHelperTrait
         return $_POST[$index];
     }
 
+	/**
+	 * @param $json
+	 *
+	 * @return string
+	 */
     protected function JsonFormatedPrint($json)
     {
         $result = '*';
@@ -72,6 +83,13 @@ trait RestHelperTrait
         return '<pre>' . $result . '</pre>';
     }
 
+	/**
+	 * @param $string
+	 * @param bool $assoc
+	 *
+	 * @return mixed
+	 * @throws InvalidJSON
+	 */
     protected function JsonDecodeAndValidate($string, $assoc = false)
     {
         // decode the JSON data

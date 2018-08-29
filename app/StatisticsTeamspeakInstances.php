@@ -20,11 +20,11 @@ use DB;
  * @method static \Illuminate\Database\Eloquent\Builder|\Api\StatisticsTeamspeakInstances halfHourAvage()
  * @method static \Illuminate\Database\Eloquent\Builder|\Api\StatisticsTeamspeakInstances hourAvage()
  * @method static \Illuminate\Database\Eloquent\Builder|\Api\StatisticsTeamspeakInstances serverID( $server_id )
- * @method static \Illuminate\Database\Eloquent\Builder|\Api\StatisticsTeamspeakInstances statDay()
+ * @method static \Illuminate\Database\Eloquent\Builder|\Api\StatisticsTeamspeakInstances statDay( $InitialSearchDate = null )
  * @method static \Illuminate\Database\Eloquent\Builder|\Api\StatisticsTeamspeakInstances statMonth()
- * @method static \Illuminate\Database\Eloquent\Builder|\Api\StatisticsTeamspeakInstances statRealtime()
- * @method static \Illuminate\Database\Eloquent\Builder|\Api\StatisticsTeamspeakInstances statWeek()
- * @method static \Illuminate\Database\Eloquent\Builder|\Api\StatisticsTeamspeakInstances statYear()
+ * @method static \Illuminate\Database\Eloquent\Builder|\Api\StatisticsTeamspeakInstances statRealtime( $InitialSearchDate = null )
+ * @method static \Illuminate\Database\Eloquent\Builder|\Api\StatisticsTeamspeakInstances statWeek( $InitialSearchDate = null )
+ * @method static \Illuminate\Database\Eloquent\Builder|\Api\StatisticsTeamspeakInstances statYear( $InitialSearchDate = null )
  * @method static \Illuminate\Database\Eloquent\Builder|\Api\StatisticsTeamspeakInstances whereCreatedAt( $value )
  * @method static \Illuminate\Database\Eloquent\Builder|\Api\StatisticsTeamspeakInstances whereId( $value )
  * @method static \Illuminate\Database\Eloquent\Builder|\Api\StatisticsTeamspeakInstances whereServerId( $value )
@@ -45,39 +45,74 @@ class StatisticsTeamspeakInstances extends Model {
 		return $query->where( 'instance_id', $instance_id );
 	}
 
-	public function scopeStatYear( $query ) {
-		return $query->whereBetween( 'created_at', [
-			date( "Y-m-d H:i:s", mktime( 0, 0, 0, date( "m" ), date( "d" ), date( "Y" ) - 1 ) ),
-			date( "Y-m-d H:i:s" )
-		] )->orderBy( 'created_at' );
+	public function scopeStatYear( $query, $InitialSearchDate = null ) {
+		if ( empty( $InitialSearchDate ) || strtotime( $InitialSearchDate ) < mktime( 0, 0, 0, date( "m" ), date( "d" ), date( "Y" ) - 1 ) ) {
+			return $query->whereBetween( 'created_at', [
+				date( "Y-m-d H:i:s", mktime( 0, 0, 0, date( "m" ), date( "d" ), date( "Y" ) - 1 ) ),
+				date( "Y-m-d H:i:s" )
+			] )->orderBy( 'created_at' );
+		} else {
+			return $query->whereBetween( 'created_at', [
+				date( "Y-m-d H:i:s", strtotime( $InitialSearchDate ) ),
+				date( "Y-m-d H:i:s" )
+			] )->orderBy( 'created_at' );
+		}
 	}
 
-	public function scopeStatMonth( $query ) {
-		return $query->whereBetween( 'created_at', [
-			date( "Y-m-d H:i:s", mktime( 0, 0, 0, date( "m" ) - 1, date( "d" ), date( "Y" ) ) ),
-			date( "Y-m-d H:i:s" )
-		] )->orderBy( 'created_at' );
+	public function scopeStatMonth( $query, $InitialSearchDate = null ) {
+		if ( empty( $InitialSearchDate ) || strtotime( $InitialSearchDate ) < mktime( 0, 0, 0, date( "m" ) - 1, date( "d" ), date( "Y" ) ) ) {
+			return $query->whereBetween( 'created_at', [
+				date( "Y-m-d H:i:s", mktime( 0, 0, 0, date( "m" ) - 1, date( "d" ), date( "Y" ) ) ),
+				date( "Y-m-d H:i:s" )
+			] )->orderBy( 'created_at' );
+		} else {
+			return $query->whereBetween( 'created_at', [
+				date( "Y-m-d H:i:s", strtotime( $InitialSearchDate ) ),
+				date( "Y-m-d H:i:s" )
+			] )->orderBy( 'created_at' );
+		}
 	}
 
-	function scopeStatWeek( $query ) {
-		return $query->whereBetween( 'created_at', [
-			date( "Y-m-d H:i:s", time() - 7 * 24 * 60 * 60 ),
-			date( "Y-m-d H:i:s" )
-		] )->orderBy( 'created_at' );
+	function scopeStatWeek( $query, $InitialSearchDate = null ) {
+		if ( empty( $InitialSearchDate ) || strtotime( $InitialSearchDate ) < time() - 7 * 24 * 60 * 60 ) {
+			return $query->whereBetween( 'created_at', [
+				date( "Y-m-d H:i:s", time() - 7 * 24 * 60 * 60 ),
+				date( "Y-m-d H:i:s" )
+			] )->orderBy( 'created_at' );
+		} else {
+			return $query->whereBetween( 'created_at', [
+				date( "Y-m-d H:i:s", strtotime( $InitialSearchDate ) ),
+				date( "Y-m-d H:i:s" )
+			] )->orderBy( 'created_at' );
+		}
 	}
 
-	function scopeStatDay( $query ) {
-		return $query->whereBetween( 'created_at', [
-			date( "Y-m-d H:i:s", time() - 24 * 60 * 60 ),
-			date( "Y-m-d H:i:s" )
-		] )->orderBy( 'created_at' );
+	function scopeStatDay( $query, $InitialSearchDate = null ) {
+		if ( empty( $InitialSearchDate ) || strtotime( $InitialSearchDate ) < time() - 24 * 60 * 60 ) {
+			return $query->whereBetween( 'created_at', [
+				date( "Y-m-d H:i:s", time() - 24 * 60 * 60 ),
+				date( "Y-m-d H:i:s" )
+			] )->orderBy( 'created_at' );
+		} else {
+			return $query->whereBetween( 'created_at', [
+				date( "Y-m-d H:i:s", strtotime( $InitialSearchDate ) ),
+				date( "Y-m-d H:i:s" )
+			] )->orderBy( 'created_at' );
+		}
 	}
 
-	function scopeStatRealtime( $query ) {
-		return $query->whereBetween( 'created_at', [
-			date( "Y-m-d H:i:s", time() - 60 * 60 ),
-			date( "Y-m-d H:i:s" )
-		] )->orderBy( 'created_at' );
+	function scopeStatRealtime( $query, $InitialSearchDate = null ) {
+		if ( empty( $InitialSearchDate ) || strtotime( $InitialSearchDate ) < time() - 60 * 60 ) {
+			return $query->whereBetween( 'created_at', [
+				date( "Y-m-d H:i:s", time() - 60 * 60 ),
+				date( "Y-m-d H:i:s" )
+			] )->orderBy( 'created_at' );
+		} else {
+			return $query->whereBetween( 'created_at', [
+				date( "Y-m-d H:i:s", strtotime( $InitialSearchDate ) ),
+				date( "Y-m-d H:i:s" )
+			] )->orderBy( 'created_at' );
+		}
 	}
 
 	function scopeFiveMinutesAvage( $query ) {
@@ -105,7 +140,7 @@ class StatisticsTeamspeakInstances extends Model {
 	}
 
 	public function instance() {
-		return $this->belongsTo( 'Api\TeamspeakInstances', 'id', 'instance_id' );
+		return $this->belongsTo( 'App\TeamspeakInstances', 'id', 'instance_id' );
 	}
 
 }

@@ -185,7 +185,7 @@ return [
 
         //Зарегистрировано в /app/Providers/AppServiceProvider.php
         //https://github.com/barryvdh/laravel-debugbar
-        //Barryvdh\Debugbar\ServiceProvider::class,
+        Barryvdh\Debugbar\ServiceProvider::class,
 
         //Зарегистрировано в /app/Providers/AppServiceProvider.php
         //https://docs.sentry.io/clients/php/integrations/laravel/
@@ -252,7 +252,7 @@ return [
         'Sentinel' => Cartalyst\Sentinel\Laravel\Facades\Sentinel::class,
         //Зарегистрировано в /app/Providers/AppServiceProvider.php
         //https://github.com/barryvdh/laravel-debugbar
-        //'Debugbar' => Barryvdh\Debugbar\Facade::class,
+        'Debugbar' => Barryvdh\Debugbar\Facade::class,
 
         //https://docs.sentry.io/clients/php/integrations/laravel/
         //Зарегистрировано в /app/Providers/AppServiceProvider.php

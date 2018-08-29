@@ -11,7 +11,7 @@ namespace Api\Http\Controllers;
 use Api\TeamspeakInstances;
 use Illuminate\Http\JsonResponse;
 use Api\Services\TeamSpeak3\Update;
-use Api\Services\TeamSpeak3\teamSpeak;
+use Api\Services\TeamSpeak3\TeamSpeak;
 use Api\Traits\RestSuccessResponseTrait;
 use Api\Services\TeamSpeak3\BlacklistCheck;
 
@@ -53,7 +53,7 @@ class TeamSpeakHelpersController extends Controller
      */
     function InstanceIsBlacklisted(int $server_id): JsonResponse
     {
-        $ipAddress = TeamspeakInstances::find($server_id)->ipaddress;
+        $ipAddress = TeamspeakInstances::find($server_id)->hostname;
 
         $BlacklistCheck = new BlacklistCheck();
         $data = $BlacklistCheck->isBlacklisted($ipAddress);
@@ -229,7 +229,7 @@ class TeamSpeakHelpersController extends Controller
      */
     function InstanceOutdatedCheck(int $server_id): JsonResponse
     {
-        $ts3conn = new teamSpeak($server_id);;
+        $ts3conn = new TeamSpeak($server_id);;
         $OutdatedChecker = new Update;
 
         $version = (string)$ts3conn->version()['version'];

@@ -13,7 +13,7 @@ class TasksTableSeeder extends Seeder {
 		Task::create( [
 			'id'          => 1,
 			'priority'    => 1000,
-			'class_name'  => 'Api\Task\TeamSpeakStatisticsInstances',
+			'class_name'  => 'Api\Task\TeamSpeakInstanceStatisticsCollectionsTask',
 			'is_enabled'  => 1,
 			'is_periodic' => 1,
 			'frequency'   => '* * * * *',
@@ -25,7 +25,7 @@ class TasksTableSeeder extends Seeder {
 		Task::create( [
 			'id'          => 2,
 			'priority'     => 1001,
-			'class_name'  => 'Api\Task\TeamSpeakStatisticsVirtualServersInstance',
+			'class_name'  => 'Api\Task\TeamSpeakVirtualServersStatisticsCollectionsTask',
 			'is_enabled'  => 1,
 			'is_periodic' => 1,
 			'frequency'   => '* * * * *',
@@ -37,7 +37,7 @@ class TasksTableSeeder extends Seeder {
 		Task::create( [
 			'id'          => 3,
 			'priority'     => 1002,
-			'class_name'  => 'Api\Task\TeamSpeakSnapshotsVirtualServers',
+			'class_name'  => 'Api\Task\TeamSpeakVirtualServerCreateSnapshotTask',
 			'is_enabled'  => 1,
 			'is_periodic' => 1,
 			'frequency'   => '0 */12 * * *',
@@ -47,13 +47,25 @@ class TasksTableSeeder extends Seeder {
 			'updated_at'  => date( "Y-m-d H:i:s" ),
 		] );
 		Task::create( [
-			'id'          => 3,
-			'priority'     => 1002,
-			'class_name'  => 'Api\Task\TeamSpeakStatisticsInstancesCacheUpdate',
+			'id'          => 4,
+			'priority'     => 1003,
+			'class_name'  => 'Api\Task\TeamSpeakStatisticsInstancesCacheUpdateTask',
 			'is_enabled'  => 1,
 			'is_periodic' => 1,
 			'frequency'   => '* * * * *',
 			'name'        => 'Обновление кеша для teamspeak 3 инстансов (статистика)',
+			'description' => '',
+			'created_at'  => date( "Y-m-d H:i:s" ),
+			'updated_at'  => date( "Y-m-d H:i:s" ),
+		] );
+		Task::create( [
+			'id'          => 5,
+			'priority'     => 1004,
+			'class_name'  => 'Api\Task\TeamSpeakVirtualServerRemoveOldSnapshotTask',
+			'is_enabled'  => 1,
+			'is_periodic' => 1,
+			'frequency'   => '* * * * *',
+			'name'        => 'Удаление старых снапшотов',
 			'description' => '',
 			'created_at'  => date( "Y-m-d H:i:s" ),
 			'updated_at'  => date( "Y-m-d H:i:s" ),

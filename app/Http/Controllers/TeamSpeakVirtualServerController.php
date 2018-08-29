@@ -494,4 +494,5 @@ class TeamSpeakVirtualServerController extends Controller {
 		return $this->jsonResponse( $data );
 
 	}
+
 }

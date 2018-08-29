@@ -17,7 +17,14 @@ use Auth;
 
 class TokenVerifi
 {
-
+	/**
+	 * @param $request
+	 * @param Closure $next
+	 *
+	 * @return mixed
+	 * @throws InvalidToken
+	 * @throws NotSpecified
+	 */
     public function handle($request, Closure $next)
     {
         try {

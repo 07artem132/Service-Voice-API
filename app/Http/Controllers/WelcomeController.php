@@ -9,4 +9,7 @@ class WelcomeController extends Controller
     function action(){
     	return view('welcome');
     }
+    function test(){
+
+    }
 }

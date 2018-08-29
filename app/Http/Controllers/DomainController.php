@@ -15,6 +15,7 @@ use Api\Services\Domain\PowerDNS;
 use Api\Http\Requests\DomainAddRequest;
 use Api\Traits\RestSuccessResponseTrait;
 use Api\Http\Requests\DomainRecordAddRequest;
+use Api\UserToken;
 
 /**
  * Class DomainController
@@ -73,9 +74,27 @@ class DomainController extends Controller {
 	 */
 	function List(): JsonResponse {
 		$this->PowerDNS = new PowerDNS();
-		$DomainList     = $this->PowerDNS->DomainList();
+		$DomainList     = (array) $this->PowerDNS->DomainList();
+
+		$token      = request()->header( 'X-token' );
+		$DomainList = $this->FilteredDomain( $DomainList, $token );
 
 		return $this->jsonResponse( $DomainList );
+	}
+
+	function FilteredDomain( array $DomainList, string $token ): array {
+		$tokenDB         = UserToken::Token( $token )->firstOrFail();
+		$TokenPrivileges = json_decode( $tokenDB->privileges->privilege );
+
+		if ( array_key_exists( 'api.admin', $TokenPrivileges ) ) {
+			return $DomainList;
+		}
+
+		$filtered = array_where( $DomainList, function ( $value, $key ) use ( $TokenPrivileges ) {
+			return array_key_exists( 'api.' . $value->name . 'record.list', $TokenPrivileges ) ? true : false;
+		} );
+
+		return $filtered;
 	}
 
 	/**
@@ -88,7 +107,7 @@ class DomainController extends Controller {
 	 * @apiParam {String} domain Доменное имя.
 	 * @apiHeader {String} X-token Ваш токен для работы с API.
 	 * @apiSuccess (Success code 200) {String} status  Всегда содержит значение "success".
-	 * @apiPermission api.domain.record.formated.list
+	 * @apiPermission api.{domain}.record.formated.list
 	 * @apiUse INVALID_IP_ADDRESS
 	 * @apiUse INVALID_TOKEN
 	 * @apiUse REQUEST_LIMIT_EXCEEDED
@@ -257,7 +276,7 @@ class DomainController extends Controller {
 	 * @apiParam {String} domain Доменное имя.
 	 * @apiHeader {String} X-token Ваш токен для работы с API.
 	 * @apiSuccess (Success code 200) {String} status  Всегда содержит значение "success".
-	 * @apiPermission api.domain.record.list
+	 * @apiPermission api.{domain}.record.list
 	 * @apiUse INVALID_IP_ADDRESS
 	 * @apiUse INVALID_TOKEN
 	 * @apiUse REQUEST_LIMIT_EXCEEDED
@@ -501,10 +520,9 @@ class DomainController extends Controller {
 	/**
 	 * Добавление домена
 	 *
-	 * @param Request $request обьект который содержит все данные запроса
+	 * @param DomainAddRequest $request обьект который содержит все данные запроса
 	 *
 	 * @return JsonResponse Обьект с данными для ответа
-	 * @throws RequestIsNotJson Возникает в случае если переданные данные не являются json
 	 */
 	function Add( DomainAddRequest $request ): JsonResponse {
 		$this->PowerDNS = new PowerDNS();
@@ -526,7 +544,7 @@ class DomainController extends Controller {
 	 * @apiSampleRequest /domain
 	 * @apiHeader {String} X-token Ваш токен для работы с API.
 	 * @apiSuccess (Success code 200) {String} status  Всегда содержит значение "success".
-	 * @apiPermission api.domain.delete
+	 * @apiPermission api.{domain}.delete
 	 * @apiUse INVALID_IP_ADDRESS
 	 * @apiUse INVALID_TOKEN
 	 * @apiUse REQUEST_LIMIT_EXCEEDED
@@ -538,11 +556,11 @@ class DomainController extends Controller {
 	 *}
 	 */
 	/**
-	 * @param $domain домен из URL
+	 * @param string $domain домен из URL
 	 *
 	 * @return JsonResponse
 	 */
-	function Delete( $domain ): JsonResponse {
+	function Delete( string $domain ): JsonResponse {
 		$this->PowerDNS = new PowerDNS();
 
 		$this->PowerDNS->DomainDelete( $domain );
@@ -560,7 +578,7 @@ class DomainController extends Controller {
 	 * <b>При запросе обязательно необходимо передать RAW данные, пример данных</b>:<br/><br/>
 	 *{<br/>
 	 * &nbsp;&nbsp;{ <br/>
-	 * &nbsp;&nbsp;&nbsp;&nbsp;"name":"ts1",<br/>
+	 * &nbsp;&nbsp;&nbsp;&nbsp;"name":"ts1.service-voice.com.",<br/>
 	 * &nbsp;&nbsp;&nbsp;&nbsp;"type":"A",<br/>
 	 * &nbsp;&nbsp;&nbsp;&nbsp;"ttl":"60",<br/>
 	 * &nbsp;&nbsp;&nbsp;&nbsp;"records":[<br/>
@@ -579,7 +597,7 @@ class DomainController extends Controller {
 	 * @apiHeader {String} X-token Ваш токен для работы с API.
 	 * @apiHeader {String} Content-Type  Установите значение "application/json" потому как ожидается что вы отправите json
 	 * @apiSuccess (Success code 200) {String} status  Всегда содержит значение "success".
-	 * @apiPermission api.domain.record.add
+	 * @apiPermission api.{domain}.record.add
 	 * @apiUse INVALID_IP_ADDRESS
 	 * @apiUse INVALID_TOKEN
 	 * @apiUse REQUEST_LIMIT_EXCEEDED
@@ -595,11 +613,10 @@ class DomainController extends Controller {
 	/**
 	 * Добавление записи для домена
 	 *
-	 * @param Request $request обьект который содержит все данные запроса
+	 * @param DomainRecordAddRequest $request обьект который содержит все данные запроса
 	 * @param string $domain домен
 	 *
 	 * @return JsonResponse Обьект с данными для ответа
-	 * @throws RequestIsNotJson Возникает в случае если переданные данные не являются json
 	 */
 	function RecordAdd( DomainRecordAddRequest $request, string $domain ): JsonResponse {
 		$this->PowerDNS = new PowerDNS();
@@ -624,7 +641,7 @@ class DomainController extends Controller {
 	 * <b>При запросе обязательно необходимо передать RAW данные, пример данных</b>:<br/><br/>
 	 *{<br/>
 	 * &nbsp;&nbsp;{ <br/>
-	 * &nbsp;&nbsp;&nbsp;&nbsp;"name":"ts1",<br/>
+	 * &nbsp;&nbsp;&nbsp;&nbsp;"name":"ts1.service-voice.com.",<br/>
 	 * &nbsp;&nbsp;&nbsp;&nbsp;"type":"A",<br/>
 	 * &nbsp;&nbsp;&nbsp;&nbsp;"ttl":"60",<br/>
 	 * &nbsp;&nbsp;&nbsp;&nbsp;"records":[<br/>
@@ -643,7 +660,7 @@ class DomainController extends Controller {
 	 * @apiHeader {String} X-token Ваш токен для работы с API.
 	 * @apiHeader {String} Content-Type  Установите значение "application/json" потому как ожидается что вы отправите json
 	 * @apiSuccess (Success code 200) {String} status  Всегда содержит значение "success".
-	 * @apiPermission api.domain.record.delete
+	 * @apiPermission api.{domain}.record.delete
 	 * @apiUse INVALID_IP_ADDRESS
 	 * @apiUse INVALID_TOKEN
 	 * @apiUse REQUEST_LIMIT_EXCEEDED
@@ -657,11 +674,10 @@ class DomainController extends Controller {
 	 *}
 	 */
 	/**
-	 * @param Request $request обьект который содержит все данные запроса
+	 * @param DomainRecordDeleteRequest $request обьект который содержит все данные запроса
 	 * @param string $domain домен
 	 *
 	 * @return JsonResponse Обьект с данными для ответа
-	 * @throws RequestIsNotJson Возникает в случае если переданные данные не являются json
 	 */
 	function RecordDelete( DomainRecordDeleteRequest $request, string $domain ): JsonResponse {
 		$this->PowerDNS = new PowerDNS();
