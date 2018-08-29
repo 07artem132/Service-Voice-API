@@ -20,10 +20,10 @@ Charts - https://erik.cat/projects/Charts/docs/4
 <br/>
 ## В дальнейшем использовать как хостинг файлов
 https://www.scaleway.com/virtual-cloud-servers/ (Сервер за 3 евро в месяц, дают 50 гб ssd)
-##Управление Iptables через API
+## Управление Iptables через API
 https://github.com/plugowski/iptables
 
-##Примечания
+## Примечания
 Задание - TeamSpeakSnapshotsVirtualServers
 Потребляет слишком много ram, из расчета на 1 инстанс 15 мб озу (пиково)
 Необходимо реализовать менее требовальный к ram способ сохранения в бд
